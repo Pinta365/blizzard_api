@@ -2,7 +2,7 @@ export { setup } from "./config.ts";
 export { authenticate } from "./auth.ts";
 export { request } from "./request.ts";
 
-export type { LinkSelfHref } from "./types.ts";
+export type { KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "./types.ts";
 
 /*
 

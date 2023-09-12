@@ -1,6 +1,8 @@
 import type { requestOptions } from "./types.ts";
-import { getSetup } from "./config.ts";
+import { apiBaseUrl, getSetup } from "./config.ts";
 import { authenticate, getauthConfig } from "./auth.ts";
+
+import { APIError } from "./errors.ts";
 
 export async function request(requestOptions: requestOptions) {
     if (
@@ -14,10 +16,6 @@ export async function request(requestOptions: requestOptions) {
 
     const params = new URLSearchParams(qs);
 
-    const host = getSetup().region == "cn"
-        ? "https://gateway.battlenet.com.cn"
-        : `https://${getSetup().region}.api.blizzard.com`;
-
     const headers: Record<string, string> = {
         "Authorization": "Bearer " + getauthConfig().accessToken,
     };
@@ -26,8 +24,7 @@ export async function request(requestOptions: requestOptions) {
         headers["Battlenet-Namespace"] = `${namespace}-${getSetup().region}`;
     }
 
-    console.log(headers);
-    const response = await fetch(host + encodeURI(url) + (qs ? "?" + params.toString() : ""), {
+    const response = await fetch(apiBaseUrl(getSetup().region) + encodeURI(url) + (qs ? "?" + params.toString() : ""), {
         method: method,
         headers: headers,
     });
@@ -36,5 +33,5 @@ export async function request(requestOptions: requestOptions) {
         return await response.json();
     }
 
-    throw new Error(`Problem fetching data. ${response.status} - ${response.statusText}`);
+    throw new APIError("Problem fetching data from API", response.status, response.statusText);
 }
