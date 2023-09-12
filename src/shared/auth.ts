@@ -20,7 +20,7 @@ export async function authenticate(force = false) {
         throw new MissingClientIdError();
     }
 
-    if (!getSetup().ClientSecret) {
+    if (!getSetup().clientSecret) {
         throw new MissingClientSecretError();
     }
 
@@ -34,7 +34,7 @@ export async function authenticate(force = false) {
     const response = await fetch(tokenUrl(getSetup().region), {
         method: "POST",
         headers: {
-            "Authorization": "Basic " + btoa(`${getSetup().clientId}:${getSetup().ClientSecret}`),
+            "Authorization": "Basic " + btoa(`${getSetup().clientId}:${getSetup().clientSecret}`),
             "Content-Type": "application/x-www-form-urlencoded",
         },
         body: "grant_type=client_credentials",

@@ -4,14 +4,14 @@ interface Config {
     region: Regions;
     locale: Locales;
     clientId: string;
-    ClientSecret: string;
+    clientSecret: string;
 }
 
 let config: Config = {
     region: "eu",
     locale: "en_GB",
     clientId: "",
-    ClientSecret: "",
+    clientSecret: "",
 };
 
 export function tokenUrl(region: Regions) {
