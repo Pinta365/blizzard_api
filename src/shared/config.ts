@@ -14,6 +14,14 @@ let config: Config = {
     ClientSecret: "",
 };
 
+export function tokenUrl(region: Regions) {
+    return region === "cn" ? "https://www.battlenet.com.cn/oauth/token" : `https://${region}.battle.net/oauth/token`;
+}
+
+export function apiBaseUrl(region: Regions) {
+    return region === "cn" ? "https://gateway.battlenet.com.cn" : `https://${region}.api.blizzard.com`;
+}
+
 export function setup(userConfig: Partial<Config>) {
     config = { ...config, ...userConfig };
 }

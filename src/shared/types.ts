@@ -5,12 +5,6 @@ export interface requestOptions {
     qs?: Record<string, string>;
 }
 
-export interface LinkSelfHref {
-    self: {
-        href: string;
-    };
-}
-
 export type Regions = "us" | "eu" | "kr" | "tw" | "cn";
 
 export type Locales =
@@ -30,5 +24,29 @@ export type Locales =
 
 export type Namespaces = "static" | "dynamic" | "profile";
 
+/** Self-referential link */
+export interface LinkSelfHref {
+    self: {
+        href: string;
+    };
+}
 
+/** Represents a single string if localization was supplied in request or an object of localized key-value strings if not */
+export interface LocalizedString {
+    name: string | Record<Locales, string>;
+}
 
+export interface KeyNameId {
+    key: {
+        href: string;
+    };
+    name: LocalizedString;
+    id: number;
+}
+
+export interface KeyId {
+    key: {
+        href: string;
+    };
+    id: number;
+}
