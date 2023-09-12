@@ -12,4 +12,13 @@ export { azeriteEssence, azeriteEssenceMedia, azeriteEssences, searchAzeriteEsse
 
 export { connectedRealm, connectedRealms, searchConnectedRealm } from "./connected_realm.ts";
 
+export {
+    covenant,
+    covenantConduit,
+    covenantConduits,
+    covenants,
+    covenantSoulbind,
+    covenantSoulbinds,
+} from "./covenant.ts";
+
 export { token } from "./token.ts";

@@ -50,3 +50,8 @@ export interface KeyId {
     };
     id: number;
 }
+
+export interface NameId {
+    name: LocalizedString;
+    id: number;
+}
