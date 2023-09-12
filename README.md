@@ -15,7 +15,7 @@ Built for Deno 🦕
 | `Auction House`                     | ✅     |                |
 | `Azerite Essence`                   | ✅     | Search missing |
 | `Connected Realm`                   | ✅     | Search missing |
-| `Covenant`                          |        |                |
+| `Covenant`                          | ✅     |                |
 | `Creature`                          |        |                |
 | `Guild Crest`                       |        |                |
 | `Heirloom`                          |        |                |
