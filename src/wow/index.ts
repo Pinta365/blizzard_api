@@ -21,4 +21,15 @@ export {
     covenantSoulbinds,
 } from "./covenant.ts";
 
+export {
+    creature,
+    creatureDisplayMedia,
+    creatureFamilies,
+    creatureFamily,
+    creatureFamilyMedia,
+    creatureType,
+    creatureTypes,
+    searchCreature,
+} from "./creature.ts";
+
 export { token } from "./token.ts";

@@ -8,64 +8,66 @@ Built for Deno 🦕
 
 ### World of Warcraft
 
-| APIs                                | Status | Note           |
-| ----------------------------------- | ------ | -------------- |
-| **Game Data APIs**                  |        |                |
-| `Achievement`                       | ✅     |                |
-| `Auction House`                     | ✅     |                |
-| `Azerite Essence`                   | ✅     | Search missing |
-| `Connected Realm`                   | ✅     | Search missing |
-| `Covenant`                          | ✅     |                |
-| `Creature`                          |        |                |
-| `Guild Crest`                       |        |                |
-| `Heirloom`                          |        |                |
-| `Item`                              |        |                |
-| `Journal`                           |        |                |
-| `Media Search`                      |        |                |
-| `Modified Crafting`                 |        |                |
-| `Mount`                             |        |                |
-| `Mythic Keystone Affix`             |        |                |
-| `Mythic Keystone Dungeon`           |        |                |
-| `Mythic Keystone Leaderboard`       |        |                |
-| `Mythic Raid Leaderboard`           |        |                |
-| `Pet`                               |        |                |
-| `Playable Class`                    |        |                |
-| `Playable Race`                     |        |                |
-| `Playable Specialization`           |        |                |
-| `Power Type`                        |        |                |
-| `Profession`                        |        |                |
-| `PvP Season`                        |        |                |
-| `PvP Tier`                          |        |                |
-| `Quest`                             |        |                |
-| `Realm`                             |        |                |
-| `Region`                            |        |                |
-| `Reputations`                       |        |                |
-| `Spell`                             |        |                |
-| `Talent`                            |        |                |
-| `Tech Talent`                       |        |                |
-| `Title`                             |        |                |
-| `Toy`                               |        |                |
-| `Token`                             | ✅     |                |
-| **Profile APIs**                    |        |                |
-| `Account Profile`                   |        |                |
-| `Character Achievements`            |        |                |
-| `Character Appearance`              |        |                |
-| `Character Collections`             |        |                |
-| `Character Encounters`              |        |                |
-| `Character Equipment`               |        |                |
-| `Character Hunter Pets`             |        |                |
-| `Character Media`                   |        |                |
-| `Character Mythic Keystone Profile` |        |                |
-| `Character Professions`             |        |                |
-| `Character Profile`                 |        |                |
-| `Character PvP`                     |        |                |
-| `Character Quests`                  |        |                |
-| `Character Reputations`             |        |                |
-| `Character Soulbinds`               |        |                |
-| `Character Specializations`         |        |                |
-| `Character Statistics`              |        |                |
-| `Character Titles`                  |        |                |
-| `Guild`                             |        |                |
+(search functions are missing, they will be implemented in ./search.ts)
+
+| APIs                                | Status | Note |
+| ----------------------------------- | ------ | ---- |
+| **Game Data APIs**                  |        |      |
+| `Achievement`                       | ✅     |      |
+| `Auction House`                     | ✅     |      |
+| `Azerite Essence`                   | ✅     |      |
+| `Connected Realm`                   | ✅     |      |
+| `Covenant`                          | ✅     |      |
+| `Creature`                          | ✅     |      |
+| `Guild Crest`                       |        |      |
+| `Heirloom`                          |        |      |
+| `Item`                              |        |      |
+| `Journal`                           |        |      |
+| `Media Search`                      |        |      |
+| `Modified Crafting`                 |        |      |
+| `Mount`                             |        |      |
+| `Mythic Keystone Affix`             |        |      |
+| `Mythic Keystone Dungeon`           |        |      |
+| `Mythic Keystone Leaderboard`       |        |      |
+| `Mythic Raid Leaderboard`           |        |      |
+| `Pet`                               |        |      |
+| `Playable Class`                    |        |      |
+| `Playable Race`                     |        |      |
+| `Playable Specialization`           |        |      |
+| `Power Type`                        |        |      |
+| `Profession`                        |        |      |
+| `PvP Season`                        |        |      |
+| `PvP Tier`                          |        |      |
+| `Quest`                             |        |      |
+| `Realm`                             |        |      |
+| `Region`                            |        |      |
+| `Reputations`                       |        |      |
+| `Spell`                             |        |      |
+| `Talent`                            |        |      |
+| `Tech Talent`                       |        |      |
+| `Title`                             |        |      |
+| `Toy`                               |        |      |
+| `Token`                             | ✅     |      |
+| **Profile APIs**                    |        |      |
+| `Account Profile`                   |        |      |
+| `Character Achievements`            |        |      |
+| `Character Appearance`              |        |      |
+| `Character Collections`             |        |      |
+| `Character Encounters`              |        |      |
+| `Character Equipment`               |        |      |
+| `Character Hunter Pets`             |        |      |
+| `Character Media`                   |        |      |
+| `Character Mythic Keystone Profile` |        |      |
+| `Character Professions`             |        |      |
+| `Character Profile`                 |        |      |
+| `Character PvP`                     |        |      |
+| `Character Quests`                  |        |      |
+| `Character Reputations`             |        |      |
+| `Character Soulbinds`               |        |      |
+| `Character Specializations`         |        |      |
+| `Character Statistics`              |        |      |
+| `Character Titles`                  |        |      |
+| `Guild`                             |        |      |
 
 ### World of Warcraft Classic
 
