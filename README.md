@@ -19,11 +19,11 @@ Built for Deno 🦕
 | `Connected Realm`                   | ✅     |      |
 | `Covenant`                          | ✅     |      |
 | `Creature`                          | ✅     |      |
-| `Guild Crest`                       |        |      |
-| `Heirloom`                          |        |      |
-| `Item`                              |        |      |
+| `Guild Crest`                       | ✅     |      |
+| `Heirloom`                          | ✅     |      |
+| `Item`                              | ✅     |      |
 | `Journal`                           |        |      |
-| `Media Search`                      |        |      |
+| `Media Search`                      | ✅     |      |
 | `Modified Crafting`                 |        |      |
 | `Mount`                             |        |      |
 | `Mythic Keystone Affix`             |        |      |

@@ -36,4 +36,7 @@ export { guildCrestBorder, guildCrestEmblem, guildCrests } from "./guild_crest.t
 
 export { heirloom, heirlooms } from "./heirloom.ts";
 
+export { item, itemClass, itemClasses, itemMedia, itemSet, itemSets, itemSubclass, searchItem } from "./item.ts";
+export { searchMedia } from "./media_search.ts";
+
 export { token } from "./token.ts";
