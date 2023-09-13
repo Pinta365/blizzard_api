@@ -2,10 +2,10 @@ import { LinkSelfHref, request } from "../shared/index.ts";
 
 interface AuctionItem {
     id: number;
-    modifiers?: [{
+    modifiers?: {
         type: number;
         value: number;
-    }];
+    }[];
     pet_breed_id?: number;
     pet_level?: number;
     pet_quality_id?: number;

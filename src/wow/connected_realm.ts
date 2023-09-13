@@ -1,7 +1,7 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
 
 interface ConnectedRealms extends LinkSelfHref {
-    connected_realms: [{ href: string }];
+    connected_realms: { href: string }[];
 }
 
 interface Realm {
