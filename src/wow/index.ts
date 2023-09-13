@@ -32,4 +32,8 @@ export {
     searchCreature,
 } from "./creature.ts";
 
+export { guildCrestBorder, guildCrestEmblem, guildCrests } from "./guild_crest.ts";
+
+export { heirloom, heirlooms } from "./heirloom.ts";
+
 export { token } from "./token.ts";
