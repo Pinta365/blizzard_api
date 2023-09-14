@@ -1,5 +1,5 @@
 import { getSetup, tokenUrl } from "./config.ts";
-import { AuthenticationError, MissingClientIdError, MissingClientSecretError } from "./errors.ts";
+import { AuthenticationError, MissingClientIdError, MissingClientSecretError, MissingRegionError } from "./errors.ts";
 
 interface AuthConfig {
     accessToken: string;
@@ -16,6 +16,10 @@ export function getauthConfig(): AuthConfig {
 }
 
 export async function authenticate(force = false) {
+    if (!getSetup().region) {
+        throw new MissingRegionError();
+    }
+
     if (!getSetup().clientId) {
         throw new MissingClientIdError();
     }
@@ -31,7 +35,7 @@ export async function authenticate(force = false) {
         return authConfig.accessToken;
     }
 
-    const response = await fetch(tokenUrl(getSetup().region), {
+    const response = await fetch(tokenUrl(getSetup().region!), {
         method: "POST",
         headers: {
             "Authorization": "Basic " + btoa(`${getSetup().clientId}:${getSetup().clientSecret}`),

@@ -43,6 +43,12 @@ export interface KeyNameId {
     name: LocalizedString;
     id: number;
 }
+export interface KeyName {
+    key: {
+        href: string;
+    };
+    name: LocalizedString;
+}
 
 export interface KeyId {
     key: {
@@ -54,4 +60,9 @@ export interface KeyId {
 export interface NameId {
     name: LocalizedString;
     id: number;
+}
+
+export interface TypeName {
+    type: string;
+    name: LocalizedString;
 }

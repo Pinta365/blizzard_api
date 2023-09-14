@@ -39,7 +39,7 @@ export class AuthenticationError extends Error {
  */
 export class MissingClientIdError extends Error {
     constructor() {
-        super("Client Id must be setup before calling authenticate. Check documentation");
+        super("Client Id must be setup. Check documentation");
         this.name = "MissingClientIdError";
     }
 }
@@ -51,7 +51,19 @@ export class MissingClientIdError extends Error {
  */
 export class MissingClientSecretError extends Error {
     constructor() {
-        super("Client Secret must be setup before calling authenticate. Check documentation");
+        super("Client Secret must be setup. Check documentation");
         this.name = "MissingClientSecretError";
+    }
+}
+
+/**
+ * Custom error class representing a missing api region error.
+ * @class
+ * @extends {Error}
+ */
+export class MissingRegionError extends Error {
+    constructor() {
+        super("Api region must be setup. Check documentation");
+        this.name = "MissingRegionError";
     }
 }

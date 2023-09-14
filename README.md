@@ -22,18 +22,18 @@ Built for Deno 🦕
 | `Guild Crest`                       | ✅     |      |
 | `Heirloom`                          | ✅     |      |
 | `Item`                              | ✅     |      |
-| `Journal`                           |        |      |
+| `Journal`                           | ✅     |      |
 | `Media Search`                      | ✅     |      |
-| `Modified Crafting`                 |        |      |
-| `Mount`                             |        |      |
-| `Mythic Keystone Affix`             |        |      |
-| `Mythic Keystone Dungeon`           |        |      |
-| `Mythic Keystone Leaderboard`       |        |      |
-| `Mythic Raid Leaderboard`           |        |      |
-| `Pet`                               |        |      |
-| `Playable Class`                    |        |      |
-| `Playable Race`                     |        |      |
-| `Playable Specialization`           |        |      |
+| `Modified Crafting`                 | ✅     |      |
+| `Mount`                             | ✅     |      |
+| `Mythic Keystone Affix`             | ✅     |      |
+| `Mythic Keystone Dungeon`           | ✅     |      |
+| `Mythic Keystone Leaderboard`       | ✅     |      |
+| `Mythic Raid Leaderboard`           | ✅     |      |
+| `Pet`                               | ✅     |      |
+| `Playable Class`                    | ✅     |      |
+| `Playable Race`                     | ✅     |      |
+| `Playable Specialization`           | ✅     |      |
 | `Power Type`                        |        |      |
 | `Profession`                        |        |      |
 | `PvP Season`                        |        |      |

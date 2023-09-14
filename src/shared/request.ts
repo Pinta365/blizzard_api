@@ -12,8 +12,12 @@ export async function request(requestOptions: requestOptions) {
         await authenticate(true);
     }
 
-    const { method, url, namespace, qs } = requestOptions;
+    const { method, url, namespace } = requestOptions;
+    let { qs } = requestOptions;
 
+    if (getSetup().locale) {
+        qs = { ...{ locale: getSetup().locale! }, ...qs };
+    }
     const params = new URLSearchParams(qs);
 
     const headers: Record<string, string> = {
@@ -24,10 +28,13 @@ export async function request(requestOptions: requestOptions) {
         headers["Battlenet-Namespace"] = `${namespace}-${getSetup().region}`;
     }
 
-    const response = await fetch(apiBaseUrl(getSetup().region) + encodeURI(url) + (qs ? "?" + params.toString() : ""), {
-        method: method,
-        headers: headers,
-    });
+    const response = await fetch(
+        apiBaseUrl(getSetup().region!) + encodeURI(url) + (qs ? "?" + params.toString() : ""),
+        {
+            method: method,
+            headers: headers,
+        },
+    );
 
     if (response.ok) {
         return await response.json();

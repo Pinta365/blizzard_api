@@ -1,4 +1,5 @@
 import type { Locales, Regions } from "./types.ts";
+import { MissingClientIdError, MissingClientSecretError, MissingRegionError } from "./errors.ts";
 
 interface Config {
     region: Regions;
@@ -7,12 +8,7 @@ interface Config {
     clientSecret: string;
 }
 
-let config: Config = {
-    region: "eu",
-    locale: "en_GB",
-    clientId: "",
-    clientSecret: "",
-};
+let config: Partial<Config> = {};
 
 export function tokenUrl(region: Regions) {
     return region === "cn" ? "https://www.battlenet.com.cn/oauth/token" : `https://${region}.battle.net/oauth/token`;
@@ -24,8 +20,20 @@ export function apiBaseUrl(region: Regions) {
 
 export function setup(userConfig: Partial<Config>) {
     config = { ...config, ...userConfig };
+
+    if (!config.region) {
+        throw new MissingRegionError();
+    }
+
+    if (!config.clientId) {
+        throw new MissingClientIdError();
+    }
+
+    if (!config.clientSecret) {
+        throw new MissingClientSecretError();
+    }
 }
 
-export function getSetup(): Config {
+export function getSetup(): Config | Partial<Config> {
     return config;
 }

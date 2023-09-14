@@ -1,4 +1,4 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../shared/index.ts";
 
 interface ItemClasses extends LinkSelfHref {
     item_classes: KeyNameId[];
@@ -30,11 +30,6 @@ interface ItemSubclass extends LinkSelfHref {
     subclass_id: number;
     display_name: LocalizedString;
     hide_subclass_in_tooltips?: boolean;
-}
-
-interface TypeName {
-    type: string;
-    name: LocalizedString;
 }
 
 interface Item extends LinkSelfHref {

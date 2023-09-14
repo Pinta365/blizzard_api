@@ -1,14 +1,8 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../shared/index.ts";
 
 interface Heirlooms extends LinkSelfHref {
     heirlooms: KeyNameId[];
 }
-
-interface TypeName {
-    type: string;
-    name: LocalizedString;
-}
-
 interface ValueDisplayString {
     value: number;
     display_string: LocalizedString;
