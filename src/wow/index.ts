@@ -83,4 +83,17 @@ export { playableClass, playableClasses, playableClassMedia, playableClassPvpTal
 
 export { playableRace, playableRaces } from "./playable_race.ts";
 
+export { powerType, powerTypes } from "./power_type.ts";
+
+export {
+    profession,
+    professionMedia,
+    professionRecipie,
+    professionRecipieMedia,
+    professions,
+    professionSkillTier,
+} from "./profession.ts";
+
+export { pvpSeason, pvpSeasonLeaderboard, pvpSeasonLeaderboards, pvpSeasonRewards, pvpSeasons } from "./pvp_season.ts";
+
 export { token } from "./token.ts";

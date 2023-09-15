@@ -34,9 +34,9 @@ Built for Deno 🦕
 | `Playable Class`                    | ✅     |      |
 | `Playable Race`                     | ✅     |      |
 | `Playable Specialization`           | ✅     |      |
-| `Power Type`                        |        |      |
-| `Profession`                        |        |      |
-| `PvP Season`                        |        |      |
+| `Power Type`                        | ✅     |      |
+| `Profession`                        | ✅     |      |
+| `PvP Season`                        | ✅     |      |
 | `PvP Tier`                          |        |      |
 | `Quest`                             |        |      |
 | `Realm`                             |        |      |
