@@ -1,10 +1,10 @@
 import { Namespaces, request } from "../shared/index.ts";
 
 export interface SearchParameters {
-    searchFields?: Record<string, string | number>;
+    searchFields?: Record<string|symbol, string | number>;
     orderBy?: string;
-    Page?: number;
-    _pageSize: number;
+    page?: number;
+    pageSize?: number;
 }
 
 export interface Search {
@@ -33,11 +33,15 @@ export async function search(url: string, namespace: Namespaces, searchParameter
     };
 
     if (searchParameters.orderBy) {
-        qs.orderBy = searchParameters.orderBy;
+        qs.orderby = searchParameters.orderBy;
     }
 
-    if (searchParameters.Page !== undefined) {
-        qs.Page = searchParameters.Page;
+    if (searchParameters.page !== undefined) {
+        qs._page = searchParameters.page;
+    }
+
+    if (searchParameters.pageSize !== undefined) {
+        qs._pageSize = searchParameters.pageSize;
     }
 
     return await request({

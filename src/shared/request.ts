@@ -38,7 +38,7 @@ export async function request(requestOptions: RequestOptions) {
     }
 
     const response = await fetch(
-        apiBaseUrl(getSetup().region!) + encodeURI(url) + (qs ? "?" + params.toString() : ""),
+        apiBaseUrl(getSetup().region!) + encodeURI(url) + (qsString ? "?" + params.toString() : ""),
         {
             method: method,
             headers: headers,

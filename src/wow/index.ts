@@ -10,13 +10,18 @@ export {
     achievementCategory,
     achievementMedia,
     achievements,
-} from "./achievement.ts";
+} from "./game_data/achievement.ts";
 
-export { auctions, commodities } from "./auction_house.ts";
+export { auctions, commodities } from "./game_data/auction_house.ts";
 
-export { azeriteEssence, azeriteEssenceMedia, azeriteEssences, searchAzeriteEssence } from "./azerite_essence.ts";
+export {
+    azeriteEssence,
+    azeriteEssenceMedia,
+    azeriteEssences,
+    searchAzeriteEssence,
+} from "./game_data/azerite_essence.ts";
 
-export { connectedRealm, connectedRealms, searchConnectedRealm } from "./connected_realm.ts";
+export { connectedRealm, connectedRealms, searchConnectedRealm } from "./game_data/connected_realm.ts";
 
 export {
     covenant,
@@ -25,7 +30,7 @@ export {
     covenants,
     covenantSoulbind,
     covenantSoulbinds,
-} from "./covenant.ts";
+} from "./game_data/covenant.ts";
 
 export {
     creature,
@@ -36,15 +41,24 @@ export {
     creatureType,
     creatureTypes,
     searchCreature,
-} from "./creature.ts";
+} from "./game_data/creature.ts";
 
-export { guildCrestBorder, guildCrestEmblem, guildCrests } from "./guild_crest.ts";
+export { guildCrestBorder, guildCrestEmblem, guildCrests } from "./game_data/guild_crest.ts";
 
-export { heirloom, heirlooms } from "./heirloom.ts";
+export { heirloom, heirlooms } from "./game_data/heirloom.ts";
 
-export { item, itemClass, itemClasses, itemMedia, itemSet, itemSets, itemSubclass, searchItem } from "./item.ts";
+export {
+    item,
+    itemClass,
+    itemClasses,
+    itemMedia,
+    itemSet,
+    itemSets,
+    itemSubclass,
+    searchItem,
+} from "./game_data/item.ts";
 
-export { searchMedia } from "./media_search.ts";
+export { searchMedia } from "./game_data/media_search.ts";
 
 export {
     journalEncounter,
@@ -55,7 +69,7 @@ export {
     journalInstanceMedia,
     journalInstances,
     searchJournalEncounter,
-} from "./journal.ts";
+} from "./game_data/journal.ts";
 
 export {
     modifiedCraftingCategories,
@@ -63,11 +77,11 @@ export {
     modifiedCraftingParents,
     modifiedCraftingSlotType,
     modifiedCraftingSlotTypes,
-} from "./modified_crafting.ts";
+} from "./game_data/modified_crafting.ts";
 
-export { mount, mounts } from "./mount.ts";
+export { mount, mounts } from "./game_data/mount.ts";
 
-export { keystoneAffix, keystoneAffixes, keystoneAffixMedia } from "./keystone_affix.ts";
+export { keystoneAffix, keystoneAffixes, keystoneAffixMedia } from "./game_data/keystone_affix.ts";
 
 export {
     mythicKeystoneDungeon,
@@ -77,19 +91,24 @@ export {
     mythicKeystonePeriods,
     mythicKeystoneSeason,
     mythicKeystoneSeasons,
-} from "./mythic_keystone_dungeon.ts";
+} from "./game_data/mythic_keystone_dungeon.ts";
 
-export { mythicKeystoneLeaderboard, mythicKeystoneLeaderboards } from "./mythic_keystone_leaderboard.ts";
+export { mythicKeystoneLeaderboard, mythicKeystoneLeaderboards } from "./game_data/mythic_keystone_leaderboard.ts";
 
-export { mythicRaidLeaderboard } from "./mythic_raid_leaderboard.ts";
+export { mythicRaidLeaderboard } from "./game_data/mythic_raid_leaderboard.ts";
 
-export { pet, petAbilities, petAbility, petAbilityMedia, petMedia, pets } from "./pet.ts";
+export { pet, petAbilities, petAbility, petAbilityMedia, petMedia, pets } from "./game_data/pet.ts";
 
-export { playableClass, playableClasses, playableClassMedia, playableClassPvpTalentSlots } from "./playable_class.ts";
+export {
+    playableClass,
+    playableClasses,
+    playableClassMedia,
+    playableClassPvpTalentSlots,
+} from "./game_data/playable_class.ts";
 
-export { playableRace, playableRaces } from "./playable_race.ts";
+export { playableRace, playableRaces } from "./game_data/playable_race.ts";
 
-export { powerType, powerTypes } from "./power_type.ts";
+export { powerType, powerTypes } from "./game_data/power_type.ts";
 
 export {
     profession,
@@ -98,11 +117,17 @@ export {
     professionRecipieMedia,
     professions,
     professionSkillTier,
-} from "./profession.ts";
+} from "./game_data/profession.ts";
 
-export { pvpSeason, pvpSeasonLeaderboard, pvpSeasonLeaderboards, pvpSeasonRewards, pvpSeasons } from "./pvp_season.ts";
+export {
+    pvpSeason,
+    pvpSeasonLeaderboard,
+    pvpSeasonLeaderboards,
+    pvpSeasonRewards,
+    pvpSeasons,
+} from "./game_data/pvp_season.ts";
 
-export { pvpTier, pvpTierMedia, pvpTiers } from "./pvp_tier.ts";
+export { pvpTier, pvpTierMedia, pvpTiers } from "./game_data/pvp_tier.ts";
 
 export {
     quest,
@@ -113,24 +138,32 @@ export {
     quests,
     questType,
     questTypes,
-} from "./quest.ts";
+} from "./game_data/quest.ts";
 
-export { realm, realms, searchRealm } from "./realm.ts";
+export { realm, realms, searchRealm } from "./game_data/realm.ts";
 
-export { region, regions } from "./region.ts";
+export { region, regions } from "./game_data/region.ts";
 
-export { reputationFaction, reputationFactions, reputationTier, reputationTiers } from "./reputations.ts";
+export { reputationFaction, reputationFactions, reputationTier, reputationTiers } from "./game_data/reputations.ts";
 
-export { searchSpell, spell, spellMedia } from "./spell.ts";
+export { searchSpell, spell, spellMedia } from "./game_data/spell.ts";
 
-export { title, titles } from "./title.ts";
+export { title, titles } from "./game_data/title.ts";
 
-export { toy, toys } from "./toy.ts";
+export { toy, toys } from "./game_data/toy.ts";
 
-export { pvpTalent, pvpTalents, talent, talents, talentTree, talentTreeNodes, talentTrees } from "./talent.ts";
+export {
+    pvpTalent,
+    pvpTalents,
+    talent,
+    talents,
+    talentTree,
+    talentTreeNodes,
+    talentTrees,
+} from "./game_data/talent.ts";
 
-export { techTalent, techTalentMedia, techTalents, techTalentTree, techTalentTrees } from "./tech_talent.ts";
+export { techTalent, techTalentMedia, techTalents, techTalentTree, techTalentTrees } from "./game_data/tech_talent.ts";
 
-export { token } from "./token.ts";
+export { token } from "./game_data/token.ts";
 
 // Start Profile APIs
