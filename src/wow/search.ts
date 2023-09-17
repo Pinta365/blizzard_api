@@ -1,7 +1,7 @@
 import { Namespaces, request } from "../shared/index.ts";
 
 export interface SearchParameters {
-    searchFields?: Record<string|symbol, string | number>;
+    searchFields?: Record<string | symbol, string | number>;
     orderBy?: string;
     page?: number;
     pageSize?: number;

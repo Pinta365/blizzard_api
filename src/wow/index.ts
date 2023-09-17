@@ -167,3 +167,7 @@ export { techTalent, techTalentMedia, techTalents, techTalentTree, techTalentTre
 export { token } from "./game_data/token.ts";
 
 // Start Profile APIs
+
+export { characterAchievementStatistics, characterAchievementSummary } from "./profile/character_achievements.ts";
+
+export { characterAppearanceSummary } from "./profile/character_appearance.ts";
