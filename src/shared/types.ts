@@ -1,8 +1,8 @@
-export interface requestOptions {
+export interface RequestOptions {
     method: "GET";
     url: string;
     namespace?: Namespaces;
-    qs?: Record<string, string>;
+    qs?: Record<string, string | number>;
 }
 
 export type Regions = "us" | "eu" | "kr" | "tw" | "cn";

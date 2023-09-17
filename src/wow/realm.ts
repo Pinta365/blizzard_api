@@ -1,4 +1,5 @@
 import { KeyName, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../shared/index.ts";
+import { Search, search, SearchParameters } from "./search.ts";
 
 interface RealmList extends KeyNameId {
     slug: string;
@@ -49,7 +50,12 @@ export async function realm(realmSlug: string): Promise<Realm> {
     });
 }
 
-export function searchRealm() {
-    //TODO: Placeholder for the realm Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of realms.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about a realm search.
+ */
+export async function searchRealm(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/realm", "dynamic", searchParameters);
 }

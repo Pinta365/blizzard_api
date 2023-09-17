@@ -1,4 +1,5 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { Search, search, SearchParameters } from "./search.ts";
 
 interface CreatureFamilies extends LinkSelfHref {
     creature_families: KeyNameId[];
@@ -118,9 +119,14 @@ export async function creature(creatureId: number): Promise<Creature> {
     });
 }
 
-export function searchCreature() {
-    //TODO: Placeholder for the Creature Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of creatures.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about a creature search.
+ */
+export async function searchCreature(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/creature", "static", searchParameters);
 }
 
 /**

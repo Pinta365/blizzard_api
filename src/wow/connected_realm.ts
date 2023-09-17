@@ -1,4 +1,5 @@
-import { KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../shared/index.ts";
+import { Search, search, SearchParameters } from "./search.ts";
 
 interface ConnectedRealms extends LinkSelfHref {
     connected_realms: { href: string }[];
@@ -12,10 +13,7 @@ interface Realm {
     category: LocalizedString;
     locale: string;
     timezone: string;
-    type: {
-        type: string;
-        name: LocalizedString;
-    };
+    type: TypeName;
     is_tournament: boolean;
     slug: string;
 }
@@ -23,14 +21,8 @@ interface Realm {
 interface ConnectedRealm extends LinkSelfHref {
     id: number;
     has_queue: boolean;
-    status: {
-        type: string;
-        name: LocalizedString;
-    };
-    population: {
-        type: string;
-        name: LocalizedString;
-    };
+    status: TypeName;
+    population: TypeName;
     realms: Realm[];
     mythic_leaderboards: { href: string };
     auctions: { href: string };
@@ -63,7 +55,12 @@ export async function connectedRealm(connectedRealmId: number): Promise<Connecte
     });
 }
 
-export function searchConnectedRealm() {
-    //TODO: Placeholder for the Connected Realm Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of connected realms.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about the connected realms search.
+ */
+export async function searchConnectedRealm(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/connected-realm", "dynamic", searchParameters);
 }

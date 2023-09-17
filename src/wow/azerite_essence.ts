@@ -1,14 +1,8 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { Search, search, SearchParameters } from "./search.ts";
 
-interface AzeriteEssence {
-    key: {
-        href: string;
-    };
-    name: LocalizedString;
-    id: number;
-}
 interface AzeriteEssences extends LinkSelfHref {
-    azerite_essences: AzeriteEssence[];
+    azerite_essences: KeyNameId[];
 }
 
 interface AzeritePower {
@@ -64,9 +58,14 @@ export async function azeriteEssence(azeriteEssenceId: number): Promise<AzeriteE
     });
 }
 
-export function searchAzeriteEssence() {
-    //TODO: Placeholder for the Azerite Essence Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of azerite essences.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about a Azerite Essences search.
+ */
+export async function searchAzeriteEssence(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/azerite-essence", "static", searchParameters);
 }
 
 /**

@@ -1,4 +1,11 @@
-export function searchMedia() {
-    //TODO: Placeholder for the media Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+import { Search, search, SearchParameters } from "./search.ts";
+
+/**
+ * Performs a search of media.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about a media search.
+ */
+export async function searchMedia(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/media", "static", searchParameters);
 }

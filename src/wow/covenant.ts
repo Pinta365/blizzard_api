@@ -1,4 +1,4 @@
-import { KeyNameId, LinkSelfHref, LocalizedString, NameId, request } from "../shared/index.ts";
+import { KeyNameId, LinkSelfHref, LocalizedString, NameId, request, TypeName } from "../shared/index.ts";
 
 interface Covenants extends LinkSelfHref {
     covenants: KeyNameId[];
@@ -59,11 +59,6 @@ interface CovenantConduits extends LinkSelfHref {
     conduits: KeyNameId;
 }
 
-interface SocketType {
-    type: string;
-    name: LocalizedString;
-}
-
 interface SpellTooltip {
     spell: KeyNameId;
     description: LocalizedString;
@@ -80,7 +75,7 @@ interface CovenantConduit extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     item: KeyNameId;
-    socket_type: SocketType;
+    socket_type: TypeName;
     ranks: Rank[];
 }
 

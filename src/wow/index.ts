@@ -1,3 +1,7 @@
+// Start Search
+
+export type { SearchParameters } from "./search.ts";
+
 // Start Game Data APIs
 
 export {
@@ -129,4 +133,4 @@ export { techTalent, techTalentMedia, techTalents, techTalentTree, techTalentTre
 
 export { token } from "./token.ts";
 
-// End Game Data APIs
+// Start Profile APIs

@@ -1,14 +1,11 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, NameId } from "../shared/index.ts";
 
 interface MythicKeystoneLeaderboards extends LinkSelfHref {
     current_leaderboards: KeyNameId[];
 }
 
 interface MythicKeystoneLeaderboard extends LinkSelfHref {
-    map: {
-        name: LocalizedString;
-        id: number;
-    };
+    map: NameId;
     period: number;
     period_start_timestamp: number;
     period_end_timestamp: number;

@@ -63,10 +63,7 @@ interface Upgrade {
 interface Heirloom extends LinkSelfHref {
     id: number;
     item: KeyNameId;
-    source: {
-        type: string;
-        name: LocalizedString;
-    };
+    source:TypeName;
     source_description: LocalizedString;
     upgrades: Upgrade[];
     media: KeyId;

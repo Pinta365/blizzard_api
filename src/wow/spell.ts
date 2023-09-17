@@ -1,4 +1,5 @@
 import { KeyId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { Search, search, SearchParameters } from "./search.ts";
 
 interface Spell extends LinkSelfHref {
     id: number;
@@ -45,7 +46,12 @@ export async function spellMedia(spellId: number): Promise<SpellMedia> {
     });
 }
 
-export function searchSpell() {
-    //TODO: Placeholder for the spell Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of spells.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about a spell search.
+ */
+export async function searchSpell(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/spell", "static", searchParameters);
 }

@@ -1,4 +1,4 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
+import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, NameId } from "../shared/index.ts";
 
 interface MythicKeystoneDungeons extends LinkSelfHref {
     dungeons: KeyNameId[];
@@ -7,10 +7,7 @@ interface MythicKeystoneDungeons extends LinkSelfHref {
 interface MythicKeystoneDungeon extends LinkSelfHref {
     id: number;
     name: LocalizedString;
-    map: {
-        name: LocalizedString;
-        id: number;
-    };
+    map: NameId;
     zone: {
         slug: string;
     };

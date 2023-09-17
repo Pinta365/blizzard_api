@@ -1,4 +1,5 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, request, TypeName } from "../shared/index.ts";
+import { Search, search, SearchParameters } from "./search.ts";
 
 interface JournalExpansions extends LinkSelfHref {
     tiers: KeyNameId[];
@@ -132,9 +133,14 @@ export async function journalEncounter(journalEncounterId: number): Promise<Jour
     });
 }
 
-export function searchJournalEncounter() {
-    //TODO: Placeholder for the journal encounter Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of journal encounters.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about a journal encounter search.
+ */
+export async function searchJournalEncounter(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/journal-encounter", "static", searchParameters);
 }
 
 /**

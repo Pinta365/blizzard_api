@@ -1,4 +1,4 @@
-import { LinkSelfHref, request } from "../shared/index.ts";
+import { LinkSelfHref, request, KeyNameId } from "../shared/index.ts";
 
 interface MythicRaidLeaderboard extends LinkSelfHref {
     slug: string;
@@ -20,13 +20,7 @@ interface MythicRaidLeaderboard extends LinkSelfHref {
         region: string;
         rank: number;
     }[];
-    journal_instance: {
-        key: {
-            href: string;
-        };
-        name: null;
-        id: number;
-    };
+    journal_instance: KeyNameId;
 }
 /**
  * Returns the leaderboard for a given raid and faction.

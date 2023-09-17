@@ -1,4 +1,5 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../shared/index.ts";
+import { Search, search, SearchParameters } from "./search.ts";
 
 interface ItemClasses extends LinkSelfHref {
     item_classes: KeyNameId[];
@@ -218,7 +219,12 @@ export async function itemMedia(itemId: number): Promise<ItemMedia> {
     });
 }
 
-export function searchItem() {
-    //TODO: Placeholder for the item Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of items.
+ *
+ * @param SearchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about an item search.
+ */
+export async function searchItem(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/item", "static", searchParameters);
 }

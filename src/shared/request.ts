@@ -1,10 +1,10 @@
-import type { requestOptions } from "./types.ts";
+import type { RequestOptions } from "./types.ts";
 import { apiBaseUrl, getSetup } from "./config.ts";
 import { authenticate, getauthConfig } from "./auth.ts";
 
 import { APIError } from "./errors.ts";
 
-export async function request(requestOptions: requestOptions) {
+export async function request(requestOptions: RequestOptions) {
     if (
         !getauthConfig().accessToken || (getauthConfig().accessToken && getauthConfig().tokenExpiration &&
             new Date() < new Date(getauthConfig().tokenExpiration))
@@ -18,7 +18,16 @@ export async function request(requestOptions: requestOptions) {
     if (getSetup().locale) {
         qs = { ...{ locale: getSetup().locale! }, ...qs };
     }
-    const params = new URLSearchParams(qs);
+
+    const qsString: Record<string, string> = qs
+        ? Object.fromEntries(
+            Object.entries(qs).filter(([, value]) => value !== undefined).map((
+                [key, value],
+            ) => [key, value.toString()]),
+        )
+        : {};
+
+    const params = new URLSearchParams(qsString);
 
     const headers: Record<string, string> = {
         "Authorization": "Bearer " + getauthConfig().accessToken,
