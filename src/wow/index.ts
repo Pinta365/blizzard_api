@@ -1,3 +1,5 @@
+// Start Game Data APIs
+
 export {
     achievement,
     achievementCategories,
@@ -96,4 +98,35 @@ export {
 
 export { pvpSeason, pvpSeasonLeaderboard, pvpSeasonLeaderboards, pvpSeasonRewards, pvpSeasons } from "./pvp_season.ts";
 
+export { pvpTier, pvpTierMedia, pvpTiers } from "./pvp_tier.ts";
+
+export {
+    quest,
+    questArea,
+    questAreas,
+    questCategories,
+    questCategory,
+    quests,
+    questType,
+    questTypes,
+} from "./quest.ts";
+
+export { realm, realms, searchRealm } from "./realm.ts";
+
+export { region, regions } from "./region.ts";
+
+export { reputationFaction, reputationFactions, reputationTier, reputationTiers } from "./reputations.ts";
+
+export { searchSpell, spell, spellMedia } from "./spell.ts";
+
+export { title, titles } from "./title.ts";
+
+export { toy, toys } from "./toy.ts";
+
+export { pvpTalent, pvpTalents, talent, talents, talentTree, talentTreeNodes, talentTrees } from "./talent.ts";
+
+export { techTalent, techTalentMedia, techTalents, techTalentTree, techTalentTrees } from "./tech_talent.ts";
+
 export { token } from "./token.ts";
+
+// End Game Data APIs

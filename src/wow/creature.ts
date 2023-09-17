@@ -1,4 +1,4 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, request } from "../shared/index.ts";
+import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../shared/index.ts";
 
 interface CreatureFamilies extends LinkSelfHref {
     creature_families: KeyNameId[];

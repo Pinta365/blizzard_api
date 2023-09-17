@@ -37,16 +37,16 @@ Built for Deno 🦕
 | `Power Type`                        | ✅     |      |
 | `Profession`                        | ✅     |      |
 | `PvP Season`                        | ✅     |      |
-| `PvP Tier`                          |        |      |
-| `Quest`                             |        |      |
-| `Realm`                             |        |      |
-| `Region`                            |        |      |
-| `Reputations`                       |        |      |
-| `Spell`                             |        |      |
-| `Talent`                            |        |      |
-| `Tech Talent`                       |        |      |
-| `Title`                             |        |      |
-| `Toy`                               |        |      |
+| `PvP Tier`                          | ✅     |      |
+| `Quest`                             | ✅     |      |
+| `Realm`                             | ✅     |      |
+| `Region`                            | ✅     |      |
+| `Reputations`                       | ✅     |      |
+| `Spell`                             | ✅     |      |
+| `Talent`                            | ✅     |      |
+| `Tech Talent`                       | ✅     |      |
+| `Title`                             | ✅     |      |
+| `Toy`                               | ✅     |      |
 | `Token`                             | ✅     |      |
 | **Profile APIs**                    |        |      |
 | `Account Profile`                   |        |      |
