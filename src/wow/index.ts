@@ -171,3 +171,23 @@ export { token } from "./game_data/token.ts";
 export { characterAchievementStatistics, characterAchievementSummary } from "./profile/character_achievements.ts";
 
 export { characterAppearanceSummary } from "./profile/character_appearance.ts";
+
+export {
+    characterCollectionHeirlooms,
+    characterCollectionMounts,
+    characterCollectionPets,
+    characterCollectionToys,
+    characterCollectionTypes,
+} from "./profile/character_collections.ts";
+
+export {
+    characterEncounterDungeons,
+    characterEncounterRaids,
+    characterEncounters,
+} from "./profile/character_encounters.ts";
+
+export { characterEquipments } from "./profile/character_equipment.ts";
+
+export { characterHunterPets } from "./profile/character_hunter_pets.ts";
+
+export { characterMedia } from "./profile/character_media.ts";

@@ -1,4 +1,4 @@
-import { KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Character, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
 interface AchievementCriteria {
     id: number;
@@ -25,21 +25,7 @@ interface CharacterAchievementSummary extends LinkSelfHref {
         achievement: KeyNameId;
         timestamp: number;
     }[];
-    character: {
-        key: {
-            href: string;
-        };
-        name: LocalizedString;
-        id: number;
-        realm: {
-            key: {
-                href: string;
-            };
-            name: LocalizedString;
-            id: number;
-            slug: string;
-        };
-    };
+    character: Character;
     statistics: {
         href: string;
     };

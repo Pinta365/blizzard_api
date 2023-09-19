@@ -1,21 +1,7 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { Character, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
 interface CharacterAppearanceSummary extends LinkSelfHref {
-    character: {
-        key: {
-            href: string;
-        };
-        name: LocalizedString;
-        id: number;
-        realm: {
-            key: {
-                href: string;
-            };
-            name: LocalizedString;
-            id: number;
-            slug: string;
-        };
-    };
+    character: Character;
     playable_race: KeyNameId;
     playable_class: KeyNameId;
     active_spec: KeyNameId;
@@ -80,6 +66,7 @@ interface CharacterAppearanceSummary extends LinkSelfHref {
         };
     }[];
 }
+
 /**
  * Returns a summary of a character's appearance settings.
  *

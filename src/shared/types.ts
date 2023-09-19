@@ -66,3 +66,19 @@ export interface TypeName {
     type: string;
     name: LocalizedString;
 }
+
+export interface Character {
+    key: {
+        href: string;
+    };
+    name: string;
+    id: number;
+    realm: {
+        key: {
+            href: string;
+        };
+        name: LocalizedString;
+        id: number;
+        slug: string;
+    };
+}

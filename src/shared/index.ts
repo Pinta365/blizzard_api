@@ -3,6 +3,7 @@ export { authenticate } from "./auth.ts";
 export { request } from "./request.ts";
 
 export type {
+    Character,
     KeyId,
     KeyName,
     KeyNameId,
