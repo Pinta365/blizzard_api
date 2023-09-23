@@ -4,6 +4,8 @@ Start of what will cover the whole Blizzard Battle.net API when its done.
 
 Built for Deno 🦕
 
+Link to the module on [Deno Land](https://deno.land/x/blizzard_api)
+
 ## WORK IN PROGRESS
 
 Let me know if you want certain APIs to be prioritized.
