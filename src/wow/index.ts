@@ -191,3 +191,28 @@ export { characterEquipments } from "./profile/character_equipment.ts";
 export { characterHunterPets } from "./profile/character_hunter_pets.ts";
 
 export { characterMedia } from "./profile/character_media.ts";
+
+export {
+    characterMythicKeystoneProfile,
+    characterMythicKeystoneSeasonDetails,
+} from "./profile/character_mythic_keystone_profile.ts";
+
+export { characterProfessions } from "./profile/character_professions.ts";
+
+export { characterProfile, characterProfileStatus } from "./profile/character_profile.ts";
+
+export { characterPvpBracketStatistics, characterPvpSummary } from "./profile/character_pvp.ts";
+
+export { characterCompletedQuests, characterQuests } from "./profile/character_quests.ts";
+
+export { characterReputations } from "./profile/character_reputations.ts";
+
+export { characterSoulbinds } from "./profile/character_soulbinds.ts";
+
+export { characterSpecializations } from "./profile/character_specializations.ts";
+
+export { characterStatistics } from "./profile/character_statistics.ts";
+
+export { characterTitles } from "./profile/character_titles.ts";
+
+export { guild, guildAchievements, guildActivity, guildRoster } from "./profile/guild.ts";

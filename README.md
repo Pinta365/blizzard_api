@@ -6,12 +6,14 @@ Built for Deno 🦕
 
 ## WORK IN PROGRESS
 
+Let me know if you want certain APIs to be prioritized.
+
 ### APIs implemented
 
 | APIs                                          | Status | Note |
 | --------------------------------------------- | ------ | ---- |
 | **World of Warcraft:** Game Data APIs         | ✅     |      |
-| **World of Warcraft:** Profile APIs           |        |      |
+| **World of Warcraft:** Profile APIs           | ✅     |      |
 |                                               |        |      |
 | **World of Warcraft Classic:** Game Data APIs |        |      |
 |                                               |        |      |

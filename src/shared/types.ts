@@ -68,7 +68,7 @@ export interface TypeName {
 }
 
 export interface Character {
-    key: {
+    key?: {
         href: string;
     };
     name: string;
@@ -81,4 +81,7 @@ export interface Character {
         id: number;
         slug: string;
     };
+    level?: number;
+    playable_class?: KeyId;
+    playable_race?: KeyId;
 }

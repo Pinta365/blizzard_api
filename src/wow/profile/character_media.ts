@@ -8,6 +8,7 @@ interface CharacterMedia extends LinkSelfHref {
     character: Character;
     assets: Asset[];
 }
+
 /**
  * Returns a summary of the media assets available for a character (such as an avatar render).
  *
