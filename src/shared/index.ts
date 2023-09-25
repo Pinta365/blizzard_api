@@ -11,5 +11,6 @@ export type {
     LocalizedString,
     NameId,
     Namespaces,
+    RequestOptions,
     TypeName,
 } from "./types.ts";
