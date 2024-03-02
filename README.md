@@ -3,6 +3,7 @@
 Start of what will cover the whole Blizzard Battle.net API when its done.
 
 Link to the module on [Deno Land](https://deno.land/x/blizzard_api)
+
 Link to the module on [JSR](https://jsr.io/@pinta365/blizzard-api)
 
 ## WORK IN PROGRESS
@@ -28,6 +29,29 @@ Currently only supports client credentials flow but the plan is to implement aut
 |                                               |        |                                                                                     |
 | **StarCraft II:** Community APIs              |        |                                                                                     |
 | **StarCraft II:** Game Data APIs              | ✅     |                                                                                     |
+
+## Example
+
+```javascript
+import * as blizzardAPI from "@pinta365/blizzard-api";
+
+const ClientId = "<YOUR CLIENT ID>";
+const ClientSecret = "<YOUR SECRET>";
+
+blizzardAPI.setup({
+    clientId: ClientId,
+    clientSecret: ClientSecret,
+    region: "eu",
+    locale: "en_GB",
+});
+
+try {
+    const sword = await blizzardAPI.wow.item(33791);
+    console.log(sword);
+} catch (error) {
+    console.log(error);
+}
+```
 
 ## Issues
 
