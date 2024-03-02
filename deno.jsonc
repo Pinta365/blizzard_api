@@ -1,6 +1,6 @@
 {
     "tasks": {
-        "dev": "deno run --watch mod.ts"
+        "publish_jsr": "deno publish --config jsr.json"        
     },
     "fmt": {
         "lineWidth": 120,

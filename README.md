@@ -2,13 +2,13 @@
 
 Start of what will cover the whole Blizzard Battle.net API when its done.
 
-Built for Deno 🦕
-
 Link to the module on [Deno Land](https://deno.land/x/blizzard_api)
+Link to the module on [JSR](https://jsr.io/@pinta365/blizzard-api)
 
 ## WORK IN PROGRESS
 
 Let me know if you want certain APIs to be prioritized.
+Currently only supports client credentials flow but the plan is to implement authorization code flow also.
 
 ### APIs implemented
 
@@ -24,7 +24,7 @@ Let me know if you want certain APIs to be prioritized.
 |                                               |        |                                                                                     |
 | **Hearthstone:** Game Data APIs               | ✅     |                                                                                     |
 |                                               |        |                                                                                     |
-| **Overwatch League:** Community APIs**        | ✅     | Only seem to support US region and some data types are partially defined as Unknown |
+| **Overwatch League:** Community APIs          | ✅     | Only seem to support US region and some data types are partially defined as Unknown |
 |                                               |        |                                                                                     |
 | **StarCraft II:** Community APIs              |        |                                                                                     |
 | **StarCraft II:** Game Data APIs              | ✅     |                                                                                     |

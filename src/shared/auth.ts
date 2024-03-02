@@ -15,7 +15,7 @@ export function getauthConfig(): AuthConfig {
     return authConfig;
 }
 
-export async function authenticate(force = false) {
+export async function authenticate(force = false): Promise<string | true> {
     if (!getSetup().region) {
         throw new MissingRegionError();
     }
