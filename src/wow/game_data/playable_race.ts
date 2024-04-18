@@ -1,10 +1,10 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface PlayableRaces extends LinkSelfHref {
+export interface PlayableRaces extends LinkSelfHref {
     races: KeyNameId[];
 }
 
-interface PlayableRace extends LinkSelfHref {
+export interface PlayableRace extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     gender_name: {

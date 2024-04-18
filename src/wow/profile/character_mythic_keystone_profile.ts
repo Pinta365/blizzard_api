@@ -1,6 +1,6 @@
 import { Character, KeyId, KeyNameId, LinkSelfHref, request } from "../../shared/index.ts";
 
-interface MythicRating {
+export interface MythicRating {
     color: {
         r: number;
         g: number;
@@ -10,7 +10,7 @@ interface MythicRating {
     rating: number;
 }
 
-interface CharacterMythicKeystoneProfile extends LinkSelfHref {
+export interface CharacterMythicKeystoneProfile extends LinkSelfHref {
     current_period: {
         period: KeyId;
     };
@@ -19,7 +19,7 @@ interface CharacterMythicKeystoneProfile extends LinkSelfHref {
     current_mythic_rating: MythicRating;
 }
 
-interface CharacterMythicKeystoneSeasonDetails extends LinkSelfHref {
+export interface CharacterMythicKeystoneSeasonDetails extends LinkSelfHref {
     season: KeyId;
     best_runs: {
         completed_timestamp: number;

@@ -1,6 +1,6 @@
 import { Character, KeyNameId, LinkSelfHref, request } from "../../shared/index.ts";
 
-interface CharacterQuests extends LinkSelfHref {
+export interface CharacterQuests extends LinkSelfHref {
     character: Character;
     in_progress: KeyNameId[];
     completed: {
@@ -8,7 +8,7 @@ interface CharacterQuests extends LinkSelfHref {
     };
 }
 
-interface CharacterCompletedQuests extends LinkSelfHref {
+export interface CharacterCompletedQuests extends LinkSelfHref {
     character: Character;
     quests: KeyNameId[];
 }

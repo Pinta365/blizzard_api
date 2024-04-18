@@ -1,6 +1,6 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface TalentTree {
+export interface TalentTree {
     key: {
         href: string;
     };
@@ -8,21 +8,21 @@ interface TalentTree {
     id: number;
 }
 
-interface TechTalentTrees extends LinkSelfHref {
+export interface TechTalentTrees extends LinkSelfHref {
     talent_trees: TalentTree[];
 }
 
-interface TechTalentTree extends LinkSelfHref {
+export interface TechTalentTree extends LinkSelfHref {
     id: number;
     max_tiers: number;
     talents: KeyNameId[];
 }
 
-interface TechTalents extends LinkSelfHref {
+export interface TechTalents extends LinkSelfHref {
     talents: KeyNameId[];
 }
 
-interface TechTalent extends LinkSelfHref {
+export interface TechTalent extends LinkSelfHref {
     id: number;
     talent_tree: KeyNameId;
     name: LocalizedString;
@@ -38,12 +38,7 @@ interface TechTalent extends LinkSelfHref {
     media: KeyId;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: string;
-}
-interface TechTalentMedia extends LinkSelfHref {
+export interface TechTalentMedia extends LinkSelfHref {
     assets: Asset[];
 }
 

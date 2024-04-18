@@ -1,11 +1,11 @@
 import { KeyName, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface TalentTrees extends LinkSelfHref {
+export interface TalentTrees extends LinkSelfHref {
     spec_talent_trees: KeyNameId;
     class_talent_trees: KeyName;
 }
 
-interface SpellTooltip {
+export interface SpellTooltip {
     spell: KeyNameId;
     description: string;
     cast_time: string;
@@ -13,23 +13,23 @@ interface SpellTooltip {
     range?: string;
 }
 
-interface Tooltip {
+export interface Tooltip {
     talent: KeyNameId;
     spell_tooltip: SpellTooltip;
 }
 
-interface Rank {
+export interface Rank {
     rank: number;
     tooltip?: Tooltip;
     choice_of_tooltips?: Tooltip[];
 }
 
-interface NodeType {
+export interface NodeType {
     id: number;
     type: string;
 }
 
-interface TalentNode {
+export interface TalentNode {
     id: number;
     locked_by?: number[];
     unlocks?: number[];
@@ -41,7 +41,7 @@ interface TalentNode {
     raw_position_y: number;
 }
 
-interface TalentTree extends LinkSelfHref {
+export interface TalentTree extends LinkSelfHref {
     id: number;
     playable_class: KeyNameId;
     playable_specialization: KeyNameId;
@@ -59,17 +59,17 @@ interface TalentTree extends LinkSelfHref {
     class_talent_nodes: TalentNode[];
 }
 
-interface TalentTreeNodes extends LinkSelfHref {
+export interface TalentTreeNodes extends LinkSelfHref {
     id: number;
     spec_talent_trees?: KeyName[];
     talent_nodes?: TalentNode[];
 }
 
-interface Talents extends LinkSelfHref {
+export interface Talents extends LinkSelfHref {
     talents: KeyNameId[];
 }
 
-interface Talent extends LinkSelfHref {
+export interface Talent extends LinkSelfHref {
     id: number;
     rank_descriptions: {
         rank: number;
@@ -80,11 +80,11 @@ interface Talent extends LinkSelfHref {
     playable_specialization: KeyNameId;
 }
 
-interface PvpTalents extends LinkSelfHref {
+export interface PvpTalents extends LinkSelfHref {
     pvp_talents: KeyNameId[];
 }
 
-interface PvpTalent extends LinkSelfHref {
+export interface PvpTalent extends LinkSelfHref {
     id: number;
     spell: KeyNameId;
     playable_specialization: KeyNameId;

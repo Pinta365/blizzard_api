@@ -1,6 +1,6 @@
 import { LocalizedString, request } from "../../shared/index.ts";
 
-interface Segment {
+export interface Segment {
     id: string;
     name: LocalizedString;
     competitionId: string;

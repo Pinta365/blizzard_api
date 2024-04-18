@@ -1,10 +1,10 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface PlayableClasses extends LinkSelfHref {
+export interface PlayableClasses extends LinkSelfHref {
     classes: KeyNameId[];
 }
 
-interface PlayableClass extends LinkSelfHref {
+export interface PlayableClass extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     gender_name: {
@@ -21,18 +21,12 @@ interface PlayableClass extends LinkSelfHref {
     additional_power_types: KeyNameId[];
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-
-interface PlayableClassMedia extends LinkSelfHref {
+export interface PlayableClassMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }
 
-interface PlayableClassPvpTalentSlots extends LinkSelfHref {
+export interface PlayableClassPvpTalentSlots extends LinkSelfHref {
     talent_slots: {
         slot_number: number;
         unlock_player_level: number;

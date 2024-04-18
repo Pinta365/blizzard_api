@@ -1,6 +1,6 @@
 import { LinkSelfHref, request } from "../../shared/index.ts";
 
-interface AuctionItem {
+export interface AuctionItem {
     id: number;
     modifiers?: {
         type: number;
@@ -14,7 +14,7 @@ interface AuctionItem {
     context?: number;
 }
 
-interface AuctionListing {
+export interface AuctionListing {
     id: number;
     item: AuctionItem;
     bid?: number;
@@ -23,7 +23,7 @@ interface AuctionListing {
     time_left: "SHORT" | "MEDIUM" | "LONG" | "VERY_LONG";
 }
 
-interface Auctions extends LinkSelfHref {
+export interface Auctions extends LinkSelfHref {
     connected_realm: {
         href: string;
     };
@@ -33,7 +33,7 @@ interface Auctions extends LinkSelfHref {
     };
 }
 
-interface commodity {
+export interface commodity {
     "id": number;
     "item": {
         "id": number;
@@ -43,7 +43,7 @@ interface commodity {
     "time_left": "SHORT" | "MEDIUM" | "LONG" | "VERY_LONG";
 }
 
-interface Commodities extends LinkSelfHref {
+export interface Commodities extends LinkSelfHref {
     auctions: commodity[];
 }
 

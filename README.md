@@ -1,15 +1,14 @@
 # BLIZZARD_API
+[![JSR Version](https://jsr.io/badges/@pinta365/blizzard-api)](https://jsr.io/@pinta365/blizzard-api)
 
 Start of what will cover the whole Blizzard Battle.net API when its done.
-
-Link to the module on [Deno Land](https://deno.land/x/blizzard_api)
 
 Link to the module on [JSR](https://jsr.io/@pinta365/blizzard-api)
 
 ## WORK IN PROGRESS
 
-Let me know if you want certain APIs to be prioritized.
-Currently only supports client credentials flow but the plan is to implement authorization code flow also.
+Let me know if you want certain APIs to be prioritized. Currently only supports client credentials flow but the plan is
+to implement authorization code flow also.
 
 ### APIs implemented
 
@@ -35,12 +34,12 @@ Currently only supports client credentials flow but the plan is to implement aut
 ```javascript
 import * as blizzardAPI from "@pinta365/blizzard-api";
 
-const ClientId = "<YOUR CLIENT ID>";
-const ClientSecret = "<YOUR SECRET>";
+const clientId = "<YOUR CLIENT ID>";
+const clientSecret = "<YOUR SECRET>";
 
 blizzardAPI.setup({
-    clientId: ClientId,
-    clientSecret: ClientSecret,
+    clientId,
+    clientSecret,
     region: "eu",
     locale: "en_GB",
 });

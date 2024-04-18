@@ -1,23 +1,17 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface KeystoneAffixes extends LinkSelfHref {
+export interface KeystoneAffixes extends LinkSelfHref {
     affixes: KeyNameId[];
 }
 
-interface KeystoneAffix extends LinkSelfHref {
+export interface KeystoneAffix extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     description: LocalizedString;
     media: KeyId;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-
-interface KeystoneAffixMedia extends LinkSelfHref {
+export interface KeystoneAffixMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

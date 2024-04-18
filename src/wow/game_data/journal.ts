@@ -1,22 +1,31 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, request, TypeName } from "../../shared/index.ts";
+import {
+    Asset,
+    KeyId,
+    KeyNameId,
+    LinkSelfHref,
+    LocalizedString,
+    NameId,
+    request,
+    TypeName,
+} from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface JournalExpansions extends LinkSelfHref {
+export interface JournalExpansions extends LinkSelfHref {
     tiers: KeyNameId[];
 }
 
-interface JournalExpansion extends LinkSelfHref {
+export interface JournalExpansion extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     dungeons: KeyNameId[];
     raids: KeyNameId[];
 }
 
-interface JournalEncounters extends LinkSelfHref {
+export interface JournalEncounters extends LinkSelfHref {
     encounters: KeyNameId[];
 }
 
-interface EncounterSection {
+export interface EncounterSection {
     id: number;
     title: string;
     body_text?: string;
@@ -25,7 +34,7 @@ interface EncounterSection {
     creature_display?: KeyId;
 }
 
-interface JournalEncounter extends LinkSelfHref {
+export interface JournalEncounter extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     description: LocalizedString;
@@ -46,11 +55,11 @@ interface JournalEncounter extends LinkSelfHref {
     modes: TypeName[];
 }
 
-interface JournalInstances extends LinkSelfHref {
+export interface JournalInstances extends LinkSelfHref {
     instances: KeyNameId[];
 }
 
-interface JournalInstance extends LinkSelfHref {
+export interface JournalInstance extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     map: NameId;
@@ -71,11 +80,7 @@ interface JournalInstance extends LinkSelfHref {
     };
 }
 
-interface Asset {
-    key: string;
-    value: string;
-}
-interface JournalInstanceMedia extends LinkSelfHref {
+export interface JournalInstanceMedia extends LinkSelfHref {
     assets: Asset[];
 }
 

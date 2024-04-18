@@ -1,9 +1,21 @@
+//request.ts
 import type { RequestOptions } from "./types.ts";
 import { apiBaseUrl, getSetup } from "./config.ts";
 import { authenticate, getauthConfig } from "./auth.ts";
 
 import { APIError } from "./errors.ts";
 
+/**
+ * Makes an authenticated request to the API and handles potential errors.
+ * @param {RequestOptions} requestOptions - An object containing the following:
+ *      * method: The HTTP method (e.g., "GET", "POST")
+ *      * url:  The API endpoint path.
+ *      * namespace (optional):  The Battlenet namespace for the request.
+ *      * qs (optional): An object representing query string parameters.
+ * @returns {Promise<any>} The parsed JSON response from the API.
+ * @throws {APIError} If there is a problem fetching or the response is not successful.
+ * @throws {AuthenticationError} (Potentially) If authentication fails during the process.
+ */
 export async function request(requestOptions: RequestOptions) {
     if (
         !getauthConfig().accessToken || (getauthConfig().accessToken && getauthConfig().tokenExpiration &&

@@ -1,6 +1,6 @@
 import { request } from "../../shared/index.ts";
 
-interface Team {
+export interface Team {
     id: number;
     competitions: string[];
     name: string;

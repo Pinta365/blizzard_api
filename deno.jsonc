@@ -1,6 +1,10 @@
 {
+    "name": "@pinta365/blizzard-api",
+    "version": "0.3.3",
+    "exports": "./mod.ts",
+
     "tasks": {
-        "publish_jsr": "deno publish --config jsr.json"        
+        "publish-dry": "deno publish --dry-run"
     },
     "fmt": {
         "lineWidth": 120,

@@ -1,13 +1,13 @@
 import { Character, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface AchievementCriteria {
+export interface AchievementCriteria {
     id: number;
     amount?: number;
     is_completed: boolean;
     child_criteria?: AchievementCriteria[];
 }
 
-interface CharacterAchievementSummary extends LinkSelfHref {
+export interface CharacterAchievementSummary extends LinkSelfHref {
     total_quantity: number;
     total_points: number;
     achievements: {
@@ -31,7 +31,7 @@ interface CharacterAchievementSummary extends LinkSelfHref {
     };
 }
 
-interface AchievementStatistic {
+export interface AchievementStatistic {
     id: number;
     name: LocalizedString;
     last_updated_timestamp: number;
@@ -39,7 +39,7 @@ interface AchievementStatistic {
     quantity: number;
 }
 
-interface AchievementsubCategory {
+export interface AchievementsubCategory {
     id: number;
     name: LocalizedString;
     statistics: {
@@ -51,7 +51,7 @@ interface AchievementsubCategory {
     }[];
 }
 
-interface CharacterAchievementStatistics extends LinkSelfHref {
+export interface CharacterAchievementStatistics extends LinkSelfHref {
     character: {
         key: {
             href: string;

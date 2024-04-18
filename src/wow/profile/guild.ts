@@ -1,12 +1,21 @@
-import { Character, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import {
+    Character,
+    Href,
+    KeyId,
+    KeyNameId,
+    LinkSelfHref,
+    LocalizedString,
+    request,
+    TypeName,
+} from "../../shared/index.ts";
 
-interface Rgba {
+export interface Rgba {
     r: number;
     g: number;
     b: number;
     a: number;
 }
-interface CrestAsset {
+export interface CrestAsset {
     id?: number;
     media?: KeyId;
     color: {
@@ -15,10 +24,7 @@ interface CrestAsset {
     };
 }
 
-interface Href {
-    href: string;
-}
-interface Guild extends LinkSelfHref {
+export interface Guild extends LinkSelfHref {
     key?: Href;
     id: number;
     name: string;
@@ -42,7 +48,7 @@ interface Guild extends LinkSelfHref {
     activity?: Href;
 }
 
-interface GuildActivity extends LinkSelfHref {
+export interface GuildActivity extends LinkSelfHref {
     guild: Guild;
     activities: {
         character_achievement: {
@@ -56,14 +62,14 @@ interface GuildActivity extends LinkSelfHref {
     }[];
 }
 
-interface Critiera {
+export interface Critiera {
     id: number;
     amount?: number;
     is_completed: boolean;
     child_criteria?: Critiera[];
 }
 
-interface GuildAchievements extends LinkSelfHref {
+export interface GuildAchievements extends LinkSelfHref {
     guild: Guild;
     total_quantity: number;
     total_points: number;
@@ -84,7 +90,7 @@ interface GuildAchievements extends LinkSelfHref {
     }[];
 }
 
-interface GuildRoster extends LinkSelfHref {
+export interface GuildRoster extends LinkSelfHref {
     guild: Guild;
     members: {
         character: Character;

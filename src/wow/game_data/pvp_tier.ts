@@ -1,20 +1,15 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-interface PvpTierMedia extends LinkSelfHref {
+export interface PvpTierMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }
 
-interface PvpTiers extends LinkSelfHref {
+export interface PvpTiers extends LinkSelfHref {
     tiers: KeyNameId[];
 }
 
-interface PvpTier extends LinkSelfHref {
+export interface PvpTier extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     min_rating: number;

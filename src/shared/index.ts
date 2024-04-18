@@ -3,7 +3,9 @@ export { authenticate } from "./auth.ts";
 export { request } from "./request.ts";
 
 export type {
+    Asset,
     Character,
+    Href,
     KeyId,
     KeyName,
     KeyNameId,

@@ -1,6 +1,6 @@
 import { Character, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface CharacterReputations extends LinkSelfHref {
+export interface CharacterReputations extends LinkSelfHref {
     character: Character;
     reputations: {
         faction: KeyNameId;

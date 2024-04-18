@@ -1,10 +1,10 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, request } from "../../shared/index.ts";
 
-interface MythicKeystoneLeaderboards extends LinkSelfHref {
+export interface MythicKeystoneLeaderboards extends LinkSelfHref {
     current_leaderboards: KeyNameId[];
 }
 
-interface MythicKeystoneLeaderboard extends LinkSelfHref {
+export interface MythicKeystoneLeaderboard extends LinkSelfHref {
     map: NameId;
     period: number;
     period_start_timestamp: number;

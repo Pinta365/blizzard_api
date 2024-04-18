@@ -1,10 +1,10 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface Mounts extends LinkSelfHref {
+export interface Mounts extends LinkSelfHref {
     mounts: KeyNameId[];
 }
 
-interface Mount extends LinkSelfHref {
+export interface Mount extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     creature_displays: KeyId[];

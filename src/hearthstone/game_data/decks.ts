@@ -1,12 +1,12 @@
 import { LocalizedString, request } from "../../shared/index.ts";
 
-interface Options {
+export interface Options {
     code?: string;
     ids?: string;
     hero?: string;
 }
 
-interface Deck {
+export interface Deck {
     deckCode: string;
     version: number;
     format: string;

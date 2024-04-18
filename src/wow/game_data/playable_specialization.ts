@@ -1,10 +1,19 @@
-import { KeyId, KeyName, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import {
+    Asset,
+    KeyId,
+    KeyName,
+    KeyNameId,
+    LinkSelfHref,
+    LocalizedString,
+    request,
+    TypeName,
+} from "../../shared/index.ts";
 
-interface PlayableSpecializations extends LinkSelfHref {
+export interface PlayableSpecializations extends LinkSelfHref {
     character_specializations: KeyNameId;
 }
 
-interface PlayableSpecialization {
+export interface PlayableSpecialization {
     id: number;
     playable_class: KeyNameId;
     name: LocalizedString;
@@ -29,13 +38,7 @@ interface PlayableSpecialization {
     primary_stat_type: TypeName;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-
-interface PlayableSpecializationMedia extends LinkSelfHref {
+export interface PlayableSpecializationMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

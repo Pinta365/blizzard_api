@@ -1,7 +1,7 @@
 import { LocalizedString, request, RequestOptions } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface Card {
+export interface Card {
     id: number;
     collectible: number;
     slug: string;

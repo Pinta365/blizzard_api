@@ -1,10 +1,10 @@
 import { KeyId, KeyNameId, LinkSelfHref, request, TypeName } from "../../shared/index.ts";
 
-interface Toys extends LinkSelfHref {
+export interface Toys extends LinkSelfHref {
     toys: KeyNameId[];
 }
 
-interface Toy extends LinkSelfHref {
+export interface Toy extends LinkSelfHref {
     id: number;
     item: KeyNameId;
     source: TypeName;

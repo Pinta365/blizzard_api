@@ -1,6 +1,6 @@
 import { Character, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface CharacterAppearanceSummary extends LinkSelfHref {
+export interface CharacterAppearanceSummary extends LinkSelfHref {
     character: Character;
     playable_race: KeyNameId;
     playable_class: KeyNameId;

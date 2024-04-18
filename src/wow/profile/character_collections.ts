@@ -1,10 +1,10 @@
 import { Character, KeyId, KeyNameId, LinkSelfHref, request, TypeName } from "../../shared/index.ts";
 
-interface Href {
+export interface Href {
     href: string;
 }
 
-interface CharacterCollectionTypes extends LinkSelfHref {
+export interface CharacterCollectionTypes extends LinkSelfHref {
     pets: Href;
     mounts: Href;
     heirlooms: Href;
@@ -12,16 +12,16 @@ interface CharacterCollectionTypes extends LinkSelfHref {
     character: Character;
 }
 
-interface Mount {
+export interface Mount {
     mounts: KeyNameId;
     is_character_specific?: boolean;
     is_useable: boolean;
 }
-interface CharacterCollectionMounts extends LinkSelfHref {
+export interface CharacterCollectionMounts extends LinkSelfHref {
     mounts: Mount[];
 }
 
-interface Pet {
+export interface Pet {
     species: KeyNameId;
     level: number;
     quality: TypeName;
@@ -35,28 +35,28 @@ interface Pet {
     id: number;
 }
 
-interface CharacterCollectionPets extends LinkSelfHref {
+export interface CharacterCollectionPets extends LinkSelfHref {
     pets: Pet[];
     unlocked_battle_pet_slots: number;
 }
 
-interface Toy {
+export interface Toy {
     toy: KeyNameId;
     is_favorite?: boolean;
 }
 
-interface CharacterCollectionToys extends LinkSelfHref {
+export interface CharacterCollectionToys extends LinkSelfHref {
     toys: Toy[];
 }
 
-interface Heirloom {
+export interface Heirloom {
     heirloom: KeyNameId;
     upgrade: {
         level: number;
     };
 }
 
-interface CharacterCollectionHeirlooms extends LinkSelfHref {
+export interface CharacterCollectionHeirlooms extends LinkSelfHref {
     heirlooms: Heirloom[];
 }
 

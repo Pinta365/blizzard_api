@@ -1,10 +1,6 @@
-import { Character, LinkSelfHref, request } from "../../shared/index.ts";
+import { Asset, Character, LinkSelfHref, request } from "../../shared/index.ts";
 
-interface Asset {
-    key: string;
-    value: string;
-}
-interface CharacterMedia extends LinkSelfHref {
+export interface CharacterMedia extends LinkSelfHref {
     character: Character;
     assets: Asset[];
 }

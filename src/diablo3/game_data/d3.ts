@@ -1,6 +1,6 @@
 import { LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface Seasons extends LinkSelfHref {
+export interface Seasons extends LinkSelfHref {
     season: {
         href: string;
     }[];
@@ -11,7 +11,7 @@ interface Seasons extends LinkSelfHref {
     generated_by: string;
 }
 
-interface Season extends LinkSelfHref {
+export interface Season extends LinkSelfHref {
     leaderboard: {
         team_size?: number;
         ladder: {
@@ -25,14 +25,14 @@ interface Season extends LinkSelfHref {
     generated_by: string;
 }
 
-interface LeaderboardData {
+export interface LeaderboardData {
     id: string;
     string?: string;
     number?: number;
     timestamp?: number;
 }
 
-interface LeaderboardBase extends LinkSelfHref {
+export interface LeaderboardBase extends LinkSelfHref {
     row: {
         player: {
             key: string;
@@ -55,18 +55,18 @@ interface LeaderboardBase extends LinkSelfHref {
     generated_by: string;
 }
 
-interface SeasonLeaderboard extends LeaderboardBase {
+export interface SeasonLeaderboard extends LeaderboardBase {
     achievement_points: boolean;
     season: number;
 }
 
-interface EraLeaderboard extends LeaderboardBase {
+export interface EraLeaderboard extends LeaderboardBase {
     greater_rift: boolean;
     greater_rift_solo_class: string;
     era: number;
 }
 
-interface Eras extends LinkSelfHref {
+export interface Eras extends LinkSelfHref {
     era: {
         href: string;
     }[];
@@ -75,7 +75,7 @@ interface Eras extends LinkSelfHref {
     generated_by: string;
 }
 
-interface Era extends LinkSelfHref {
+export interface Era extends LinkSelfHref {
     leaderboard: {
         team_size?: number;
         ladder: {

@@ -1,6 +1,6 @@
 import { LocalizedString, request } from "../../shared/index.ts";
 
-interface Metadata {
+export interface Metadata {
     sets: {
         id: number;
         name: LocalizedString;

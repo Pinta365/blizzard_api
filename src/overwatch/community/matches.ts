@@ -1,6 +1,6 @@
 import { request } from "../../shared/index.ts";
 
-interface Match {
+export interface Match {
     competitionId: string;
     conclusion: string;
     endTimestamp: number;

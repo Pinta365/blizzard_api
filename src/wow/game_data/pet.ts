@@ -1,10 +1,10 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface Pets extends LinkSelfHref {
+export interface Pets extends LinkSelfHref {
     pets: KeyNameId[];
 }
 
-interface Pet extends LinkSelfHref {
+export interface Pet extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     battle_pet_type: {
@@ -30,21 +30,16 @@ interface Pet extends LinkSelfHref {
     media: KeyId;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-interface PetMedia extends LinkSelfHref {
+export interface PetMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }
 
-interface PetAbilities extends LinkSelfHref {
+export interface PetAbilities extends LinkSelfHref {
     abilities: KeyNameId[];
 }
 
-interface PetAbility extends LinkSelfHref {
+export interface PetAbility extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     battle_pet_type: {
@@ -56,7 +51,7 @@ interface PetAbility extends LinkSelfHref {
     media: KeyId;
 }
 
-interface PetAbilityMedia extends LinkSelfHref {
+export interface PetAbilityMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

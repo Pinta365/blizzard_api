@@ -1,11 +1,11 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface ConnectedRealms extends LinkSelfHref {
+export interface ConnectedRealms extends LinkSelfHref {
     connected_realms: { href: string }[];
 }
 
-interface Realm {
+export interface Realm {
     id: number;
     region: KeyNameId;
     connected_realm: { href: string };
@@ -18,7 +18,7 @@ interface Realm {
     slug: string;
 }
 
-interface ConnectedRealm extends LinkSelfHref {
+export interface ConnectedRealm extends LinkSelfHref {
     id: number;
     has_queue: boolean;
     status: TypeName;

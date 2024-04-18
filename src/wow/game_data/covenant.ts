@@ -1,10 +1,10 @@
-import { KeyNameId, LinkSelfHref, LocalizedString, NameId, request, TypeName } from "../../shared/index.ts";
+import { Asset, KeyNameId, LinkSelfHref, LocalizedString, NameId, request, TypeName } from "../../shared/index.ts";
 
-interface Covenants extends LinkSelfHref {
+export interface Covenants extends LinkSelfHref {
     covenants: KeyNameId[];
 }
 
-interface SpellTooltip {
+export interface SpellTooltip {
     spell: KeyNameId;
     description: LocalizedString;
     cast_time: string;
@@ -13,18 +13,18 @@ interface SpellTooltip {
     cooldown: string;
 }
 
-interface SignatureAbility {
+export interface SignatureAbility {
     id: number;
     spell_tooltip: SpellTooltip;
 }
 
-interface ClassAbility {
+export interface ClassAbility {
     id: number;
     playable_class: KeyNameId;
     spell_tooltip: SpellTooltip;
 }
 
-interface Covenant extends LinkSelfHref {
+export interface Covenant extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     description: LocalizedString;
@@ -32,21 +32,15 @@ interface Covenant extends LinkSelfHref {
     class_abilities: ClassAbility[];
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-
-interface CovenantMedia extends LinkSelfHref {
+export interface CovenantMedia extends LinkSelfHref {
     assets: Asset[];
 }
 
-interface CovenantSoulbinds extends LinkSelfHref {
+export interface CovenantSoulbinds extends LinkSelfHref {
     soulbinds: KeyNameId;
 }
 
-interface CovenantSoulbind extends LinkSelfHref {
+export interface CovenantSoulbind extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     covenant: KeyNameId;
@@ -55,23 +49,23 @@ interface CovenantSoulbind extends LinkSelfHref {
     talent_tree: KeyNameId;
 }
 
-interface CovenantConduits extends LinkSelfHref {
+export interface CovenantConduits extends LinkSelfHref {
     conduits: KeyNameId;
 }
 
-interface SpellTooltip {
+export interface SpellTooltip {
     spell: KeyNameId;
     description: LocalizedString;
     cast_time: string;
 }
 
-interface Rank {
+export interface Rank {
     id: number;
     tier: number;
     spell_tooltip: SpellTooltip;
 }
 
-interface CovenantConduit extends LinkSelfHref {
+export interface CovenantConduit extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     item: KeyNameId;

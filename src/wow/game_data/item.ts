@@ -1,21 +1,21 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface ItemClasses extends LinkSelfHref {
+export interface ItemClasses extends LinkSelfHref {
     item_classes: KeyNameId[];
 }
 
-interface ItemClass extends LinkSelfHref {
+export interface ItemClass extends LinkSelfHref {
     class_id: number;
     name: LocalizedString;
     item_subclasses: KeyNameId[];
 }
 
-interface ItemSets extends LinkSelfHref {
+export interface ItemSets extends LinkSelfHref {
     item_sets: KeyNameId[];
 }
 
-interface ItemSet extends LinkSelfHref {
+export interface ItemSet extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     items: KeyNameId[];
@@ -26,14 +26,14 @@ interface ItemSet extends LinkSelfHref {
     is_effect_active: boolean;
 }
 
-interface ItemSubclass extends LinkSelfHref {
+export interface ItemSubclass extends LinkSelfHref {
     class_id: number;
     subclass_id: number;
     display_name: LocalizedString;
     hide_subclass_in_tooltips?: boolean;
 }
 
-interface Item extends LinkSelfHref {
+export interface Item extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     quality: TypeName;
@@ -112,12 +112,7 @@ interface Item extends LinkSelfHref {
     purchase_quantity: number;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-interface ItemMedia extends LinkSelfHref {
+export interface ItemMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

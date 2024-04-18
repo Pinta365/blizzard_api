@@ -1,22 +1,22 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface ReputationFactions extends LinkSelfHref {
+export interface ReputationFactions extends LinkSelfHref {
     factions: KeyNameId[];
     root_factions: KeyNameId[];
 }
 
-interface ReputationFaction extends LinkSelfHref {
+export interface ReputationFaction extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     description: LocalizedString;
     reputation_tiers: KeyId;
 }
 
-interface ReputationTiers extends LinkSelfHref {
+export interface ReputationTiers extends LinkSelfHref {
     reputation_tiers: KeyNameId[];
 }
 
-interface ReputationTier extends LinkSelfHref {
+export interface ReputationTier extends LinkSelfHref {
     id: number;
     tiers: {
         name: LocalizedString;

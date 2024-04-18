@@ -1,10 +1,10 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, request } from "../../shared/index.ts";
 
-interface MythicKeystoneDungeons extends LinkSelfHref {
+export interface MythicKeystoneDungeons extends LinkSelfHref {
     dungeons: KeyNameId[];
 }
 
-interface MythicKeystoneDungeon extends LinkSelfHref {
+export interface MythicKeystoneDungeon extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     map: NameId;
@@ -19,7 +19,7 @@ interface MythicKeystoneDungeon extends LinkSelfHref {
     is_traacked: boolean;
 }
 
-interface MythicKeystoneIndex extends LinkSelfHref {
+export interface MythicKeystoneIndex extends LinkSelfHref {
     seasons: {
         href: string;
     };
@@ -28,18 +28,18 @@ interface MythicKeystoneIndex extends LinkSelfHref {
     };
 }
 
-interface MythicKeystonePeriods extends LinkSelfHref {
+export interface MythicKeystonePeriods extends LinkSelfHref {
     periods: KeyId[];
     current_period: KeyId;
 }
 
-interface MythicKeystonePeriod extends LinkSelfHref {
+export interface MythicKeystonePeriod extends LinkSelfHref {
     id: number;
     start_timestamp: number;
     end_timestamp: number;
 }
 
-interface MythicKeystoneSeason extends LinkSelfHref {
+export interface MythicKeystoneSeason extends LinkSelfHref {
     id: number;
     start_timestamp: number;
     end_timestamp?: number;
@@ -114,7 +114,7 @@ export async function mythicKeystonePeriod(periodId: number): Promise<MythicKeys
     });
 }
 
-interface MythicKeystoneSeasons extends LinkSelfHref {
+export interface MythicKeystoneSeasons extends LinkSelfHref {
     "seasons": KeyId[];
     "current_season": KeyId;
 }

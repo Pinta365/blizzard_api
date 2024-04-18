@@ -1,20 +1,20 @@
 import { Character, KeyNameId, LinkSelfHref, NameId, request } from "../../shared/index.ts";
 
-interface Tier {
+export interface Tier {
     skill_points: number;
     max_skill_points: number;
     tier: NameId;
     known_recipes: KeyNameId[];
 }
 
-interface Profession {
+export interface Profession {
     profession: KeyNameId;
     skill_points?: number;
     max_skill_points?: number;
     tiers?: Tier[];
 }
 
-interface CharacterProfessions extends LinkSelfHref {
+export interface CharacterProfessions extends LinkSelfHref {
     character: Character;
     primaries: Profession[];
     secondaries: Profession[];

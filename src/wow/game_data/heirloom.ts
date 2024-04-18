@@ -1,14 +1,14 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface Heirlooms extends LinkSelfHref {
+export interface Heirlooms extends LinkSelfHref {
     heirlooms: KeyNameId[];
 }
-interface ValueDisplayString {
+export interface ValueDisplayString {
     value: number;
     display_string: LocalizedString;
 }
 
-interface UpgradeStats {
+export interface UpgradeStats {
     type: TypeName;
     value: number;
     display: {
@@ -22,7 +22,7 @@ interface UpgradeStats {
     };
 }
 
-interface Upgrade {
+export interface Upgrade {
     item: {
         item: KeyId;
         context: number;
@@ -60,7 +60,7 @@ interface Upgrade {
     level: number;
 }
 
-interface Heirloom extends LinkSelfHref {
+export interface Heirloom extends LinkSelfHref {
     id: number;
     item: KeyNameId;
     source: TypeName;

@@ -1,13 +1,13 @@
 import { Character, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface Rgba {
+export interface Rgba {
     r: number;
     g: number;
     b: number;
     a: number;
 }
 
-interface characterEquipments extends LinkSelfHref {
+export interface characterEquipments extends LinkSelfHref {
     character: Character;
     equipped_items: {
         item: KeyId;

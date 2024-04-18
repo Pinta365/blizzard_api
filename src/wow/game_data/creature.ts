@@ -1,27 +1,27 @@
 import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface CreatureFamilies extends LinkSelfHref {
+export interface CreatureFamilies extends LinkSelfHref {
     creature_families: KeyNameId[];
 }
 
-interface CreatureFamily extends LinkSelfHref {
+export interface CreatureFamily extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     specialization: KeyNameId;
     media: KeyId;
 }
 
-interface CreatureTypes extends LinkSelfHref {
+export interface CreatureTypes extends LinkSelfHref {
     creature_types: KeyNameId[];
 }
 
-interface CreatureType extends LinkSelfHref {
+export interface CreatureType extends LinkSelfHref {
     id: number;
     name: LocalizedString;
 }
 
-interface Creature extends LinkSelfHref {
+export interface Creature extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     type: KeyNameId;
@@ -30,23 +30,23 @@ interface Creature extends LinkSelfHref {
     is_tameable: boolean;
 }
 
-interface CreatureDisplayAssets {
+export interface CreatureDisplayAssets {
     key: string;
     value: string;
 }
 
-interface CreatureDisplayMedia extends LinkSelfHref {
+export interface CreatureDisplayMedia extends LinkSelfHref {
     assets: CreatureDisplayAssets[];
     id: number;
 }
 
-interface CreatureFamilyAssets {
+export interface CreatureFamilyAssets {
     key: string;
     value: string;
     file_data_id: number;
 }
 
-interface CreatureFamilyMedia extends LinkSelfHref {
+export interface CreatureFamilyMedia extends LinkSelfHref {
     assets: CreatureFamilyAssets[];
     id: number;
 }

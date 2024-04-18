@@ -1,10 +1,10 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface Professions extends LinkSelfHref {
+export interface Professions extends LinkSelfHref {
     professions: KeyNameId[];
 }
 
-interface Profession extends LinkSelfHref {
+export interface Profession extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     description: LocalizedString;
@@ -13,17 +13,12 @@ interface Profession extends LinkSelfHref {
     skill_tiers: KeyNameId[];
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-interface ProfessionMedia extends LinkSelfHref {
+export interface ProfessionMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }
 
-interface ProfessionSkillTier extends LinkSelfHref {
+export interface ProfessionSkillTier extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     minimum_skill_level: number;
@@ -34,7 +29,7 @@ interface ProfessionSkillTier extends LinkSelfHref {
     }[];
 }
 
-interface ProfessionRecipie extends LinkSelfHref {
+export interface ProfessionRecipie extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     media: KeyId;
@@ -48,7 +43,7 @@ interface ProfessionRecipie extends LinkSelfHref {
     };
 }
 
-interface professionRecipieMedia extends LinkSelfHref {
+export interface professionRecipieMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

@@ -1,10 +1,10 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface Titles extends LinkSelfHref {
+export interface Titles extends LinkSelfHref {
     titles: KeyNameId[];
 }
 
-interface Title extends LinkSelfHref {
+export interface Title extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     gender_name: {

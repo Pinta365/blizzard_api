@@ -1,6 +1,6 @@
 import { Character, KeyNameId, LinkSelfHref, request } from "../../shared/index.ts";
 
-interface CharacterStatistics extends LinkSelfHref {
+export interface CharacterStatistics extends LinkSelfHref {
     health: number;
     power: number;
     power_type: KeyNameId;

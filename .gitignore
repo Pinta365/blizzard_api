@@ -2,4 +2,3 @@
 .vscode
 test.ts
 npm/
-deno.lock

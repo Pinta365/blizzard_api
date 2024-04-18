@@ -1,6 +1,6 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface Quests extends LinkSelfHref {
+export interface Quests extends LinkSelfHref {
     categories: {
         href: string;
     };
@@ -12,7 +12,7 @@ interface Quests extends LinkSelfHref {
     };
 }
 
-interface Quest extends LinkSelfHref {
+export interface Quest extends LinkSelfHref {
     id: number;
     title: LocalizedString;
     area: KeyNameId;
@@ -39,31 +39,31 @@ interface Quest extends LinkSelfHref {
     };
 }
 
-interface QuestCategories extends LinkSelfHref {
+export interface QuestCategories extends LinkSelfHref {
     categories: KeyNameId[];
 }
 
-interface QuestCategory extends LinkSelfHref {
+export interface QuestCategory extends LinkSelfHref {
     id: number;
     category: LocalizedString;
     quests: KeyNameId[];
 }
 
-interface QuestAreas extends LinkSelfHref {
+export interface QuestAreas extends LinkSelfHref {
     areas: KeyNameId[];
 }
 
-interface QuestArea extends LinkSelfHref {
+export interface QuestArea extends LinkSelfHref {
     id: number;
     area: LocalizedString;
     quests: KeyNameId[];
 }
 
-interface QuestTypes extends LinkSelfHref {
+export interface QuestTypes extends LinkSelfHref {
     types: KeyNameId[];
 }
 
-interface QuestType extends LinkSelfHref {
+export interface QuestType extends LinkSelfHref {
     id: number;
     type: LocalizedString;
     quests: KeyNameId[];

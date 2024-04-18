@@ -1,6 +1,6 @@
 import { LinkSelfHref, request } from "../../shared/index.ts";
 
-interface League extends LinkSelfHref {
+export interface League extends LinkSelfHref {
     key: {
         league_id: number;
         season_id: number;

@@ -1,6 +1,6 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface ModifiedCraftingParents extends LinkSelfHref {
+export interface ModifiedCraftingParents extends LinkSelfHref {
     categories: {
         href: string;
     };
@@ -9,20 +9,20 @@ interface ModifiedCraftingParents extends LinkSelfHref {
     };
 }
 
-interface ModifiedCraftingCategories extends LinkSelfHref {
+export interface ModifiedCraftingCategories extends LinkSelfHref {
     categories: KeyNameId;
 }
 
-interface ModifiedCraftingCategory extends LinkSelfHref {
+export interface ModifiedCraftingCategory extends LinkSelfHref {
     id: number;
     name: LocalizedString;
 }
 
-interface ModifiedCraftingSlotTypes extends LinkSelfHref {
+export interface ModifiedCraftingSlotTypes extends LinkSelfHref {
     slot_types: KeyNameId[];
 }
 
-interface ModifiedCraftingSlotType extends LinkSelfHref {
+export interface ModifiedCraftingSlotType extends LinkSelfHref {
     id: number;
     description: LocalizedString;
     compatible_categories: KeyNameId[];

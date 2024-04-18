@@ -1,10 +1,10 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface PowerTypes extends LinkSelfHref {
+export interface PowerTypes extends LinkSelfHref {
     power_types: KeyNameId[];
 }
 
-interface PowerType extends LinkSelfHref {
+export interface PowerType extends LinkSelfHref {
     id: number;
     name: LocalizedString;
 }

@@ -1,6 +1,6 @@
 import { KeyNameId, LinkSelfHref, request } from "../../shared/index.ts";
 
-interface MythicRaidLeaderboard extends LinkSelfHref {
+export interface MythicRaidLeaderboard extends LinkSelfHref {
     slug: string;
     criteria_type: string;
     entries: {

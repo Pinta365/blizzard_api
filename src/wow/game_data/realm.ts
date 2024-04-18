@@ -1,14 +1,14 @@
 import { KeyName, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface RealmList extends KeyNameId {
+export interface RealmList extends KeyNameId {
     slug: string;
 }
-interface Realms extends LinkSelfHref {
+export interface Realms extends LinkSelfHref {
     realms: RealmList[];
 }
 
-interface Realm extends LinkSelfHref {
+export interface Realm extends LinkSelfHref {
     id: number;
     region: KeyName;
     connected_realm: {

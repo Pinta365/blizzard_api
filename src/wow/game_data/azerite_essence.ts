@@ -1,18 +1,18 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface AzeriteEssences extends LinkSelfHref {
+export interface AzeriteEssences extends LinkSelfHref {
     azerite_essences: KeyNameId[];
 }
 
-interface AzeritePower {
+export interface AzeritePower {
     id: number;
     rank: number;
     main_power_spell: KeyNameId;
     passive_power_spell: KeyNameId;
 }
 
-interface AzeriteEssenceDetails extends LinkSelfHref {
+export interface AzeriteEssenceDetails extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     allowed_specializations: KeyNameId[];
@@ -20,13 +20,7 @@ interface AzeriteEssenceDetails extends LinkSelfHref {
     media: KeyId;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-
-interface AzeritEessenceMedia extends LinkSelfHref {
+export interface AzeritEessenceMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

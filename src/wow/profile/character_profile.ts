@@ -1,14 +1,14 @@
 import { KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface Href {
+export interface Href {
     href: string;
 }
 
-interface Realm extends KeyNameId {
+export interface Realm extends KeyNameId {
     slug: string;
 }
 
-interface CharacterProfile extends LinkSelfHref {
+export interface CharacterProfile extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     gender: TypeName;
@@ -52,7 +52,7 @@ interface CharacterProfile extends LinkSelfHref {
     };
 }
 
-interface CharacterProfileStatus extends LinkSelfHref {
+export interface CharacterProfileStatus extends LinkSelfHref {
     id: number;
     is_valid: boolean;
 }

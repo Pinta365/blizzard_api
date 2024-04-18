@@ -1,6 +1,6 @@
 import { Character, KeyNameId, LinkSelfHref, request, TypeName } from "../../shared/index.ts";
 
-interface CharacterEncounters extends LinkSelfHref {
+export interface CharacterEncounters extends LinkSelfHref {
     character: Character;
     dungeons: {
         href: string;
@@ -10,7 +10,7 @@ interface CharacterEncounters extends LinkSelfHref {
     };
 }
 
-interface CharacterEncounterDungeons extends LinkSelfHref {
+export interface CharacterEncounterDungeons extends LinkSelfHref {
     expansions: {
         expansion: KeyNameId;
         instances: {
@@ -32,7 +32,7 @@ interface CharacterEncounterDungeons extends LinkSelfHref {
     }[];
 }
 
-interface CharacterEncounterRaids extends LinkSelfHref {
+export interface CharacterEncounterRaids extends LinkSelfHref {
     character: Character;
     expansions: {
         expansion: KeyNameId;

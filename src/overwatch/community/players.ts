@@ -1,6 +1,6 @@
 import { request } from "../../shared/index.ts";
 
-interface Player {
+export interface Player {
     number: number;
     preferredSlot: number;
     givenName: string;

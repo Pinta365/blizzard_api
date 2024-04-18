@@ -1,7 +1,7 @@
 import { LocalizedString, request } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface Cardback {
+export interface Cardback {
     id: number;
     sortCategory: number;
     text: LocalizedString;

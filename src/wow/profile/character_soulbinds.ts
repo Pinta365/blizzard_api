@@ -1,6 +1,6 @@
 import { Character, KeyNameId, LinkSelfHref, request, TypeName } from "../../shared/index.ts";
 
-interface CharacterSoulbinds extends LinkSelfHref {
+export interface CharacterSoulbinds extends LinkSelfHref {
     character: Character;
     chosen_covenant: KeyNameId;
     renown_level: number;

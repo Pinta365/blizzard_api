@@ -1,6 +1,6 @@
 import { Character, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface Detail {
+export interface Detail {
     talent: KeyNameId;
     spell_tooltip: {
         spell: KeyNameId;
@@ -12,14 +12,14 @@ interface Detail {
     };
 }
 
-interface Talent {
+export interface Talent {
     id: number;
     rank: number;
     tooltip: Detail;
     default_points?: number;
 }
 
-interface CharacterSpecializations extends LinkSelfHref {
+export interface CharacterSpecializations extends LinkSelfHref {
     specializations: {
         specialization: KeyNameId;
         glyphs?: KeyNameId[];

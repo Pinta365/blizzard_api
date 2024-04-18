@@ -1,6 +1,6 @@
 import { LocalizedString, request } from "../../shared/index.ts";
 
-interface Segment {
+export interface Segment {
     id: string;
     name: LocalizedString;
     competitionId: string;
@@ -9,7 +9,7 @@ interface Segment {
     lastMatchStart?: number;
 }
 
-interface SummaryData {
+export interface SummaryData {
     players: unknown;
     teams: unknown;
     segments: {

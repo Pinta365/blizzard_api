@@ -1,16 +1,16 @@
-import { KeyId, LinkSelfHref, request } from "../../shared/index.ts";
+import { Asset, KeyId, LinkSelfHref, request } from "../../shared/index.ts";
 
-interface Emblem {
+export interface Emblem {
     id: number;
     media: KeyId[];
 }
 
-interface Border {
+export interface Border {
     id: number;
     media: KeyId[];
 }
 
-interface IdRgba {
+export interface IdRgba {
     id: number;
     rgba: {
         r: number;
@@ -20,7 +20,7 @@ interface IdRgba {
     };
 }
 
-interface GuildCrests extends LinkSelfHref {
+export interface GuildCrests extends LinkSelfHref {
     emblems: Emblem[];
     borders: Border[];
     colors: {
@@ -30,17 +30,12 @@ interface GuildCrests extends LinkSelfHref {
     };
 }
 
-interface Asset {
-    key: string;
-    value: string;
-}
-
-interface GuildCrestBorder extends LinkSelfHref {
+export interface GuildCrestBorder extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }
 
-interface GuildCrestEmblem extends LinkSelfHref {
+export interface GuildCrestEmblem extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

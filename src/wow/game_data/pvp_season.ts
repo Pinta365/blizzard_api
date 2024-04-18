@@ -1,11 +1,11 @@
 import { KeyId, KeyNameId, LinkSelfHref, request, TypeName } from "../../shared/index.ts";
 
-interface PvpSeasons extends LinkSelfHref {
+export interface PvpSeasons extends LinkSelfHref {
     seasons: KeyId[];
     current_season: KeyId;
 }
 
-interface PvpSeason extends LinkSelfHref {
+export interface PvpSeason extends LinkSelfHref {
     id: number;
     leaderboards: {
         href: string;
@@ -17,12 +17,12 @@ interface PvpSeason extends LinkSelfHref {
     season_end_timestamp: number;
 }
 
-interface PvpSeasonLeaderboards extends LinkSelfHref {
+export interface PvpSeasonLeaderboards extends LinkSelfHref {
     season: KeyId;
     leaderboards: KeyNameId[];
 }
 
-interface PvpSeasonLeaderboard extends LinkSelfHref {
+export interface PvpSeasonLeaderboard extends LinkSelfHref {
     season: KeyId;
     name: string;
     bracket: {
@@ -55,7 +55,7 @@ interface PvpSeasonLeaderboard extends LinkSelfHref {
     }[];
 }
 
-interface PvpSeasonRewards extends LinkSelfHref {
+export interface PvpSeasonRewards extends LinkSelfHref {
     season: KeyId;
     rewards: {
         bracket: {

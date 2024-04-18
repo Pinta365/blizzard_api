@@ -4,13 +4,13 @@
  * @author Pinta <https://github.com/Pinta365>
  */
 
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 
-interface AchievementCategories extends LinkSelfHref {
+export interface AchievementCategories extends LinkSelfHref {
     categories: KeyNameId[];
 }
 
-interface AggregatesByFaction {
+export interface AggregatesByFaction {
     alliance: {
         quantity: number;
         points: number;
@@ -21,7 +21,7 @@ interface AggregatesByFaction {
     };
 }
 
-interface AchievementCategory extends LinkSelfHref {
+export interface AchievementCategory extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     achievements: KeyNameId[];
@@ -31,11 +31,11 @@ interface AchievementCategory extends LinkSelfHref {
     display_order: number;
 }
 
-interface Achievements extends LinkSelfHref {
+export interface Achievements extends LinkSelfHref {
     achievements: KeyNameId[];
 }
 
-interface Achievement extends LinkSelfHref {
+export interface Achievement extends LinkSelfHref {
     id: number;
     category: KeyNameId;
     name: LocalizedString;
@@ -52,13 +52,7 @@ interface Achievement extends LinkSelfHref {
     display_order: number;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: number;
-}
-
-interface AchievementMedia extends LinkSelfHref {
+export interface AchievementMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }

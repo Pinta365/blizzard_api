@@ -1,12 +1,12 @@
 import { Character, KeyId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
 
-interface MatchStatistic {
+export interface MatchStatistic {
     played: number;
     won: number;
     lost: number;
 }
 
-interface CharacterPvpBracketStatistics extends LinkSelfHref {
+export interface CharacterPvpBracketStatistics extends LinkSelfHref {
     character: Character;
     faction: TypeName;
     bracket: {
@@ -20,7 +20,7 @@ interface CharacterPvpBracketStatistics extends LinkSelfHref {
     weekly_match_statistics: MatchStatistic;
 }
 
-interface CharacterPvpSummary extends LinkSelfHref {
+export interface CharacterPvpSummary extends LinkSelfHref {
     brackets: {
         href: string;
     }[];

@@ -1,19 +1,14 @@
-import { KeyId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { Asset, KeyId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
 import { Search, search, SearchParameters } from "../search.ts";
 
-interface Spell extends LinkSelfHref {
+export interface Spell extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     description: LocalizedString;
     media: KeyId;
 }
 
-interface Asset {
-    key: string;
-    value: string;
-    file_data_id: string;
-}
-interface SpellMedia extends LinkSelfHref {
+export interface SpellMedia extends LinkSelfHref {
     assets: Asset[];
     id: number;
 }
