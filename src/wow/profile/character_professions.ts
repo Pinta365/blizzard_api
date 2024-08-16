@@ -1,4 +1,5 @@
-import { Character, KeyNameId, LinkSelfHref, NameId, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Character, KeyNameId, LinkSelfHref, NameId } from "../../shared/index.ts";
 
 export interface Tier {
     skill_points: number;

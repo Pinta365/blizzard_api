@@ -1,5 +1,7 @@
-import { KeyName, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
-import { Search, search, SearchParameters } from "../search.ts";
+import { request } from "../../shared/index.ts";
+import { search } from "../search.ts";
+import type { KeyName, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type { Search, SearchParameters } from "../search.ts";
 
 export interface RealmList extends KeyNameId {
     slug: string;

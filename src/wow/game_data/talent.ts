@@ -1,4 +1,5 @@
-import { KeyName, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { KeyName, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface TalentTrees extends LinkSelfHref {
     spec_talent_trees: KeyNameId;

@@ -1,4 +1,5 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId } from "../../shared/index.ts";
 
 export interface MythicKeystoneDungeons extends LinkSelfHref {
     dungeons: KeyNameId[];

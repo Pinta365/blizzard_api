@@ -1,4 +1,5 @@
-import { KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Quests extends LinkSelfHref {
     categories: {

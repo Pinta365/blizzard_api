@@ -1,4 +1,5 @@
-import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Professions extends LinkSelfHref {
     professions: KeyNameId[];

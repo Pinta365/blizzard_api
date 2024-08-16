@@ -4,7 +4,8 @@
  * @author Pinta <https://github.com/Pinta365>
  */
 
-import { LinkSelfHref, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { LinkSelfHref } from "../../shared/index.ts";
 
 export interface WowToken extends LinkSelfHref {
     last_updated_timestamp: number;

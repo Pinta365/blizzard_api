@@ -1,4 +1,5 @@
-import { KeyNameId, LinkSelfHref, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { KeyNameId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface MythicRaidLeaderboard extends LinkSelfHref {
     slug: string;

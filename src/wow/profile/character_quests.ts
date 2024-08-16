@@ -1,4 +1,5 @@
-import { Character, KeyNameId, LinkSelfHref, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Character, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface CharacterQuests extends LinkSelfHref {
     character: Character;

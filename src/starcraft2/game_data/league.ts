@@ -1,4 +1,5 @@
-import { LinkSelfHref, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { LinkSelfHref } from "../../shared/index.ts";
 
 export interface League extends LinkSelfHref {
     key: {

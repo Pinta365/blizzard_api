@@ -1,4 +1,5 @@
-import { Namespaces, request } from "../shared/index.ts";
+import { request } from "../shared/index.ts";
+import type { Namespaces } from "../shared/index.ts";
 
 export interface SearchParameters {
     searchFields?: Record<string | symbol, string | number>;

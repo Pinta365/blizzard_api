@@ -1,4 +1,5 @@
-import { KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface ModifiedCraftingParents extends LinkSelfHref {
     categories: {

@@ -1,4 +1,5 @@
-import { LocalizedString, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { LocalizedString } from "../../shared/index.ts";
 
 export interface Options {
     code?: string;

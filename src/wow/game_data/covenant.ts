@@ -1,4 +1,5 @@
-import { Asset, KeyNameId, LinkSelfHref, LocalizedString, NameId, request, TypeName } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Asset, KeyNameId, LinkSelfHref, LocalizedString, NameId, TypeName } from "../../shared/index.ts";
 
 export interface Covenants extends LinkSelfHref {
     covenants: KeyNameId[];

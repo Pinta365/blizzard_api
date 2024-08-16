@@ -1,5 +1,7 @@
-import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
-import { Search, search, SearchParameters } from "../search.ts";
+import { request } from "../../shared/index.ts";
+import { search } from "../search.ts";
+import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { Search, SearchParameters } from "../search.ts";
 
 export interface AzeriteEssences extends LinkSelfHref {
     azerite_essences: KeyNameId[];

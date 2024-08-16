@@ -4,7 +4,8 @@
  * @author Pinta <https://github.com/Pinta365>
  */
 
-import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface AchievementCategories extends LinkSelfHref {
     categories: KeyNameId[];

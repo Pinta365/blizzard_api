@@ -1,4 +1,5 @@
-import { KeyId, KeyNameId, LinkSelfHref, request, TypeName } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface PvpSeasons extends LinkSelfHref {
     seasons: KeyId[];

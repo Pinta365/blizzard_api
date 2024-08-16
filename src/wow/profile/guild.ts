@@ -46,6 +46,7 @@ export interface Guild extends LinkSelfHref {
     achievements?: Href;
     created_timestamp?: number;
     activity?: Href;
+    name_search: string;
 }
 
 export interface GuildActivity extends LinkSelfHref {

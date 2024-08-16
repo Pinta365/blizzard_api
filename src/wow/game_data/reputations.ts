@@ -1,4 +1,5 @@
-import { KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface ReputationFactions extends LinkSelfHref {
     factions: KeyNameId[];

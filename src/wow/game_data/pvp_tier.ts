@@ -1,4 +1,5 @@
-import { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface PvpTierMedia extends LinkSelfHref {
     assets: Asset[];

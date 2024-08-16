@@ -1,4 +1,5 @@
-import { LinkSelfHref, LocalizedString, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface Regions extends LinkSelfHref {
     regions: {

@@ -1,4 +1,5 @@
-import { Character, KeyNameId, LinkSelfHref, request, TypeName } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Character, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface CharacterSoulbinds extends LinkSelfHref {
     character: Character;

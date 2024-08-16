@@ -1,4 +1,5 @@
 # BLIZZARD_API
+
 [![JSR Version](https://jsr.io/badges/@pinta365/blizzard-api)](https://jsr.io/@pinta365/blizzard-api)
 
 Start of what will cover the whole Blizzard Battle.net API when its done.

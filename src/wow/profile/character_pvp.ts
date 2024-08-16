@@ -1,4 +1,5 @@
-import { Character, KeyId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Character, KeyId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface MatchStatistic {
     played: number;

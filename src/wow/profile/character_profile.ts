@@ -50,6 +50,7 @@ export interface CharacterProfile extends LinkSelfHref {
         renown_level: number;
         soulbinds: Href;
     };
+    name_search: string;
 }
 
 export interface CharacterProfileStatus extends LinkSelfHref {

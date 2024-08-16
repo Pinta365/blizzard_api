@@ -1,4 +1,5 @@
-import { Search, search, SearchParameters } from "../search.ts";
+import { search } from "../search.ts";
+import type { Search, SearchParameters } from "../search.ts";
 
 /**
  * Performs a search of media.

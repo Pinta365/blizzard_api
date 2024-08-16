@@ -1,4 +1,5 @@
-import { Character, KeyId, KeyNameId, LinkSelfHref, request } from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Character, KeyId, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface MythicRating {
     color: {

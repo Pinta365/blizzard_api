@@ -1,13 +1,5 @@
-import {
-    Asset,
-    KeyId,
-    KeyName,
-    KeyNameId,
-    LinkSelfHref,
-    LocalizedString,
-    request,
-    TypeName,
-} from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Asset, KeyId, KeyName, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface PlayableSpecializations extends LinkSelfHref {
     character_specializations: KeyNameId;
