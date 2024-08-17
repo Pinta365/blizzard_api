@@ -13,20 +13,20 @@ to implement authorization code flow also.
 
 ### APIs implemented
 
-| APIs                                          | Status | Note |
-| --------------------------------------------- | ------ | ---- |
-| **World of Warcraft:** Game Data APIs         | ✅     |      |
-| **World of Warcraft:** Profile APIs           | ✅     |      |
-|                                               |        |      |
-| **World of Warcraft Classic:** Game Data APIs |        |      |
-|                                               |        |      |
-| **Diablo III:** Community APIs                |        |      |
-| **Diablo III:** Game Data APIs                | ✅     |      |
-|                                               |        |      |
-| **Hearthstone:** Game Data APIs               | ✅     |      |
-|                                               |        |      |
-| **StarCraft II:** Community APIs              |        |      |
-| **StarCraft II:** Game Data APIs              | ✅     |      |
+| APIs                                          | Status | Note                      |
+| --------------------------------------------- | ------ | ------------------------- |
+| **World of Warcraft:** Game Data APIs         | ✅     |                           |
+| **World of Warcraft:** Profile APIs           | ✅     |                           |
+|                                               |        |                           |
+| **World of Warcraft Classic:** Game Data APIs |        |                           |
+|                                               |        |                           |
+| **Diablo III:** Community APIs                | ✅     | Missing profile endpoints |
+| **Diablo III:** Game Data APIs                | ✅     |                           |
+|                                               |        |                           |
+| **Hearthstone:** Game Data APIs               | ✅     |                           |
+|                                               |        |                           |
+| **StarCraft II:** Community APIs              |        |                           |
+| **StarCraft II:** Game Data APIs              | ✅     |                           |
 
 ## Example
 
