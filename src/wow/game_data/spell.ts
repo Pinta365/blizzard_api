@@ -26,7 +26,7 @@ export async function spell(spellId: number): Promise<Spell> {
         method: "GET",
         url: `/data/wow/spell/${spellId}`,
         namespace: "static",
-    });
+    }) as Spell;
 }
 
 /**
@@ -40,7 +40,7 @@ export async function spellMedia(spellId: number): Promise<SpellMedia> {
         method: "GET",
         url: `/data/wow/media/spell/${spellId}`,
         namespace: "static",
-    });
+    }) as SpellMedia;
 }
 
 /**
@@ -50,5 +50,5 @@ export async function spellMedia(spellId: number): Promise<SpellMedia> {
  * @returns A promise that resolves to an object representing details about a spell search.
  */
 export async function searchSpell(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/spell", "static", searchParameters);
+    return await search("/spell", "static", searchParameters) as Search;
 }

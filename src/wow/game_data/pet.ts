@@ -67,7 +67,7 @@ export async function pets(): Promise<Pets> {
         method: "GET",
         url: "/data/wow/pet/index",
         namespace: "static",
-    });
+    }) as Pets;
 }
 
 /**
@@ -81,7 +81,7 @@ export async function pet(petId: number): Promise<Pet> {
         method: "GET",
         url: `/data/wow/pet/${petId}`,
         namespace: "static",
-    });
+    }) as Pet;
 }
 
 /**
@@ -95,7 +95,7 @@ export async function petMedia(petId: number): Promise<PetMedia> {
         method: "GET",
         url: `/data/wow/media/pet/${petId}`,
         namespace: "static",
-    });
+    }) as PetMedia;
 }
 
 /**
@@ -108,7 +108,7 @@ export async function petAbilities(): Promise<PetAbilities> {
         method: "GET",
         url: "/data/wow/pet-ability/index",
         namespace: "static",
-    });
+    }) as PetAbilities;
 }
 
 /**
@@ -122,7 +122,7 @@ export async function petAbility(petAbilityId: number): Promise<PetAbility> {
         method: "GET",
         url: `/data/wow/pet-ability/${petAbilityId}`,
         namespace: "static",
-    });
+    }) as PetAbility;
 }
 
 /**
@@ -136,5 +136,5 @@ export async function petAbilityMedia(petAbilityId: number): Promise<PetAbilityM
         method: "GET",
         url: `/data/wow/media/pet-ability${petAbilityId}`,
         namespace: "static",
-    });
+    }) as PetAbilityMedia;
 }

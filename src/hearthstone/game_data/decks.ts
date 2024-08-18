@@ -94,5 +94,5 @@ export async function fetchDeck(options?: Options): Promise<Deck> {
         method: "GET",
         url: `/hearthstone/deck`,
         qs: options as Record<string, string | number>,
-    });
+    }) as Deck;
 }

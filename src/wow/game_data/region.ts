@@ -23,7 +23,7 @@ export async function regions(): Promise<Regions> {
         method: "GET",
         url: "/data/wow/region/index",
         namespace: "dynamic",
-    });
+    }) as Regions;
 }
 
 /**
@@ -37,5 +37,5 @@ export async function region(regionId: number): Promise<Region> {
         method: "GET",
         url: `/data/wow/region/${regionId}`,
         namespace: "dynamic",
-    });
+    }) as Region;
 }

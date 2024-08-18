@@ -38,5 +38,5 @@ export async function characterSoulbinds(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/soulbinds`,
         namespace: "profile",
-    });
+    }) as CharacterSoulbinds;
 }

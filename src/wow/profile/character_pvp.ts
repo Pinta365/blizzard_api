@@ -54,7 +54,7 @@ export async function characterPvpBracketStatistics(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/pvp-bracket/${pvpBracket}`,
         namespace: "profile",
-    });
+    }) as CharacterPvpBracketStatistics;
 }
 
 /**
@@ -72,5 +72,5 @@ export async function characterPvpSummary(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/pvp-summary`,
         namespace: "profile",
-    });
+    }) as CharacterPvpSummary;
 }

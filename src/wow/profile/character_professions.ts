@@ -36,5 +36,5 @@ export async function characterProfessions(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/professions`,
         namespace: "profile",
-    });
+    }) as CharacterProfessions;
 }

@@ -68,7 +68,7 @@ export async function achievementCategories(): Promise<AchievementCategories> {
         method: "GET",
         url: "/data/wow/achievement-category/index",
         namespace: "static",
-    });
+    }) as AchievementCategories;
 }
 
 /**
@@ -82,7 +82,7 @@ export async function achievementCategory(achievementCategoryId: number): Promis
         method: "GET",
         url: `/data/wow/achievement-category/${achievementCategoryId}`,
         namespace: "static",
-    });
+    }) as AchievementCategory;
 }
 
 /**
@@ -95,7 +95,7 @@ export async function achievements(): Promise<Achievements> {
         method: "GET",
         url: "/data/wow/achievement/index",
         namespace: "static",
-    });
+    }) as Achievements;
 }
 
 /**
@@ -109,7 +109,7 @@ export async function achievement(achievementId: number): Promise<Achievement> {
         method: "GET",
         url: `/data/wow/achievement/${achievementId}`,
         namespace: "static",
-    });
+    }) as Achievement;
 }
 
 /**
@@ -123,5 +123,5 @@ export async function achievementMedia(achievementId: number): Promise<Achieveme
         method: "GET",
         url: `/data/wow/media/achievement/${achievementId}`,
         namespace: "static",
-    });
+    }) as AchievementMedia;
 }

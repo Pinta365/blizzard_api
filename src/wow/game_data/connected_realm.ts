@@ -40,7 +40,7 @@ export async function connectedRealms(): Promise<ConnectedRealms> {
         method: "GET",
         url: "/data/wow/connected-realm/index",
         namespace: "dynamic",
-    });
+    }) as ConnectedRealms;
 }
 
 /**
@@ -54,7 +54,7 @@ export async function connectedRealm(connectedRealmId: number): Promise<Connecte
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}`,
         namespace: "dynamic",
-    });
+    }) as ConnectedRealm;
 }
 
 /**
@@ -64,5 +64,5 @@ export async function connectedRealm(connectedRealmId: number): Promise<Connecte
  * @returns A promise that resolves to an object representing details about the connected realms search.
  */
 export async function searchConnectedRealm(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/connected-realm", "dynamic", searchParameters);
+    return await search("/connected-realm", "dynamic", searchParameters as Search);
 }

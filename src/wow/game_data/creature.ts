@@ -63,7 +63,7 @@ export async function creatureFamilies(): Promise<CreatureFamilies> {
         method: "GET",
         url: "/data/wow/creature-family/index",
         namespace: "static",
-    });
+    }) as CreatureFamilies;
 }
 
 /**
@@ -77,7 +77,7 @@ export async function creatureFamily(creatureFamilyId: number): Promise<Creature
         method: "GET",
         url: `/data/wow/creature-family/${creatureFamilyId}`,
         namespace: "static",
-    });
+    }) as CreatureFamily;
 }
 
 /**
@@ -90,7 +90,7 @@ export async function creatureTypes(): Promise<CreatureTypes> {
         method: "GET",
         url: "/data/wow/creature-type/index",
         namespace: "static",
-    });
+    }) as CreatureTypes;
 }
 
 /**
@@ -104,7 +104,7 @@ export async function creatureType(creatureTypeId: number): Promise<CreatureType
         method: "GET",
         url: `/data/wow/creature-type/${creatureTypeId}`,
         namespace: "static",
-    });
+    }) as CreatureType;
 }
 
 /**
@@ -118,7 +118,7 @@ export async function creature(creatureId: number): Promise<Creature> {
         method: "GET",
         url: `/data/wow/creature/${creatureId}`,
         namespace: "static",
-    });
+    }) as Creature;
 }
 
 /**
@@ -128,7 +128,7 @@ export async function creature(creatureId: number): Promise<Creature> {
  * @returns A promise that resolves to an object representing details about a creature search.
  */
 export async function searchCreature(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/creature", "static", searchParameters);
+    return await search("/creature", "static", searchParameters) as Search;
 }
 
 /**
@@ -142,7 +142,7 @@ export async function creatureDisplayMedia(creatureDisplayId: number): Promise<C
         method: "GET",
         url: `/data/wow/media/creature-display/${creatureDisplayId}`,
         namespace: "static",
-    });
+    }) as CreatureDisplayMedia;
 }
 
 /**
@@ -156,5 +156,5 @@ export async function creatureFamilyMedia(creatureFamilyId: number): Promise<Cre
         method: "GET",
         url: `/data/wow/media/creature-family/${creatureFamilyId}`,
         namespace: "static",
-    });
+    }) as CreatureFamilyMedia;
 }

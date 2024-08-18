@@ -32,7 +32,7 @@ export interface Card {
  * @returns A promise that resolves to an object representing an up-to-date list of all cards matching the search criteria.
  */
 export async function searchCards(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/cards", searchParameters);
+    return await search("/cards", searchParameters) as Search;
 }
 
 /**
@@ -51,5 +51,5 @@ export async function fetchCard(idorslug: string, gameMode?: string): Promise<Ca
         reqOptions["qs"] = { gameMode };
     }
 
-    return await request(reqOptions);
+    return await request(reqOptions) as Card;
 }

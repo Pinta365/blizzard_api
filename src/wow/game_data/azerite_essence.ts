@@ -37,7 +37,7 @@ export async function azeriteEssences(): Promise<AzeriteEssences> {
         method: "GET",
         url: "/data/wow/azerite-essence/index",
         namespace: "static",
-    });
+    }) as AzeriteEssences;
 }
 
 /**
@@ -51,7 +51,7 @@ export async function azeriteEssence(azeriteEssenceId: number): Promise<AzeriteE
         method: "GET",
         url: `/data/wow/azerite-essence/${azeriteEssenceId}`,
         namespace: "static",
-    });
+    }) as AzeriteEssenceDetails;
 }
 
 /**
@@ -61,7 +61,7 @@ export async function azeriteEssence(azeriteEssenceId: number): Promise<AzeriteE
  * @returns A promise that resolves to an object representing details about a Azerite Essences search.
  */
 export async function searchAzeriteEssence(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/azerite-essence", "static", searchParameters);
+    return await search("/azerite-essence", "static", searchParameters) as Search;
 }
 
 /**
@@ -75,5 +75,5 @@ export async function azeriteEssenceMedia(azeriteEssenceId: number): Promise<Aze
         method: "GET",
         url: `/data/wow/media/azerite-essence/${azeriteEssenceId}`,
         namespace: "static",
-    });
+    }) as AzeritEessenceMedia;
 }

@@ -72,7 +72,7 @@ export async function characterProfile(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}`,
         namespace: "profile",
-    });
+    }) as CharacterProfile;
 }
 
 /**
@@ -101,5 +101,5 @@ export async function characterProfileStatus(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/status`,
         namespace: "profile",
-    });
+    }) as CharacterProfileStatus;
 }

@@ -57,7 +57,7 @@ export async function characterMythicKeystoneProfile(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/mythic-keystone-profile`,
         namespace: "profile",
-    });
+    }) as CharacterMythicKeystoneProfile;
 }
 
 /**
@@ -79,5 +79,5 @@ export async function characterMythicKeystoneSeasonDetails(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/mythic-keystone-profile/season/${seasonId}`,
         namespace: "profile",
-    });
+    }) as CharacterMythicKeystoneSeasonDetails;
 }

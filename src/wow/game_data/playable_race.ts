@@ -28,7 +28,7 @@ export async function playableRaces(): Promise<PlayableRaces> {
         method: "GET",
         url: "/data/wow/playable-race/index",
         namespace: "static",
-    });
+    }) as PlayableRaces;
 }
 
 /**
@@ -42,5 +42,5 @@ export async function playableRace(playableRaceId: number): Promise<PlayableRace
         method: "GET",
         url: `/data/wow/playable-race/${playableRaceId}`,
         namespace: "static",
-    });
+    }) as PlayableRace;
 }

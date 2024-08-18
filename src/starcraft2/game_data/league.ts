@@ -41,5 +41,5 @@ export async function leagueData(
     return await request({
         method: "GET",
         url: `/data/sc2/league/${seasonId}/${queueId}/${teamType}/${leagueId}`,
-    });
+    }) as League;
 }

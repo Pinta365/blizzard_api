@@ -83,5 +83,5 @@ export async function characterAppearanceSummary(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/appearance`,
         namespace: "profile",
-    });
+    }) as CharacterAppearanceSummary;
 }

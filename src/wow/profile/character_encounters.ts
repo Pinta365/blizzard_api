@@ -71,7 +71,7 @@ export async function characterEncounters(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/encounters`,
         namespace: "profile",
-    });
+    }) as CharacterEncounters;
 }
 
 /**
@@ -89,7 +89,7 @@ export async function characterEncounterDungeons(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/encounters/dungeons`,
         namespace: "profile",
-    });
+    }) as CharacterEncounterDungeons;
 }
 
 /**
@@ -107,5 +107,5 @@ export async function characterEncounterRaids(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/encounters/raids`,
         namespace: "profile",
-    });
+    }) as CharacterEncounterRaids;
 }

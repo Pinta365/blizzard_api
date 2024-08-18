@@ -34,7 +34,7 @@ export async function pvpTierMedia(pvpTierId: number): Promise<PvpTierMedia> {
         method: "GET",
         url: `/data/wow/media/pvp-tier/${pvpTierId}`,
         namespace: "static",
-    });
+    }) as PvpTierMedia;
 }
 
 /**
@@ -47,7 +47,7 @@ export async function pvpTiers(): Promise<PvpTiers> {
         method: "GET",
         url: "/data/wow/pvp-tier/index",
         namespace: "static",
-    });
+    }) as PvpTiers;
 }
 
 /**
@@ -61,5 +61,5 @@ export async function pvpTier(pvpTierId: number): Promise<PvpTier> {
         method: "GET",
         url: `/data/wow/pvp-tier/${pvpTierId}`,
         namespace: "static",
-    });
+    }) as PvpTier;
 }

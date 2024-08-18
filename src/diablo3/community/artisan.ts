@@ -49,7 +49,7 @@ export async function artisan(artisanSlug: string): Promise<Artisan> {
     return await request({
         method: "GET",
         url: `/d3/data/artisan/${artisanSlug}`,
-    });
+    }) as Artisan;
 }
 
 /**
@@ -63,5 +63,5 @@ export async function artisanRecipe(artisanSlug: string, recipeSlug: string): Pr
     return await request({
         method: "GET",
         url: `/d3/data/artisan/${artisanSlug}/recipe/${recipeSlug}`,
-    });
+    }) as Recipe;
 }

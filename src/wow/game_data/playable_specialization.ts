@@ -45,7 +45,7 @@ export async function playableSpecializations(): Promise<PlayableSpecializations
         method: "GET",
         url: "/data/wow/playable-specialization/index",
         namespace: "static",
-    });
+    }) as PlayableSpecializations;
 }
 
 /**
@@ -59,7 +59,7 @@ export async function playableSpecialization(specId: number): Promise<PlayableSp
         method: "GET",
         url: `/data/wow/playable-specialization/${specId}`,
         namespace: "static",
-    });
+    }) as PlayableSpecialization;
 }
 
 /**
@@ -73,5 +73,5 @@ export async function playableSpecializationMedia(specId: number): Promise<Playa
         method: "GET",
         url: `/data/wow/media/playable-specialization/${specId}`,
         namespace: "static",
-    });
+    }) as PlayableSpecializationMedia;
 }

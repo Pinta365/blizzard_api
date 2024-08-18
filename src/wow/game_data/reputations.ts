@@ -37,7 +37,7 @@ export async function reputationFactions(): Promise<ReputationFactions> {
         method: "GET",
         url: "/data/wow/reputation-faction/index",
         namespace: "static",
-    });
+    }) as ReputationFactions;
 }
 
 /**
@@ -51,7 +51,7 @@ export async function reputationFaction(reputationFactionId: string): Promise<Re
         method: "GET",
         url: `/data/wow/reputation-faction/${reputationFactionId}`,
         namespace: "static",
-    });
+    }) as ReputationFaction;
 }
 
 /**
@@ -64,7 +64,7 @@ export async function reputationTiers(): Promise<ReputationTiers> {
         method: "GET",
         url: "/data/wow/reputation-tiers/index",
         namespace: "static",
-    });
+    }) as ReputationTiers;
 }
 
 /**
@@ -78,5 +78,5 @@ export async function reputationTier(reputationTiersId: string): Promise<Reputat
         method: "GET",
         url: `/data/wow/reputation-tiers/${reputationTiersId}`,
         namespace: "static",
-    });
+    }) as ReputationTier;
 }

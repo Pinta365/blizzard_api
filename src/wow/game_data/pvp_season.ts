@@ -79,7 +79,7 @@ export async function pvpSeasons(): Promise<PvpSeasons> {
         method: "GET",
         url: "/data/wow/pvp-season/index",
         namespace: "dynamic",
-    });
+    }) as PvpSeasons;
 }
 
 /**
@@ -93,7 +93,7 @@ export async function pvpSeason(pvpSeasonId: number): Promise<PvpSeason> {
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}`,
         namespace: "dynamic",
-    });
+    }) as PvpSeason;
 }
 
 /**
@@ -107,7 +107,7 @@ export async function pvpSeasonLeaderboards(pvpSeasonId: number): Promise<PvpSea
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-leaderboard/index`,
         namespace: "dynamic",
-    });
+    }) as PvpSeasonLeaderboards;
 }
 
 /**
@@ -122,7 +122,7 @@ export async function pvpSeasonLeaderboard(pvpSeasonId: number, pvpBracket: numb
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-leaderboard/${pvpBracket}`,
         namespace: "dynamic",
-    });
+    }) as PvpSeasonLeaderboard;
 }
 
 /**
@@ -136,5 +136,5 @@ export async function pvpSeasonRewards(pvpSeasonId: number): Promise<PvpSeasonRe
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-leaderboard/index`,
         namespace: "dynamic",
-    });
+    }) as PvpSeasonRewards;
 }

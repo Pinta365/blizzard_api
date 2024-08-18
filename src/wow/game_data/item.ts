@@ -129,7 +129,7 @@ export async function itemClasses(): Promise<ItemClasses> {
         method: "GET",
         url: "/data/wow/item-class/index",
         namespace: "static",
-    });
+    }) as ItemClasses;
 }
 
 /**
@@ -143,7 +143,7 @@ export async function itemClass(itemClassId: number): Promise<ItemClass> {
         method: "GET",
         url: `/data/wow/item-class/${itemClassId}`,
         namespace: "static",
-    });
+    }) as ItemClass;
 }
 
 /**
@@ -156,7 +156,7 @@ export async function itemSets(): Promise<ItemSets> {
         method: "GET",
         url: "/data/wow/item-set/index",
         namespace: "static",
-    });
+    }) as ItemSets;
 }
 
 /**
@@ -170,7 +170,7 @@ export async function itemSet(itemSetId: number): Promise<ItemSet> {
         method: "GET",
         url: `/data/wow/item-set/${itemSetId}`,
         namespace: "static",
-    });
+    }) as ItemSet;
 }
 
 /**
@@ -185,7 +185,7 @@ export async function itemSubclass(itemClassId: number, itemSubclassId: number):
         method: "GET",
         url: `/data/wow/item-class/${itemClassId}/item-subclass/${itemSubclassId}`,
         namespace: "static",
-    });
+    }) as ItemSubclass;
 }
 
 /**
@@ -199,7 +199,7 @@ export async function item(itemId: number): Promise<Item> {
         method: "GET",
         url: `/data/wow/item/${itemId}`,
         namespace: "static",
-    });
+    }) as Item;
 }
 
 /**
@@ -213,7 +213,7 @@ export async function itemMedia(itemId: number): Promise<ItemMedia> {
         method: "GET",
         url: `/data/wow/media/item/${itemId}`,
         namespace: "static",
-    });
+    }) as ItemMedia;
 }
 
 /**
@@ -223,5 +223,5 @@ export async function itemMedia(itemId: number): Promise<ItemMedia> {
  * @returns A promise that resolves to an object representing details about an item search.
  */
 export async function searchItem(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/item", "static", searchParameters);
+    return await search("/item", "static", searchParameters) as Search;
 }

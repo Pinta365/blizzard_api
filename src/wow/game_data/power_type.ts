@@ -20,7 +20,7 @@ export async function powerTypes(): Promise<PowerTypes> {
         method: "GET",
         url: "/data/wow/power-type/index",
         namespace: "static",
-    });
+    }) as PowerTypes;
 }
 
 /**
@@ -34,5 +34,5 @@ export async function powerType(powerTypeId: number): Promise<PowerType> {
         method: "GET",
         url: `/data/wow/power-type/${powerTypeId}`,
         namespace: "static",
-    });
+    }) as PowerType;
 }

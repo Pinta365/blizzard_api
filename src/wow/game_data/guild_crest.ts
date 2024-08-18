@@ -51,7 +51,7 @@ export async function guildCrests(): Promise<GuildCrests> {
         method: "GET",
         url: "/data/wow/guild-crest/index",
         namespace: "static",
-    });
+    }) as GuildCrests;
 }
 
 /**
@@ -65,7 +65,7 @@ export async function guildCrestBorder(borderId: number): Promise<GuildCrestBord
         method: "GET",
         url: `/data/wow/media/guild-crest/border/${borderId}`,
         namespace: "static",
-    });
+    }) as GuildCrestBorder;
 }
 
 /**
@@ -79,5 +79,5 @@ export async function guildCrestEmblem(emblemId: number): Promise<GuildCrestEmbl
         method: "GET",
         url: `/data/wow/media/guild-crest/emblem/${emblemId}`,
         namespace: "static",
-    });
+    }) as GuildCrestEmblem;
 }

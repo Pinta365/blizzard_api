@@ -84,7 +84,7 @@ export async function covenants(): Promise<Covenants> {
         method: "GET",
         url: "/data/wow/covenant/index",
         namespace: "static",
-    });
+    }) as Covenants;
 }
 
 /**
@@ -98,7 +98,7 @@ export async function covenant(covenantId: number): Promise<Covenant> {
         method: "GET",
         url: `/data/wow/covenant/${covenantId}`,
         namespace: "static",
-    });
+    }) as Covenant;
 }
 
 /**
@@ -112,7 +112,7 @@ export async function azeriteEssenceMedia(covenantId: number): Promise<CovenantM
         method: "GET",
         url: `/data/wow/media/covenant/${covenantId}`,
         namespace: "static",
-    });
+    }) as CovenantMedia;
 }
 
 /**
@@ -125,7 +125,7 @@ export async function covenantSoulbinds(): Promise<CovenantSoulbinds> {
         method: "GET",
         url: "/data/wow/covenant/soulbind/index",
         namespace: "static",
-    });
+    }) as CovenantSoulbinds;
 }
 
 /**
@@ -139,7 +139,7 @@ export async function covenantSoulbind(soulbindId: number): Promise<CovenantSoul
         method: "GET",
         url: `/data/wow/covenant/soulbind/${soulbindId}`,
         namespace: "static",
-    });
+    }) as CovenantSoulbind;
 }
 
 /**
@@ -152,7 +152,7 @@ export async function covenantConduits(): Promise<CovenantConduits> {
         method: "GET",
         url: "/data/wow/covenant/conduit/index",
         namespace: "static",
-    });
+    }) as CovenantConduits;
 }
 
 /**
@@ -166,5 +166,5 @@ export async function covenantConduit(conduitId: number): Promise<CovenantCondui
         method: "GET",
         url: `/data/wow/covenant/conduit/${conduitId}`,
         namespace: "static",
-    });
+    }) as CovenantConduit;
 }

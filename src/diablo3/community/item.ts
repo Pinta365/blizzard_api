@@ -53,5 +53,5 @@ export async function item(itemSlugAndId: string): Promise<Item> {
     return await request({
         method: "GET",
         url: `/d3/data/item/${itemSlugAndId}`,
-    });
+    }) as Item;
 }

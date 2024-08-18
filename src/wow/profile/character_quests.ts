@@ -29,7 +29,7 @@ export async function characterQuests(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/quests`,
         namespace: "profile",
-    });
+    }) as CharacterQuests;
 }
 
 /**
@@ -47,16 +47,5 @@ export async function characterCompletedQuests(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/quests/completed`,
         namespace: "profile",
-    });
+    }) as CharacterCompletedQuests;
 }
-
-/*
-Character Quests API
-GET
-Character Quests
-/profile/wow/character/{realmSlug}/{characterName}/quests
-
-GET
-Character Completed Quests
-/profile/wow/character/{realmSlug}/{characterName}/quests/completed
-*/

@@ -100,7 +100,7 @@ export async function seasons(): Promise<Seasons> {
     return await request({
         method: "GET",
         url: "/data/d3/season/",
-    });
+    }) as Seasons;
 }
 
 /**
@@ -113,7 +113,7 @@ export async function season(seasonId: number): Promise<Season> {
     return await request({
         method: "GET",
         url: `/data/d3/season/${seasonId}`,
-    });
+    }) as Season;
 }
 
 /**
@@ -127,7 +127,7 @@ export async function seasonLeaderboard(seasonId: number, leaderboard: string): 
     return await request({
         method: "GET",
         url: `/data/d3/season/${seasonId}/leaderboard/${leaderboard}`,
-    });
+    }) as SeasonLeaderboard;
 }
 
 /**
@@ -139,7 +139,7 @@ export async function eras(): Promise<Eras> {
     return await request({
         method: "GET",
         url: "/data/d3/era/",
-    });
+    }) as Eras;
 }
 
 /**
@@ -152,7 +152,7 @@ export async function era(eraId: number): Promise<Era> {
     return await request({
         method: "GET",
         url: `/data/d3/era/${eraId}`,
-    });
+    }) as Era;
 }
 
 /**
@@ -166,5 +166,5 @@ export async function eraLeaderboard(eraId: number, leaderboard: string): Promis
     return await request({
         method: "GET",
         url: `/data/d3/era/${eraId}/leaderboard/${leaderboard}`,
-    });
+    }) as EraLeaderboard;
 }

@@ -13,6 +13,16 @@ export interface AuthConfig {
 }
 
 /**
+ * Represents the data for the token reponse.
+ */
+interface TokenResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    sub: string;
+}
+
+/**
  * Global storage for authentication configuration data.
  */
 const authConfig: AuthConfig = {
@@ -67,7 +77,7 @@ export async function authenticate(forceNewToken = false): Promise<string> {
     });
 
     if (response.ok) {
-        const data = await response.json();
+        const data = await response.json() as TokenResponse;
         authConfig.accessToken = data.access_token;
         authConfig.tokenExpiration = Date.now() + data.expires_in * 1000;
         return authConfig.accessToken;

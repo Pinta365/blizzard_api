@@ -91,7 +91,7 @@ export async function characterAchievementSummary(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/achievements`,
         namespace: "profile",
-    });
+    }) as CharacterAchievementSummary;
 }
 
 /**
@@ -109,5 +109,5 @@ export async function characterAchievementStatistics(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/achievements/statistics`,
         namespace: "profile",
-    });
+    }) as CharacterAchievementStatistics;
 }

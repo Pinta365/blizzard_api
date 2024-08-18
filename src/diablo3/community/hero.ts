@@ -51,7 +51,7 @@ export async function heroClass(classSlug: string): Promise<HeroClass> {
     return await request({
         method: "GET",
         url: `/d3/data/hero/${classSlug}`,
-    });
+    }) as HeroClass;
 }
 
 /**
@@ -65,5 +65,5 @@ export async function heroSkill(classSlug: string, skillSlug: string): Promise<H
     return await request({
         method: "GET",
         url: `/d3/data/hero/${classSlug}/skill/${skillSlug}`,
-    });
+    }) as HeroSkill;
 }

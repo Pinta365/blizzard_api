@@ -58,7 +58,7 @@ export async function mythicKeystoneDungeons(): Promise<MythicKeystoneDungeons> 
         method: "GET",
         url: "/data/wow/mythic-keystone/dungeon/index",
         namespace: "dynamic",
-    });
+    }) as MythicKeystoneDungeons;
 }
 
 /**
@@ -72,7 +72,7 @@ export async function mythicKeystoneDungeon(dungeonId: number): Promise<MythicKe
         method: "GET",
         url: `/data/wow/mythic-keystone/dungeon/${dungeonId}`,
         namespace: "dynamic",
-    });
+    }) as MythicKeystoneDungeon;
 }
 
 /**
@@ -85,7 +85,7 @@ export async function mythicKeystoneIndex(): Promise<MythicKeystoneIndex> {
         method: "GET",
         url: "/data/wow/mythic-keystone/index",
         namespace: "dynamic",
-    });
+    }) as MythicKeystoneIndex;
 }
 
 /**
@@ -98,7 +98,7 @@ export async function mythicKeystonePeriods(): Promise<MythicKeystonePeriods> {
         method: "GET",
         url: "/data/wow/mythic-keystone/period/index",
         namespace: "dynamic",
-    });
+    }) as MythicKeystonePeriods;
 }
 
 /**
@@ -112,7 +112,7 @@ export async function mythicKeystonePeriod(periodId: number): Promise<MythicKeys
         method: "GET",
         url: `/data/wow/mythic-keystone/period/${periodId}`,
         namespace: "dynamic",
-    });
+    }) as MythicKeystonePeriod;
 }
 
 export interface MythicKeystoneSeasons extends LinkSelfHref {
@@ -129,7 +129,7 @@ export async function mythicKeystoneSeasons(): Promise<MythicKeystoneSeasons> {
         method: "GET",
         url: "/data/wow/mythic-keystone/season/index",
         namespace: "dynamic",
-    });
+    }) as MythicKeystoneSeasons;
 }
 
 /**
@@ -143,5 +143,5 @@ export async function mythicKeystoneSeason(seasonId: number): Promise<MythicKeys
         method: "GET",
         url: `/data/wow/mythic-keystone/season/${seasonId}`,
         namespace: "dynamic",
-    });
+    }) as MythicKeystoneSeason;
 }

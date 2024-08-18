@@ -80,7 +80,7 @@ export async function quests(): Promise<Quests> {
         method: "GET",
         url: "/data/wow/quest/index",
         namespace: "static",
-    });
+    }) as Quests;
 }
 
 /**
@@ -94,7 +94,7 @@ export async function quest(questId: number): Promise<Quest> {
         method: "GET",
         url: `/data/wow/quest/${questId}`,
         namespace: "static",
-    });
+    }) as Quest;
 }
 
 /**
@@ -107,7 +107,7 @@ export async function questCategories(): Promise<QuestCategories> {
         method: "GET",
         url: "/data/wow/quest/category/index",
         namespace: "static",
-    });
+    }) as QuestCategories;
 }
 
 /**
@@ -121,7 +121,7 @@ export async function questCategory(questCategoryId: number): Promise<QuestCateg
         method: "GET",
         url: `/data/wow/quest/category/${questCategoryId}`,
         namespace: "static",
-    });
+    }) as QuestCategory;
 }
 
 /**
@@ -134,7 +134,7 @@ export async function questAreas(): Promise<QuestAreas> {
         method: "GET",
         url: "/data/wow/quest/area/index",
         namespace: "static",
-    });
+    }) as QuestAreas;
 }
 
 /**
@@ -148,7 +148,7 @@ export async function questArea(questAreaId: number): Promise<QuestArea> {
         method: "GET",
         url: `/data/wow/quest/area/${questAreaId}`,
         namespace: "static",
-    });
+    }) as QuestArea;
 }
 
 /**
@@ -161,7 +161,7 @@ export async function questTypes(): Promise<QuestTypes> {
         method: "GET",
         url: "/data/wow/quest/type/index",
         namespace: "static",
-    });
+    }) as QuestTypes;
 }
 
 /**
@@ -175,5 +175,5 @@ export async function questType(questTypeId: number): Promise<QuestType> {
         method: "GET",
         url: `/data/wow/quest/type/${questTypeId}`,
         namespace: "static",
-    });
+    }) as QuestType;
 }

@@ -21,5 +21,5 @@ export async function characterMedia(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/character-media`,
         namespace: "profile",
-    });
+    }) as CharacterMedia;
 }

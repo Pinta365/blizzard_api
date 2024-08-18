@@ -80,7 +80,7 @@ export async function heirlooms(): Promise<Heirlooms> {
         method: "GET",
         url: "/data/wow/heirloom/index",
         namespace: "static",
-    });
+    }) as Heirlooms;
 }
 
 /**
@@ -94,5 +94,5 @@ export async function heirloom(heirloomId: number): Promise<Heirloom> {
         method: "GET",
         url: `/data/wow/heirloom/${heirloomId}`,
         namespace: "static",
-    });
+    }) as Heirloom;
 }

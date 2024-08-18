@@ -59,7 +59,7 @@ export async function professions(): Promise<Professions> {
         method: "GET",
         url: "/data/wow/profession/index",
         namespace: "static",
-    });
+    }) as Professions;
 }
 
 /**
@@ -73,7 +73,7 @@ export async function profession(professionId: number): Promise<Profession> {
         method: "GET",
         url: `/data/wow/profession/${professionId}`,
         namespace: "static",
-    });
+    }) as Profession;
 }
 
 /**
@@ -87,7 +87,7 @@ export async function professionMedia(professionId: number): Promise<ProfessionM
         method: "GET",
         url: `/data/wow/media/profession/${professionId}`,
         namespace: "static",
-    });
+    }) as ProfessionMedia;
 }
 
 /**
@@ -102,7 +102,7 @@ export async function professionSkillTier(professionId: number, skillTierId: num
         method: "GET",
         url: `/data/wow/profession/${professionId}/skill-tier/${skillTierId}`,
         namespace: "static",
-    });
+    }) as ProfessionSkillTier;
 }
 
 /**
@@ -116,7 +116,7 @@ export async function professionRecipie(recipeId: number): Promise<ProfessionRec
         method: "GET",
         url: `/data/wow/recipe/${recipeId}`,
         namespace: "static",
-    });
+    }) as ProfessionRecipie;
 }
 
 /**
@@ -130,5 +130,5 @@ export async function professionRecipieMedia(recipeId: number): Promise<professi
         method: "GET",
         url: `/data/wow/media/recipe/${recipeId}`,
         namespace: "static",
-    });
+    }) as professionRecipieMedia;
 }

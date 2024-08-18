@@ -28,5 +28,5 @@ export async function characterHunterPets(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/hunter-pets`,
         namespace: "profile",
-    });
+    }) as CharacterHunterPets;
 }

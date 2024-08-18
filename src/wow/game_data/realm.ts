@@ -35,7 +35,7 @@ export async function realms(): Promise<Realms> {
         method: "GET",
         url: "/data/wow/realm/index",
         namespace: "dynamic",
-    });
+    }) as Realms;
 }
 
 /**
@@ -49,7 +49,7 @@ export async function realm(realmSlug: string): Promise<Realm> {
         method: "GET",
         url: `/data/wow/realm/${realmSlug}`,
         namespace: "dynamic",
-    });
+    }) as Realm;
 }
 
 /**
@@ -59,5 +59,5 @@ export async function realm(realmSlug: string): Promise<Realm> {
  * @returns A promise that resolves to an object representing details about a realm search.
  */
 export async function searchRealm(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/realm", "dynamic", searchParameters);
+    return await search("/realm", "dynamic", searchParameters) as Search;
 }

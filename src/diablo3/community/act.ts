@@ -26,7 +26,7 @@ export async function acts(): Promise<Acts> {
     return await request({
         method: "GET",
         url: "/d3/data/act/",
-    });
+    }) as Acts;
 }
 
 /**
@@ -39,5 +39,5 @@ export async function act(seasonId: number): Promise<Act> {
     return await request({
         method: "GET",
         url: `/d3/data/act/${seasonId}`,
-    });
+    }) as Act;
 }

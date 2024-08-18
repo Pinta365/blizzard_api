@@ -28,7 +28,7 @@ export async function mounts(): Promise<Mounts> {
         method: "GET",
         url: "/data/wow/mount/index",
         namespace: "static",
-    });
+    }) as Mounts;
 }
 
 /**
@@ -42,7 +42,7 @@ export async function mount(mountId: number): Promise<Mount> {
         method: "GET",
         url: `/data/wow/mount/${mountId}`,
         namespace: "static",
-    });
+    }) as Mount;
 }
 
 export function searchMount() {

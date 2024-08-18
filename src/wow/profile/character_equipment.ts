@@ -140,5 +140,5 @@ export async function characterEquipments(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/equipment`,
         namespace: "profile",
-    });
+    }) as characterEquipments;
 }

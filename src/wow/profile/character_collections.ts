@@ -76,7 +76,7 @@ export async function characterCollectionTypes(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections`,
         namespace: "profile",
-    });
+    }) as CharacterCollectionTypes;
 }
 
 /**
@@ -94,7 +94,7 @@ export async function characterCollectionMounts(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/mounts`,
         namespace: "profile",
-    });
+    }) as CharacterCollectionMounts;
 }
 
 /**
@@ -112,7 +112,7 @@ export async function characterCollectionPets(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/pets`,
         namespace: "profile",
-    });
+    }) as CharacterCollectionPets;
 }
 
 /**
@@ -130,7 +130,7 @@ export async function characterCollectionToys(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/toys`,
         namespace: "profile",
-    });
+    }) as CharacterCollectionToys;
 }
 
 /**
@@ -148,5 +148,5 @@ export async function characterCollectionHeirlooms(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/heirlooms`,
         namespace: "profile",
-    });
+    }) as CharacterCollectionHeirlooms;
 }

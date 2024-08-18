@@ -28,5 +28,5 @@ export async function follower(followerSlug: string): Promise<Follower> {
     return await request({
         method: "GET",
         url: `/d3/data/follower/${followerSlug}`,
-    });
+    }) as Follower;
 }

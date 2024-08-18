@@ -50,5 +50,5 @@ export async function search(url: string, namespace: Namespaces, searchParameter
         url: `/data/wow/search${url}`,
         qs,
         namespace,
-    });
+    }) as Search;
 }

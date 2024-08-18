@@ -48,5 +48,5 @@ export async function search(url: string, searchParameters: SearchParameters): P
         method: "GET",
         url: `/hearthstone${url}`,
         qs,
-    });
+    }) as Search;
 }

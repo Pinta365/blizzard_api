@@ -63,7 +63,7 @@ export async function auctions(connectedRealmId: number): Promise<Auctions> {
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}/auctions`,
         namespace: "dynamic",
-    });
+    }) as Auctions;
 }
 
 /**
@@ -80,5 +80,5 @@ export async function commodities(): Promise<Commodities> {
         method: "GET",
         url: "/data/wow/auctions/commodities",
         namespace: "dynamic",
-    });
+    }) as Commodities;
 }

@@ -104,7 +104,7 @@ export async function talentTrees(): Promise<TalentTrees> {
         method: "GET",
         url: "/data/wow/talent-tree/index",
         namespace: "static",
-    });
+    }) as TalentTrees;
 }
 
 /**
@@ -119,7 +119,7 @@ export async function talentTree(talentTreeId: number, specId: number): Promise<
         method: "GET",
         url: `/data/wow/talent-tree/${talentTreeId}/playable-specialization/${specId}`,
         namespace: "static",
-    });
+    }) as TalentTree;
 }
 
 /**
@@ -133,7 +133,7 @@ export async function talentTreeNodes(talentTreeId: number): Promise<TalentTreeN
         method: "GET",
         url: `/data/wow/talent-tree/${talentTreeId}`,
         namespace: "static",
-    });
+    }) as TalentTreeNodes;
 }
 
 /**
@@ -146,7 +146,7 @@ export async function talents(): Promise<Talents> {
         method: "GET",
         url: "/data/wow/talent/index",
         namespace: "static",
-    });
+    }) as Talents;
 }
 
 /**
@@ -160,7 +160,7 @@ export async function talent(talentId: number): Promise<Talent> {
         method: "GET",
         url: `/data/wow/talent/${talentId}`,
         namespace: "static",
-    });
+    }) as Talent;
 }
 
 /**
@@ -173,7 +173,7 @@ export async function pvpTalents(): Promise<PvpTalents> {
         method: "GET",
         url: "/data/wow/pvp-talent/index",
         namespace: "static",
-    });
+    }) as PvpTalents;
 }
 
 /**
@@ -187,5 +187,5 @@ export async function pvpTalent(pvpTalentId: number): Promise<PvpTalent> {
         method: "GET",
         url: `/data/wow/pvp-talent/${pvpTalentId}`,
         namespace: "static",
-    });
+    }) as PvpTalent;
 }

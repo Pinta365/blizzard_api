@@ -23,7 +23,7 @@ export async function toys(): Promise<Toys> {
         method: "GET",
         url: "/data/wow/toy/index",
         namespace: "static",
-    });
+    }) as Toys;
 }
 
 /**
@@ -37,5 +37,5 @@ export async function toy(toyId: number): Promise<Toy> {
         method: "GET",
         url: `/data/wow/toy/${toyId}`,
         namespace: "static",
-    });
+    }) as Toy;
 }

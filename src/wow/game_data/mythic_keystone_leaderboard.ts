@@ -55,7 +55,7 @@ export async function mythicKeystoneLeaderboards(connectedRealmId: number): Prom
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}/mythic-leaderboard/index`,
         namespace: "dynamic",
-    });
+    }) as MythicKeystoneLeaderboards;
 }
 
 /**
@@ -75,5 +75,5 @@ export async function mythicKeystoneLeaderboard(
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}/mythic-leaderboard/${dungeonId}/period/${period}`,
         namespace: "dynamic",
-    });
+    }) as MythicKeystoneLeaderboard;
 }

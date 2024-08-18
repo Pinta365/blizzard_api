@@ -30,5 +30,5 @@ export async function characterReputations(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/reputations`,
         namespace: "profile",
-    });
+    }) as CharacterReputations;
 }

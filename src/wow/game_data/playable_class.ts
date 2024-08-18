@@ -44,7 +44,7 @@ export async function playableClasses(): Promise<PlayableClasses> {
         method: "GET",
         url: "/data/wow/playable-class/index",
         namespace: "static",
-    });
+    }) as PlayableClasses;
 }
 
 /**
@@ -58,7 +58,7 @@ export async function playableClass(classId: number): Promise<PlayableClass> {
         method: "GET",
         url: `/data/wow/playable-class/${classId}`,
         namespace: "static",
-    });
+    }) as PlayableClass;
 }
 
 /**
@@ -72,7 +72,7 @@ export async function playableClassMedia(playableClassId: number): Promise<Playa
         method: "GET",
         url: `/data/wow/media/playable-class/${playableClassId}`,
         namespace: "static",
-    });
+    }) as PlayableClassMedia;
 }
 
 /**
@@ -86,5 +86,5 @@ export async function playableClassPvpTalentSlots(classId: number): Promise<Play
         method: "GET",
         url: `/data/wow/playable-class/${classId}/pvp-talent-slots`,
         namespace: "static",
-    });
+    }) as PlayableClassPvpTalentSlots;
 }

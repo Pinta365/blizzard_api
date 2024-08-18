@@ -23,7 +23,7 @@ export async function itemTypes(): Promise<ItemTypes[]> {
     return await request({
         method: "GET",
         url: "/d3/data/item-type/",
-    });
+    }) as ItemTypes[];
 }
 
 /**
@@ -36,5 +36,5 @@ export async function itemType(itemTypeSlug: string): Promise<ItemType> {
     return await request({
         method: "GET",
         url: `/d3/data/item-type/${itemTypeSlug}`,
-    });
+    }) as ItemType;
 }

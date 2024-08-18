@@ -27,7 +27,7 @@ export async function keystoneAffixes(): Promise<KeystoneAffixes> {
         method: "GET",
         url: "/data/wow/keystone-affix/index",
         namespace: "static",
-    });
+    }) as KeystoneAffixes;
 }
 
 /**
@@ -41,7 +41,7 @@ export async function keystoneAffix(keystoneAffixId: number): Promise<KeystoneAf
         method: "GET",
         url: `/data/wow/keystone-affix/${keystoneAffixId}`,
         namespace: "static",
-    });
+    }) as KeystoneAffix;
 }
 
 /**
@@ -55,5 +55,5 @@ export async function keystoneAffixMedia(keystoneAffixId: number): Promise<Keyst
         method: "GET",
         url: `/data/wow/media/keystone-affix/${keystoneAffixId}`,
         namespace: "static",
-    });
+    }) as KeystoneAffixMedia;
 }

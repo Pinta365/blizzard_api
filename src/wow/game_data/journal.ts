@@ -87,7 +87,7 @@ export async function journalExpansions(): Promise<JournalExpansions> {
         method: "GET",
         url: "/data/wow/journal-expansion/index",
         namespace: "static",
-    });
+    }) as JournalExpansions;
 }
 
 /**
@@ -101,7 +101,7 @@ export async function journalExpansion(journalExpansionId: number): Promise<Jour
         method: "GET",
         url: `/data/wow/journal-expansion/${journalExpansionId}`,
         namespace: "static",
-    });
+    }) as JournalExpansion;
 }
 
 /**
@@ -114,7 +114,7 @@ export async function journalEncounters(): Promise<JournalEncounters> {
         method: "GET",
         url: "/data/wow/journal-encounter/index",
         namespace: "static",
-    });
+    }) as JournalEncounters;
 }
 
 /**
@@ -128,7 +128,7 @@ export async function journalEncounter(journalEncounterId: number): Promise<Jour
         method: "GET",
         url: `/data/wow/journal-encounter/${journalEncounterId}`,
         namespace: "static",
-    });
+    }) as JournalEncounter;
 }
 
 /**
@@ -138,7 +138,7 @@ export async function journalEncounter(journalEncounterId: number): Promise<Jour
  * @returns A promise that resolves to an object representing details about a journal encounter search.
  */
 export async function searchJournalEncounter(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/journal-encounter", "static", searchParameters);
+    return await search("/journal-encounter", "static", searchParameters) as Search;
 }
 
 /**
@@ -151,7 +151,7 @@ export async function journalInstances(): Promise<JournalInstances> {
         method: "GET",
         url: "/data/wow/journal-instance/index",
         namespace: "static",
-    });
+    }) as JournalInstances;
 }
 
 /**
@@ -165,7 +165,7 @@ export async function journalInstance(journalInstanceId: number): Promise<Journa
         method: "GET",
         url: `/data/wow/journal-instance/${journalInstanceId}`,
         namespace: "static",
-    });
+    }) as JournalInstance;
 }
 
 /**
@@ -179,5 +179,5 @@ export async function journalInstanceMedia(journalInstanceId: number): Promise<J
         method: "GET",
         url: `/data/wow/media/journal-instance/${journalInstanceId}`,
         namespace: "static",
-    });
+    }) as JournalInstanceMedia;
 }

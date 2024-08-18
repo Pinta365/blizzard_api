@@ -17,7 +17,7 @@ export interface Cardback {
  * @returns A promise that resolves to an object representing an up-to-date list of all card backs matching the search criteria.
  */
 export async function searchCardbacks(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/cardback", searchParameters);
+    return await search("/cardback", searchParameters) as Search;
 }
 
 /**
@@ -30,5 +30,5 @@ export async function fetchCardback(idorslug: string): Promise<Cardback> {
     return await request({
         method: "GET",
         url: `/hearthstone/cardback/${idorslug}`,
-    });
+    }) as Cardback;
 }

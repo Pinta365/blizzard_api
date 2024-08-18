@@ -39,7 +39,7 @@ export async function modifiedCraftingParents(): Promise<ModifiedCraftingParents
         method: "GET",
         url: "/data/wow/modified-crafting/index",
         namespace: "static",
-    });
+    }) as ModifiedCraftingParents;
 }
 
 /**
@@ -52,7 +52,7 @@ export async function modifiedCraftingCategories(): Promise<ModifiedCraftingCate
         method: "GET",
         url: "/data/wow/modified-crafting/category/index",
         namespace: "static",
-    });
+    }) as ModifiedCraftingCategories;
 }
 
 /**
@@ -66,7 +66,7 @@ export async function modifiedCraftingCategory(categoryId: number): Promise<Modi
         method: "GET",
         url: `/data/wow/modified-crafting/category/${categoryId}`,
         namespace: "static",
-    });
+    }) as ModifiedCraftingCategory;
 }
 
 /**
@@ -79,7 +79,7 @@ export async function modifiedCraftingSlotTypes(): Promise<ModifiedCraftingSlotT
         method: "GET",
         url: "/data/wow/modified-crafting/reagent-slot-type/index",
         namespace: "static",
-    });
+    }) as ModifiedCraftingSlotTypes;
 }
 
 /**
@@ -93,5 +93,5 @@ export async function modifiedCraftingSlotType(slotTypeId: number): Promise<Modi
         method: "GET",
         url: `/data/wow/modified-crafting/reagent-slot-type/${slotTypeId}`,
         namespace: "static",
-    });
+    }) as ModifiedCraftingSlotType;
 }

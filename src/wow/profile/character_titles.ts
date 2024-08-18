@@ -21,5 +21,5 @@ export async function characterTitles(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/titles`,
         namespace: "profile",
-    });
+    }) as CharacterTitles;
 }

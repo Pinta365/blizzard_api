@@ -8,5 +8,5 @@ import type { Search, SearchParameters } from "../search.ts";
  * @returns A promise that resolves to an object representing details about a media search.
  */
 export async function searchMedia(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/media", "static", searchParameters);
+    return await search("/media", "static", searchParameters) as Search;
 }

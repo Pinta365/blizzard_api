@@ -1,13 +1,5 @@
-import {
-    Character,
-    Href,
-    KeyId,
-    KeyNameId,
-    LinkSelfHref,
-    LocalizedString,
-    request,
-    TypeName,
-} from "../../shared/index.ts";
+import { request } from "../../shared/index.ts";
+import type { Character, Href, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Rgba {
     r: number;
@@ -114,7 +106,7 @@ export async function guild(
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}`,
         namespace: "profile",
-    });
+    }) as Guild;
 }
 
 /**
@@ -132,7 +124,7 @@ export async function guildActivity(
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}/activity`,
         namespace: "profile",
-    });
+    }) as GuildActivity;
 }
 
 /**
@@ -150,7 +142,7 @@ export async function guildAchievements(
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}/achievements`,
         namespace: "profile",
-    });
+    }) as GuildAchievements;
 }
 
 /**
@@ -168,5 +160,5 @@ export async function guildRoster(
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}/roster`,
         namespace: "profile",
-    });
+    }) as GuildRoster;
 }

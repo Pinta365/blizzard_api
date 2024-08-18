@@ -24,7 +24,7 @@ export async function titles(): Promise<Titles> {
         method: "GET",
         url: "/data/wow/title/index",
         namespace: "static",
-    });
+    }) as Titles;
 }
 
 /**
@@ -38,5 +38,5 @@ export async function title(titleId: number): Promise<Title> {
         method: "GET",
         url: `/data/wow/title/${titleId}`,
         namespace: "static",
-    });
+    }) as Title;
 }

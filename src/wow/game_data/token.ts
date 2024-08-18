@@ -22,6 +22,6 @@ export async function token(): Promise<WowToken> {
         method: "GET",
         url: "/data/wow/token/index",
         namespace: "dynamic",
-    });
+    }) as WowToken;
     return tokenData;
 }

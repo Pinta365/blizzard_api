@@ -98,5 +98,5 @@ export async function metadata(type: MetaTypes): Promise<Partial<Metadata>> {
     return await request({
         method: "GET",
         url: `/hearthstone/metadata/${type}`,
-    });
+    }) as Metadata;
 }

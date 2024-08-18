@@ -53,7 +53,7 @@ export async function techTalentTrees(): Promise<TechTalentTrees> {
         method: "GET",
         url: "/data/wow/tech-talent-tree/index",
         namespace: "static",
-    });
+    }) as TechTalentTrees;
 }
 
 /**
@@ -67,7 +67,7 @@ export async function techTalentTree(techTalentTreeId: number): Promise<TechTale
         method: "GET",
         url: `/data/wow/tech-talent-tree/${techTalentTreeId}`,
         namespace: "static",
-    });
+    }) as TechTalentTree;
 }
 
 /**
@@ -80,7 +80,7 @@ export async function techTalents(): Promise<TechTalents> {
         method: "GET",
         url: "/data/wow/tech-talent/index",
         namespace: "static",
-    });
+    }) as TechTalents;
 }
 
 /**
@@ -94,7 +94,7 @@ export async function techTalent(techTalentId: number): Promise<TechTalent> {
         method: "GET",
         url: `/data/wow/tech-talent/${techTalentId}`,
         namespace: "static",
-    });
+    }) as TechTalent;
 }
 
 /**
@@ -108,5 +108,5 @@ export async function techTalentMedia(techTalentId: number): Promise<TechTalentM
         method: "GET",
         url: `/data/wow/media/tech-talent/${techTalentId}`,
         namespace: "static",
-    });
+    }) as TechTalentMedia;
 }

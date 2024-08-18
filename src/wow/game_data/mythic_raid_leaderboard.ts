@@ -35,5 +35,5 @@ export async function mythicRaidLeaderboard(raid: number, faction: number): Prom
         method: "GET",
         url: `/data/wow/leaderboard/hall-of-fame/${raid}/${faction}`,
         namespace: "dynamic",
-    });
+    }) as MythicRaidLeaderboard;
 }

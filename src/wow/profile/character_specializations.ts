@@ -54,5 +54,5 @@ export async function characterSpecializations(
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/specializations`,
         namespace: "profile",
-    });
+    }) as CharacterSpecializations;
 }
