@@ -13,7 +13,7 @@ await build({
     },
     package: {
         // package.json properties
-        name: "blizzard_api",
+        name: "@pinta365/blizzard_api",
         version: Deno.args[0],
         description:
             "TS library to interact with the Blizzard Battle.net API. World of Warcraft, World of Warcraft Classic, StarCraft 2, Diablo 3, Hearthstone.",
