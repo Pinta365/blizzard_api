@@ -25,7 +25,7 @@ export async function request(requestOptions: RequestOptions) {
     }
 
     const { method, url, namespace } = requestOptions;
-        let { qs } = requestOptions;
+    let { qs } = requestOptions;
 
     if (getSetup().locale) {
         qs = { ...{ locale: getSetup().locale! }, ...qs };
@@ -48,7 +48,7 @@ export async function request(requestOptions: RequestOptions) {
     if (namespace) {
         headers["Battlenet-Namespace"] = `${namespace}-${getSetup().region}`;
     }
-    
+
     const response = await fetch(
         apiBaseUrl(getSetup().region!) + encodeURI(url) + (qsString ? "?" + params.toString() : ""),
         {

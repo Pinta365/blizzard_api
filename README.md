@@ -22,6 +22,7 @@ to implement authorization code flow also.
 | **World of Warcraft:** Profile APIs           | ✅     |                           |
 |                                               |        |                           |
 | **World of Warcraft Classic:** Game Data APIs |        |                           |
+| **World of Warcraft Classic:** Profile APIs   |        |                           |
 |                                               |        |                           |
 | **Diablo III:** Community APIs                | ✅     | Missing profile endpoints |
 | **Diablo III:** Game Data APIs                | ✅     |                           |
