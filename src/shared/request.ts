@@ -25,7 +25,7 @@ export async function request(requestOptions: RequestOptions) {
     }
 
     const { method, url, namespace } = requestOptions;
-    let { qs } = requestOptions;
+        let { qs } = requestOptions;
 
     if (getSetup().locale) {
         qs = { ...{ locale: getSetup().locale! }, ...qs };
@@ -48,7 +48,7 @@ export async function request(requestOptions: RequestOptions) {
     if (namespace) {
         headers["Battlenet-Namespace"] = `${namespace}-${getSetup().region}`;
     }
-
+    
     const response = await fetch(
         apiBaseUrl(getSetup().region!) + encodeURI(url) + (qsString ? "?" + params.toString() : ""),
         {
@@ -61,5 +61,8 @@ export async function request(requestOptions: RequestOptions) {
         return await response.json();
     }
 
-    throw new APIError("Problem fetching data from API", response.status, response.statusText);
+    const errorData = await response.json();
+    const statusCode = errorData.code || response.status;
+    const errorMessage = JSON.stringify(errorData) || "Problem fetching data from API";
+    throw new APIError(errorMessage, statusCode, response.statusText);
 }
