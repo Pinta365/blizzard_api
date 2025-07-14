@@ -40,7 +40,18 @@ export type Locales =
 /**
  * Available Battle.net namespaces.
  */
-export type Namespaces = "static" | "dynamic" | "profile";
+export type Namespaces =
+    | "static"
+    | "dynamic"
+    | "profile"
+    | //Retail
+    "static-classic1x"
+    | "dynamic-classic1x"
+    | "profile-classic1x"
+    | //Classic
+    "static-classic"
+    | "dynamic-classic"
+    | "profile-classic"; //Classic Cataclysm
 
 /**
  * Represents a reference (link) with a URL.

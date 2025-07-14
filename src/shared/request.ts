@@ -5,6 +5,12 @@ import { authenticate, getauthConfig } from "./auth.ts";
 
 import { APIError } from "./errors.ts";
 
+interface BlizzardAPIErrorResponse {
+    code?: number;
+    detail?: string;
+    type?: string;
+}
+
 /**
  * Makes an authenticated request to the API and handles potential errors.
  * @param {RequestOptions} requestOptions - An object containing the following:
@@ -61,7 +67,7 @@ export async function request(requestOptions: RequestOptions) {
         return await response.json();
     }
 
-    const errorData = await response.json();
+    const errorData = await response.json() as BlizzardAPIErrorResponse;
     const statusCode = errorData.code || response.status;
     const errorMessage = JSON.stringify(errorData) || "Problem fetching data from API";
     throw new APIError(errorMessage, statusCode, response.statusText);
