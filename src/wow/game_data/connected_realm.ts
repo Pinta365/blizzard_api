@@ -46,8 +46,8 @@ export async function connectedRealms(): Promise<ConnectedRealms> {
 /**
  * Returns details about a Connected Realms Id
  *
- * @param connectedRealmId - The unique identifier Azerite Essence.
- * @returns A promise that resolves to an object representing details about an Azerite Essences.
+ * @param connectedRealmId - The unique identifier Connected Realms.
+ * @returns A promise that resolves to an object representing details about an Connected Realms.
  */
 export async function connectedRealm(connectedRealmId: number): Promise<ConnectedRealm> {
     return await request({

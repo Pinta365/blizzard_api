@@ -41,13 +41,13 @@ export async function realms(): Promise<Realms> {
 /**
  * Returns a single realm by slug or ID.
  *
- * @param realmSlug - The unique identifier for the realm.
+ * @param realmSlugOrId - The unique identifier for the realm.
  * @returns A promise that resolves to an object representing details about a realm.
  */
-export async function realm(realmSlug: string): Promise<Realm> {
+export async function realm(realmSlugOrId: string | number): Promise<Realm> {
     return await request({
         method: "GET",
-        url: `/data/wow/realm/${realmSlug}`,
+        url: `/data/wow/realm/${realmSlugOrId}`,
         namespace: "dynamic",
     }) as Realm;
 }
