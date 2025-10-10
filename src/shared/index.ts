@@ -1,5 +1,5 @@
 export { setup } from "./config.ts";
-export { authenticate } from "./auth.ts";
+export { authenticate, getAccessToken, getAuthConfig } from "./auth.ts";
 export { request, requestHref } from "./request.ts";
 
 export type {

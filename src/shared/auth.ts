@@ -39,6 +39,22 @@ export function getauthConfig(): AuthConfig {
 }
 
 /**
+ * Retrieves the current access token for debugging or external use.
+ * @returns {string} The current access token, or empty string if not authenticated.
+ */
+export function getAccessToken(): string {
+    return authConfig.accessToken;
+}
+
+/**
+ * Retrieves the current authentication configuration for debugging or external use.
+ * @returns {AuthConfig} The current authentication configuration.
+ */
+export function getAuthConfig(): AuthConfig {
+    return { ...authConfig };
+}
+
+/**
  * Handles authentication and obtains an access token if needed.
  * @param {boolean} forceNewToken - If true, forces the retrieval of a new token, ignoring any existing one.
  * @returns {Promise<string>} Returns the access token (string).
