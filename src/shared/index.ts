@@ -1,6 +1,6 @@
 export { setup } from "./config.ts";
 export { authenticate } from "./auth.ts";
-export { request } from "./request.ts";
+export { request, requestHref } from "./request.ts";
 
 export type {
     Asset,

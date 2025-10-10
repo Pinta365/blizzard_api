@@ -1,5 +1,5 @@
 //request.ts
-import type { RequestOptions } from "./types.ts";
+import type { Namespaces, RequestOptions } from "./types.ts";
 import { apiBaseUrl, getSetup } from "./config.ts";
 import { authenticate, getauthConfig } from "./auth.ts";
 
@@ -62,6 +62,68 @@ export async function request(requestOptions: RequestOptions) {
             headers: headers,
         },
     );
+
+    if (response.ok) {
+        return await response.json();
+    }
+
+    const errorData = await response.json() as BlizzardAPIErrorResponse;
+    const statusCode = errorData.code || response.status;
+    const errorMessage = JSON.stringify(errorData) || "Problem fetching data from API";
+    throw new APIError(errorMessage, statusCode, response.statusText);
+}
+
+/**
+ * Makes an authenticated request to an arbitrary Blizzard API href URL.
+ * This function is useful for following href links returned in API responses.
+ * @param {string} href - The full href URL from a Blizzard API response.
+ * @param {Record<string, string | number>} [qs] - Optional query string parameters to append.
+ * @returns {Promise<any>} The parsed JSON response from the API.
+ * @throws {APIError} If there is a problem fetching or the response is not successful.
+ * @throws {AuthenticationError} (Potentially) If authentication fails during the process.
+ */
+export async function requestHref(href: string, qs?: Record<string, string | number>) {
+    if (
+        !getauthConfig().accessToken || (getauthConfig().accessToken && getauthConfig().tokenExpiration &&
+            new Date() < new Date(getauthConfig().tokenExpiration))
+    ) {
+        await authenticate(true);
+    }
+
+    const url = new URL(href);
+
+    const namespaceMatch = url.searchParams.get("namespace");
+    const namespace = namespaceMatch ? namespaceMatch.split("-")[0] as Namespaces : undefined;
+
+    const additionalQs = qs
+        ? Object.fromEntries(
+            Object.entries(qs).filter(([, value]) => value !== undefined).map((
+                [key, value],
+            ) => [key, value.toString()]),
+        )
+        : {};
+
+    if (getSetup().locale) {
+        additionalQs.locale = getSetup().locale!;
+    }
+
+    const params = new URLSearchParams(additionalQs);
+    const queryString = params.toString();
+
+    const headers: Record<string, string> = {
+        "Authorization": "Bearer " + getauthConfig().accessToken,
+    };
+
+    if (namespace) {
+        headers["Battlenet-Namespace"] = `${namespace}-${getSetup().region}`;
+    }
+
+    const fullUrl = href + (queryString ? (href.includes("?") ? "&" : "?") + queryString : "");
+    console.log(fullUrl);
+    const response = await fetch(fullUrl, {
+        method: "GET",
+        headers: headers,
+    });
 
     if (response.ok) {
         return await response.json();
