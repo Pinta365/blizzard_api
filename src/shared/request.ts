@@ -78,11 +78,11 @@ export async function request(requestOptions: RequestOptions) {
  * This function is useful for following href links returned in API responses.
  * @param {string} href - The full href URL from a Blizzard API response.
  * @param {Record<string, string | number>} [qs] - Optional query string parameters to append.
- * @returns {Promise<any>} The parsed JSON response from the API.
+ * @returns {Promise<unknown>} The parsed JSON response from the API.
  * @throws {APIError} If there is a problem fetching or the response is not successful.
  * @throws {AuthenticationError} (Potentially) If authentication fails during the process.
  */
-export async function requestHref(href: string, qs?: Record<string, string | number>) {
+export async function requestHref(href: string, qs?: Record<string, string | number>): Promise<unknown> {
     if (
         !getauthConfig().accessToken || (getauthConfig().accessToken && getauthConfig().tokenExpiration &&
             new Date() < new Date(getauthConfig().tokenExpiration))
