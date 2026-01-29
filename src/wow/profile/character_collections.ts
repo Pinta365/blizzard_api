@@ -61,6 +61,14 @@ export interface CharacterCollectionHeirlooms extends LinkSelfHref {
     heirlooms: Heirloom[];
 }
 
+export interface DecorItem {
+    decor: KeyNameId;
+}
+
+export interface CharacterCollectionDecor extends LinkSelfHref {
+    decors: DecorItem[];
+}
+
 /**
  * Returns an index of collection types for a character.
  *
@@ -149,4 +157,22 @@ export async function characterCollectionHeirlooms(
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/heirlooms`,
         namespace: "profile",
     }) as CharacterCollectionHeirlooms;
+}
+
+/**
+ * Returns a summary of the housing decor collection a character has obtained.
+ *
+ * @param realmSlug - The slug of the realm.
+ * @param characterName - The lowercase name of the character.
+ * @returns A promise that resolves to an object representing details about decor a character has collected.
+ */
+export async function characterCollectionDecor(
+    realmSlug: string,
+    characterName: string,
+): Promise<CharacterCollectionDecor> {
+    return await request({
+        method: "GET",
+        url: `/profile/wow/character/${realmSlug}/${characterName}/collections/decor`,
+        namespace: "profile",
+    }) as CharacterCollectionDecor;
 }

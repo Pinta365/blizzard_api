@@ -48,6 +48,21 @@ export { guildCrestBorder, guildCrestEmblem, guildCrests } from "./game_data/gui
 export { heirloom, heirlooms } from "./game_data/heirloom.ts";
 
 export {
+    decor,
+    decors,
+    fixture,
+    fixtureHook,
+    fixtureHooks,
+    fixtures,
+    room,
+    rooms,
+    searchDecor,
+    searchFixture,
+    searchFixtureHook,
+    searchRoom,
+} from "./game_data/housing.ts";
+
+export {
     item,
     itemClass,
     itemClasses,
@@ -96,6 +111,8 @@ export {
 export { mythicKeystoneLeaderboard, mythicKeystoneLeaderboards } from "./game_data/mythic_keystone_leaderboard.ts";
 
 export { mythicRaidLeaderboard } from "./game_data/mythic_raid_leaderboard.ts";
+
+export { neighborhood, neighborhoodMap, neighborhoodMaps } from "./game_data/neighborhood.ts";
 
 export { pet, petAbilities, petAbility, petAbilityMedia, petMedia, pets } from "./game_data/pet.ts";
 
@@ -173,12 +190,15 @@ export { characterAchievementStatistics, characterAchievementSummary } from "./p
 export { characterAppearanceSummary } from "./profile/character_appearance.ts";
 
 export {
+    characterCollectionDecor,
     characterCollectionHeirlooms,
     characterCollectionMounts,
     characterCollectionPets,
     characterCollectionToys,
     characterCollectionTypes,
 } from "./profile/character_collections.ts";
+
+export { characterHouse } from "./profile/character_house.ts";
 
 export {
     characterEncounterDungeons,
