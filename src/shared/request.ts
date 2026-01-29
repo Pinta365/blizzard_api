@@ -67,9 +67,18 @@ export async function request(requestOptions: RequestOptions) {
         return await response.json();
     }
 
-    const errorData = await response.json() as BlizzardAPIErrorResponse;
-    const statusCode = errorData.code || response.status;
-    const errorMessage = JSON.stringify(errorData) || "Problem fetching data from API";
+    const text = await response.text();
+    let errorData: BlizzardAPIErrorResponse | null = null;
+    try {
+        errorData = text ? (JSON.parse(text) as BlizzardAPIErrorResponse) : null;
+    } catch {
+        // Empty or non-JSON body (e.g. 404 with no body)
+    }
+    const statusCode = errorData?.code ?? response.status;
+    const errorMessage = errorData
+        ? JSON.stringify(errorData)
+        : response.statusText || "Problem fetching data from API";
+
     throw new APIError(errorMessage, statusCode, response.statusText);
 }
 
@@ -119,7 +128,7 @@ export async function requestHref(href: string, qs?: Record<string, string | num
     }
 
     const fullUrl = href + (queryString ? (href.includes("?") ? "&" : "?") + queryString : "");
-    console.log(fullUrl);
+
     const response = await fetch(fullUrl, {
         method: "GET",
         headers: headers,
@@ -129,8 +138,17 @@ export async function requestHref(href: string, qs?: Record<string, string | num
         return await response.json();
     }
 
-    const errorData = await response.json() as BlizzardAPIErrorResponse;
-    const statusCode = errorData.code || response.status;
-    const errorMessage = JSON.stringify(errorData) || "Problem fetching data from API";
+    const text = await response.text();
+    let errorData: BlizzardAPIErrorResponse | null = null;
+    try {
+        errorData = text ? (JSON.parse(text) as BlizzardAPIErrorResponse) : null;
+    } catch {
+        // Empty or non-JSON body
+    }
+    const statusCode = errorData?.code ?? response.status;
+    const errorMessage = errorData
+        ? JSON.stringify(errorData)
+        : response.statusText || "Problem fetching data from API";
+
     throw new APIError(errorMessage, statusCode, response.statusText);
 }
