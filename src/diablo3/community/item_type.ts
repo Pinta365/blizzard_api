@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 
 interface ItemTypes {
     id: string;
@@ -19,8 +19,8 @@ interface ItemType {
  *
  * @returns A promise that resolves to an object representing an index of item types.
  */
-export async function itemTypes(): Promise<ItemTypes[]> {
-    return await request({
+export async function itemTypes(ctx: ApiContext): Promise<ItemTypes[]> {
+    return await ctx.request({
         method: "GET",
         url: "/d3/data/item-type/",
     }) as ItemTypes[];
@@ -32,8 +32,8 @@ export async function itemTypes(): Promise<ItemTypes[]> {
  * @param itemTypeSlug - The slug of the item type to retrieve.
  * @returns A promise that resolves to an object representing the data for a single item type by slug.
  */
-export async function itemType(itemTypeSlug: string): Promise<ItemType> {
-    return await request({
+export async function itemType(ctx: ApiContext, itemTypeSlug: string): Promise<ItemType> {
+    return await ctx.request({
         method: "GET",
         url: `/d3/data/item-type/${itemTypeSlug}`,
     }) as ItemType;

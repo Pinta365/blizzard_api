@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface Detail {
@@ -47,10 +47,11 @@ export interface CharacterSpecializations extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a summary of a character's specializations.
  */
 export async function characterSpecializations(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterSpecializations> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/specializations`,
         namespace: "profile",

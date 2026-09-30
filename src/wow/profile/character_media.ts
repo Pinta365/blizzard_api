@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, Character, LinkSelfHref } from "../../shared/index.ts";
 
 export interface CharacterMedia extends LinkSelfHref {
@@ -14,10 +14,11 @@ export interface CharacterMedia extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a summary of the media assets available for a character.
  */
 export async function characterMedia(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterMedia> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/character-media`,
         namespace: "profile",

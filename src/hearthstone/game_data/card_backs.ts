@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { LocalizedString } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -16,8 +16,8 @@ export interface Cardback {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing an up-to-date list of all card backs matching the search criteria.
  */
-export async function searchCardbacks(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/cardbacks", searchParameters) as Search;
+export async function searchCardbacks(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/cardbacks", searchParameters) as Search;
 }
 
 /**
@@ -26,8 +26,8 @@ export async function searchCardbacks(searchParameters: SearchParameters): Promi
  * @param idorslug - The unique identifier for the card back by slug.
  * @returns A promise that resolves to an object representing details about a card back.
  */
-export async function fetchCardback(idorslug: string): Promise<Cardback> {
-    return await request({
+export async function fetchCardback(ctx: ApiContext, idorslug: string): Promise<Cardback> {
+    return await ctx.request({
         method: "GET",
         url: `/hearthstone/cardbacks/${idorslug}`,
     }) as Cardback;

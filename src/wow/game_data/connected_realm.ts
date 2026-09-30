@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -35,8 +35,8 @@ export interface ConnectedRealm extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of all Connected Realms.
  */
-export async function connectedRealms(): Promise<ConnectedRealms> {
-    return await request({
+export async function connectedRealms(ctx: ApiContext): Promise<ConnectedRealms> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/connected-realm/index",
         namespace: "dynamic",
@@ -49,8 +49,8 @@ export async function connectedRealms(): Promise<ConnectedRealms> {
  * @param connectedRealmId - The unique identifier Connected Realms.
  * @returns A promise that resolves to an object representing details about an Connected Realms.
  */
-export async function connectedRealm(connectedRealmId: number): Promise<ConnectedRealm> {
-    return await request({
+export async function connectedRealm(ctx: ApiContext, connectedRealmId: number): Promise<ConnectedRealm> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}`,
         namespace: "dynamic",
@@ -63,6 +63,6 @@ export async function connectedRealm(connectedRealmId: number): Promise<Connecte
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about the connected realms search.
  */
-export async function searchConnectedRealm(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/connected-realm", "dynamic", searchParameters as Search);
+export async function searchConnectedRealm(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/connected-realm", "dynamic", searchParameters as Search);
 }

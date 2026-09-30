@@ -67,3 +67,16 @@ export class MissingRegionError extends Error {
         this.name = "MissingRegionError";
     }
 }
+
+/**
+ * Custom error class representing a missing user access token, needed for user-scoped endpoints
+ * such as the WoW account profile. Obtain one with the authorization code flow and use client.forUser(token).
+ * @class
+ * @extends {Error}
+ */
+export class MissingUserTokenError extends Error {
+    constructor() {
+        super("This endpoint requires a user access token. Use client.forUser(token). Check documentation");
+        this.name = "MissingUserTokenError";
+    }
+}

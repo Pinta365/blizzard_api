@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { LinkSelfHref } from "../../shared/index.ts";
 
 export interface League extends LinkSelfHref {
@@ -33,12 +33,13 @@ export interface League extends LinkSelfHref {
  * @returns A promise that resolves to an object representing the data for a league.
  */
 export async function leagueData(
+    ctx: ApiContext,
     seasonId: number,
     queueId: number,
     teamType: number,
     leagueId: number,
 ): Promise<League> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/data/sc2/league/${seasonId}/${queueId}/${teamType}/${leagueId}`,
     }) as League;

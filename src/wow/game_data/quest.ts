@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Quests extends LinkSelfHref {
@@ -75,8 +75,8 @@ export interface QuestType extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of quests.
  */
-export async function quests(): Promise<Quests> {
-    return await request({
+export async function quests(ctx: ApiContext): Promise<Quests> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/quest/index",
         namespace: "static",
@@ -89,8 +89,8 @@ export async function quests(): Promise<Quests> {
  * @param questId - The unique identifier for the quest.
  * @returns A promise that resolves to an object representing details about a quest.
  */
-export async function quest(questId: number): Promise<Quest> {
-    return await request({
+export async function quest(ctx: ApiContext, questId: number): Promise<Quest> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/quest/${questId}`,
         namespace: "static",
@@ -102,8 +102,8 @@ export async function quest(questId: number): Promise<Quest> {
  *
  * @returns A promise that resolves to an object representing a list of quest categories.
  */
-export async function questCategories(): Promise<QuestCategories> {
-    return await request({
+export async function questCategories(ctx: ApiContext): Promise<QuestCategories> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/quest/category/index",
         namespace: "static",
@@ -116,8 +116,8 @@ export async function questCategories(): Promise<QuestCategories> {
  * @param questCategoryId - The unique identifier for the quest category.
  * @returns A promise that resolves to an object representing details about a quest category.
  */
-export async function questCategory(questCategoryId: number): Promise<QuestCategory> {
-    return await request({
+export async function questCategory(ctx: ApiContext, questCategoryId: number): Promise<QuestCategory> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/quest/category/${questCategoryId}`,
         namespace: "static",
@@ -129,8 +129,8 @@ export async function questCategory(questCategoryId: number): Promise<QuestCateg
  *
  * @returns A promise that resolves to an object representing a list of quest areas.
  */
-export async function questAreas(): Promise<QuestAreas> {
-    return await request({
+export async function questAreas(ctx: ApiContext): Promise<QuestAreas> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/quest/area/index",
         namespace: "static",
@@ -143,8 +143,8 @@ export async function questAreas(): Promise<QuestAreas> {
  * @param questAreaId - The unique identifier for the quest area.
  * @returns A promise that resolves to an object representing details about a quest area.
  */
-export async function questArea(questAreaId: number): Promise<QuestArea> {
-    return await request({
+export async function questArea(ctx: ApiContext, questAreaId: number): Promise<QuestArea> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/quest/area/${questAreaId}`,
         namespace: "static",
@@ -156,8 +156,8 @@ export async function questArea(questAreaId: number): Promise<QuestArea> {
  *
  * @returns A promise that resolves to an object representing a list of quest types.
  */
-export async function questTypes(): Promise<QuestTypes> {
-    return await request({
+export async function questTypes(ctx: ApiContext): Promise<QuestTypes> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/quest/type/index",
         namespace: "static",
@@ -170,8 +170,8 @@ export async function questTypes(): Promise<QuestTypes> {
  * @param questTypeId - The unique identifier for the quest type.
  * @returns A promise that resolves to an object representing details about a quest type.
  */
-export async function questType(questTypeId: number): Promise<QuestType> {
-    return await request({
+export async function questType(ctx: ApiContext, questTypeId: number): Promise<QuestType> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/quest/type/${questTypeId}`,
         namespace: "static",

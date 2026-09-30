@@ -4,7 +4,8 @@
  * @author Pinta <https://github.com/Pinta365>
  */
 
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
+
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface AchievementCategories extends LinkSelfHref {
@@ -63,8 +64,8 @@ export interface AchievementMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing the index of achievement categories.
  */
-export async function achievementCategories(): Promise<AchievementCategories> {
-    return await request({
+export async function achievementCategories(ctx: ApiContext): Promise<AchievementCategories> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/achievement-category/index",
         namespace: "static",
@@ -77,8 +78,11 @@ export async function achievementCategories(): Promise<AchievementCategories> {
  * @param achievementCategoryId - The unique identifier of the achievement category to retrieve.
  * @returns A promise that resolves to an object representing the achievement category details.
  */
-export async function achievementCategory(achievementCategoryId: number): Promise<AchievementCategory> {
-    return await request({
+export async function achievementCategory(
+    ctx: ApiContext,
+    achievementCategoryId: number,
+): Promise<AchievementCategory> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/achievement-category/${achievementCategoryId}`,
         namespace: "static",
@@ -90,8 +94,8 @@ export async function achievementCategory(achievementCategoryId: number): Promis
  *
  * @returns A promise that resolves to an object representing the index of achievements.
  */
-export async function achievements(): Promise<Achievements> {
-    return await request({
+export async function achievements(ctx: ApiContext): Promise<Achievements> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/achievement/index",
         namespace: "static",
@@ -104,8 +108,8 @@ export async function achievements(): Promise<Achievements> {
  * @param achievementId - The unique identifier of the achievement to retrieve.
  * @returns A promise that resolves to an object representing the achievement details.
  */
-export async function achievement(achievementId: number): Promise<Achievement> {
-    return await request({
+export async function achievement(ctx: ApiContext, achievementId: number): Promise<Achievement> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/achievement/${achievementId}`,
         namespace: "static",
@@ -118,8 +122,8 @@ export async function achievement(achievementId: number): Promise<Achievement> {
  * @param achievementId - The unique identifier of the achievement to retrieve media details for.
  * @returns A promise that resolves to an object representing the achievement media details.
  */
-export async function achievementMedia(achievementId: number): Promise<AchievementMedia> {
-    return await request({
+export async function achievementMedia(ctx: ApiContext, achievementId: number): Promise<AchievementMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/achievement/${achievementId}`,
         namespace: "static",

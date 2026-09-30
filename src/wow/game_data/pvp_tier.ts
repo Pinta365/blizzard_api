@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface PvpTierMedia extends LinkSelfHref {
@@ -29,8 +29,8 @@ export interface PvpTier extends LinkSelfHref {
  * @param pvpTierId - The unique identifier for the PvP tier
  * @returns A promise that resolves to an object representing media details about a PvP tier.
  */
-export async function pvpTierMedia(pvpTierId: number): Promise<PvpTierMedia> {
-    return await request({
+export async function pvpTierMedia(ctx: ApiContext, pvpTierId: number): Promise<PvpTierMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/pvp-tier/${pvpTierId}`,
         namespace: "static",
@@ -42,8 +42,8 @@ export async function pvpTierMedia(pvpTierId: number): Promise<PvpTierMedia> {
  *
  * @returns A promise that resolves to an object representing a list of PvP tiers.
  */
-export async function pvpTiers(): Promise<PvpTiers> {
-    return await request({
+export async function pvpTiers(ctx: ApiContext): Promise<PvpTiers> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/pvp-tier/index",
         namespace: "static",
@@ -56,8 +56,8 @@ export async function pvpTiers(): Promise<PvpTiers> {
  * @param pvpTierId - The unique identifier for the PvP tier.
  * @returns A promise that resolves to an object representing details about a PvP tier.
  */
-export async function pvpTier(pvpTierId: number): Promise<PvpTier> {
-    return await request({
+export async function pvpTier(ctx: ApiContext, pvpTierId: number): Promise<PvpTier> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pvp-tier/${pvpTierId}`,
         namespace: "static",

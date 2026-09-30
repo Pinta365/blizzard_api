@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -32,8 +32,8 @@ export interface AzeritEessenceMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of all Azerite Essences.
  */
-export async function azeriteEssences(): Promise<AzeriteEssences> {
-    return await request({
+export async function azeriteEssences(ctx: ApiContext): Promise<AzeriteEssences> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/azerite-essence/index",
         namespace: "static",
@@ -46,8 +46,8 @@ export async function azeriteEssences(): Promise<AzeriteEssences> {
  * @param azeriteEssenceId - The unique identifier Azerite Essence.
  * @returns A promise that resolves to an object representing details about an Azerite Essences.
  */
-export async function azeriteEssence(azeriteEssenceId: number): Promise<AzeriteEssenceDetails> {
-    return await request({
+export async function azeriteEssence(ctx: ApiContext, azeriteEssenceId: number): Promise<AzeriteEssenceDetails> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/azerite-essence/${azeriteEssenceId}`,
         namespace: "static",
@@ -60,8 +60,8 @@ export async function azeriteEssence(azeriteEssenceId: number): Promise<AzeriteE
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about a Azerite Essences search.
  */
-export async function searchAzeriteEssence(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/azerite-essence", "static", searchParameters) as Search;
+export async function searchAzeriteEssence(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/azerite-essence", "static", searchParameters) as Search;
 }
 
 /**
@@ -70,8 +70,8 @@ export async function searchAzeriteEssence(searchParameters: SearchParameters): 
  * @param azeriteEssenceId - The unique identifier Azerite Essence.
  * @returns A promise that resolves to an object representing media details about an Azerite Essences.
  */
-export async function azeriteEssenceMedia(azeriteEssenceId: number): Promise<AzeritEessenceMedia> {
-    return await request({
+export async function azeriteEssenceMedia(ctx: ApiContext, azeriteEssenceId: number): Promise<AzeritEessenceMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/azerite-essence/${azeriteEssenceId}`,
         namespace: "static",

@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 
 interface FollowerSkill {
     slug: string;
@@ -24,8 +24,8 @@ interface Follower {
  * @param followerSlug - The slug of the follower to retrieve.
  * @returns A promise that resolves to an object representing the data for a single follower by slug.
  */
-export async function follower(followerSlug: string): Promise<Follower> {
-    return await request({
+export async function follower(ctx: ApiContext, followerSlug: string): Promise<Follower> {
+    return await ctx.request({
         method: "GET",
         url: `/d3/data/follower/${followerSlug}`,
     }) as Follower;

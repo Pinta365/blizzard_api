@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface TalentTree {
@@ -48,8 +48,8 @@ export interface TechTalentMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of tech talents trees
  */
-export async function techTalentTrees(): Promise<TechTalentTrees> {
-    return await request({
+export async function techTalentTrees(ctx: ApiContext): Promise<TechTalentTrees> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/tech-talent-tree/index",
         namespace: "static",
@@ -62,8 +62,8 @@ export async function techTalentTrees(): Promise<TechTalentTrees> {
  * @param techTalentTreeId - The unique identifier for the tech talent tree.
  * @returns A promise that resolves to an object representing details about the tech talent tree.
  */
-export async function techTalentTree(techTalentTreeId: number): Promise<TechTalentTree> {
-    return await request({
+export async function techTalentTree(ctx: ApiContext, techTalentTreeId: number): Promise<TechTalentTree> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/tech-talent-tree/${techTalentTreeId}`,
         namespace: "static",
@@ -75,8 +75,8 @@ export async function techTalentTree(techTalentTreeId: number): Promise<TechTale
  *
  * @returns A promise that resolves to an object representing a list of tech talents trees
  */
-export async function techTalents(): Promise<TechTalents> {
-    return await request({
+export async function techTalents(ctx: ApiContext): Promise<TechTalents> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/tech-talent/index",
         namespace: "static",
@@ -89,8 +89,8 @@ export async function techTalents(): Promise<TechTalents> {
  * @param techTalentId - The unique identifier for the tech talent tree.
  * @returns A promise that resolves to an object representing details about the tech talent tree.
  */
-export async function techTalent(techTalentId: number): Promise<TechTalent> {
-    return await request({
+export async function techTalent(ctx: ApiContext, techTalentId: number): Promise<TechTalent> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/tech-talent/${techTalentId}`,
         namespace: "static",
@@ -103,8 +103,8 @@ export async function techTalent(techTalentId: number): Promise<TechTalent> {
  * @param techTalentId - The unique identifier for the tech talent.
  * @returns A promise that resolves to an object representing details about a tech talent.
  */
-export async function techTalentMedia(techTalentId: number): Promise<TechTalentMedia> {
-    return await request({
+export async function techTalentMedia(ctx: ApiContext, techTalentId: number): Promise<TechTalentMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/tech-talent/${techTalentId}`,
         namespace: "static",

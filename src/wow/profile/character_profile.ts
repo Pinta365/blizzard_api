@@ -1,4 +1,4 @@
-import { type KeyNameId, type LinkSelfHref, type LocalizedString, request, type TypeName } from "../../shared/index.ts";
+import type { ApiContext, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Href {
     href: string;
@@ -65,10 +65,11 @@ export interface CharacterProfileStatus extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a profile summary.
  */
 export async function characterProfile(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterProfile> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}`,
         namespace: "profile",
@@ -94,10 +95,11 @@ export async function characterProfile(
  * @returns A promise that resolves to an object representing a profile summary status.
  */
 export async function characterProfileStatus(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterProfileStatus> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/status`,
         namespace: "profile",

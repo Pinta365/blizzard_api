@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId } from "../../shared/index.ts";
 
 export interface MythicKeystoneDungeons extends LinkSelfHref {
@@ -53,8 +53,8 @@ export interface MythicKeystoneSeason extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of the Mythic Keystone dungeons.
  */
-export async function mythicKeystoneDungeons(): Promise<MythicKeystoneDungeons> {
-    return await request({
+export async function mythicKeystoneDungeons(ctx: ApiContext): Promise<MythicKeystoneDungeons> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/mythic-keystone/dungeon/index",
         namespace: "dynamic",
@@ -67,8 +67,8 @@ export async function mythicKeystoneDungeons(): Promise<MythicKeystoneDungeons> 
  * @param dungeonId - The unique identifier for the Mythic Keystone dungeon
  * @returns A promise that resolves to an object representing details about a Mythic Keystone dungeon by ID.
  */
-export async function mythicKeystoneDungeon(dungeonId: number): Promise<MythicKeystoneDungeon> {
-    return await request({
+export async function mythicKeystoneDungeon(ctx: ApiContext, dungeonId: number): Promise<MythicKeystoneDungeon> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/mythic-keystone/dungeon/${dungeonId}`,
         namespace: "dynamic",
@@ -80,8 +80,8 @@ export async function mythicKeystoneDungeon(dungeonId: number): Promise<MythicKe
  *
  * @returns A promise that resolves to an object representing a index of links to other documents related to Mythic Keystone dungeons.
  */
-export async function mythicKeystoneIndex(): Promise<MythicKeystoneIndex> {
-    return await request({
+export async function mythicKeystoneIndex(ctx: ApiContext): Promise<MythicKeystoneIndex> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/mythic-keystone/index",
         namespace: "dynamic",
@@ -93,8 +93,8 @@ export async function mythicKeystoneIndex(): Promise<MythicKeystoneIndex> {
  *
  * @returns A promise that resolves to an object representing a index of Mythic Keystone periods.
  */
-export async function mythicKeystonePeriods(): Promise<MythicKeystonePeriods> {
-    return await request({
+export async function mythicKeystonePeriods(ctx: ApiContext): Promise<MythicKeystonePeriods> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/mythic-keystone/period/index",
         namespace: "dynamic",
@@ -107,8 +107,8 @@ export async function mythicKeystonePeriods(): Promise<MythicKeystonePeriods> {
  * @param periodId - The unique identifier for the Mythic Keystone period
  * @returns A promise that resolves to an object representing details about a Mythic Keystone period by ID.
  */
-export async function mythicKeystonePeriod(periodId: number): Promise<MythicKeystonePeriod> {
-    return await request({
+export async function mythicKeystonePeriod(ctx: ApiContext, periodId: number): Promise<MythicKeystonePeriod> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/mythic-keystone/period/${periodId}`,
         namespace: "dynamic",
@@ -124,8 +124,8 @@ export interface MythicKeystoneSeasons extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a index of Mythic Keystone seasons
  */
-export async function mythicKeystoneSeasons(): Promise<MythicKeystoneSeasons> {
-    return await request({
+export async function mythicKeystoneSeasons(ctx: ApiContext): Promise<MythicKeystoneSeasons> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/mythic-keystone/season/index",
         namespace: "dynamic",
@@ -138,8 +138,8 @@ export async function mythicKeystoneSeasons(): Promise<MythicKeystoneSeasons> {
  * @param seasonId - The unique identifier for the Mythic Keystone season
  * @returns A promise that resolves to an object representing details about a Mythic Keystone season by ID.
  */
-export async function mythicKeystoneSeason(seasonId: number): Promise<MythicKeystoneSeason> {
-    return await request({
+export async function mythicKeystoneSeason(ctx: ApiContext, seasonId: number): Promise<MythicKeystoneSeason> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/mythic-keystone/season/${seasonId}`,
         namespace: "dynamic",

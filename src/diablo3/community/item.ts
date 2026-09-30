@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 
 interface ItemType {
     twoHanded: boolean;
@@ -49,8 +49,8 @@ interface Item {
  * @param itemSlugAndId - The slug and ID of the item to retrieve.
  * @returns A promise that resolves to an object representing the data for a single item by item slug and ID.
  */
-export async function item(itemSlugAndId: string): Promise<Item> {
-    return await request({
+export async function item(ctx: ApiContext, itemSlugAndId: string): Promise<Item> {
+    return await ctx.request({
         method: "GET",
         url: `/d3/data/item/${itemSlugAndId}`,
     }) as Item;

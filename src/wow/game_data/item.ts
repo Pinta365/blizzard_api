@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -124,8 +124,8 @@ export interface ItemMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of item classes.
  */
-export async function itemClasses(): Promise<ItemClasses> {
-    return await request({
+export async function itemClasses(ctx: ApiContext): Promise<ItemClasses> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/item-class/index",
         namespace: "static",
@@ -138,8 +138,8 @@ export async function itemClasses(): Promise<ItemClasses> {
  * @param itemClassId - The unique identifier for the item class by ID.
  * @returns A promise that resolves to an object representing details about an item class by ID.
  */
-export async function itemClass(itemClassId: number): Promise<ItemClass> {
-    return await request({
+export async function itemClass(ctx: ApiContext, itemClassId: number): Promise<ItemClass> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/item-class/${itemClassId}`,
         namespace: "static",
@@ -151,8 +151,8 @@ export async function itemClass(itemClassId: number): Promise<ItemClass> {
  *
  * @returns A promise that resolves to an object representing a list of item sets.
  */
-export async function itemSets(): Promise<ItemSets> {
-    return await request({
+export async function itemSets(ctx: ApiContext): Promise<ItemSets> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/item-set/index",
         namespace: "static",
@@ -165,8 +165,8 @@ export async function itemSets(): Promise<ItemSets> {
  * @param itemSetId - The unique identifier for the item set by ID.
  * @returns A promise that resolves to an object representing details about an item set by ID.
  */
-export async function itemSet(itemSetId: number): Promise<ItemSet> {
-    return await request({
+export async function itemSet(ctx: ApiContext, itemSetId: number): Promise<ItemSet> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/item-set/${itemSetId}`,
         namespace: "static",
@@ -180,8 +180,12 @@ export async function itemSet(itemSetId: number): Promise<ItemSet> {
  * @param itemSubclassId - The unique identifier for the item subclass by ID.
  * @returns A promise that resolves to an object representing details about an item set by ID.
  */
-export async function itemSubclass(itemClassId: number, itemSubclassId: number): Promise<ItemSubclass> {
-    return await request({
+export async function itemSubclass(
+    ctx: ApiContext,
+    itemClassId: number,
+    itemSubclassId: number,
+): Promise<ItemSubclass> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/item-class/${itemClassId}/item-subclass/${itemSubclassId}`,
         namespace: "static",
@@ -194,8 +198,8 @@ export async function itemSubclass(itemClassId: number, itemSubclassId: number):
  * @param itemId - The unique identifier for the item by ID.
  * @returns A promise that resolves to an object representing details about an item by ID.
  */
-export async function item(itemId: number): Promise<Item> {
-    return await request({
+export async function item(ctx: ApiContext, itemId: number): Promise<Item> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/item/${itemId}`,
         namespace: "static",
@@ -208,8 +212,8 @@ export async function item(itemId: number): Promise<Item> {
  * @param itemId - The unique identifier for the item
  * @returns A promise that resolves to an object representing media details about an item.
  */
-export async function itemMedia(itemId: number): Promise<ItemMedia> {
-    return await request({
+export async function itemMedia(ctx: ApiContext, itemId: number): Promise<ItemMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/item/${itemId}`,
         namespace: "static",
@@ -222,6 +226,6 @@ export async function itemMedia(itemId: number): Promise<ItemMedia> {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about an item search.
  */
-export async function searchItem(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/item", "static", searchParameters) as Search;
+export async function searchItem(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/item", "static", searchParameters) as Search;
 }

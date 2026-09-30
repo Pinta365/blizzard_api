@@ -15,5 +15,6 @@ jobs:
                   deno-version: v2.x
             - run: deno fmt --check
             - run: deno lint
-            - run: deno check mod.ts scripts/*.ts
+            - run: deno check mod.ts scripts/*.ts tests/*.ts
+            - run: deno test
             - run: deno publish --dry-run --allow-dirty

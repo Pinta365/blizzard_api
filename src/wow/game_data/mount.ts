@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -25,8 +25,8 @@ export interface Mount extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of the index of mounts.
  */
-export async function mounts(): Promise<Mounts> {
-    return await request({
+export async function mounts(ctx: ApiContext): Promise<Mounts> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/mount/index",
         namespace: "static",
@@ -39,8 +39,8 @@ export async function mounts(): Promise<Mounts> {
  * @param mountId - The unique identifier for the mount by ID.
  * @returns A promise that resolves to an object representing details about a mount.
  */
-export async function mount(mountId: number): Promise<Mount> {
-    return await request({
+export async function mount(ctx: ApiContext, mountId: number): Promise<Mount> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/mount/${mountId}`,
         namespace: "static",
@@ -53,6 +53,6 @@ export async function mount(mountId: number): Promise<Mount> {
  * @param searchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about a mount search.
  */
-export async function searchMount(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/mount", "static", searchParameters) as Search;
+export async function searchMount(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/mount", "static", searchParameters) as Search;
 }

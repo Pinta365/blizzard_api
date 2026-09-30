@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, Href, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Rgba {
@@ -98,11 +98,8 @@ export interface GuildRoster extends LinkSelfHref {
  * @param nameSlug - The slug of the guild.
  * @returns A promise that resolves to an object representing a single guild by its name and realm.
  */
-export async function guild(
-    realmSlug: string,
-    nameSlug: string,
-): Promise<Guild> {
-    return await request({
+export async function guild(ctx: ApiContext, realmSlug: string, nameSlug: string): Promise<Guild> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}`,
         namespace: "profile",
@@ -116,11 +113,8 @@ export async function guild(
  * @param nameSlug - The slug of the guild.
  * @returns A promise that resolves to an object representing a single guild's activity by its name and realm.
  */
-export async function guildActivity(
-    realmSlug: string,
-    nameSlug: string,
-): Promise<GuildActivity> {
-    return await request({
+export async function guildActivity(ctx: ApiContext, realmSlug: string, nameSlug: string): Promise<GuildActivity> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}/activity`,
         namespace: "profile",
@@ -135,10 +129,11 @@ export async function guildActivity(
  * @returns A promise that resolves to an object representing a single guild's achievements by its name and realm.
  */
 export async function guildAchievements(
+    ctx: ApiContext,
     realmSlug: string,
     nameSlug: string,
 ): Promise<GuildAchievements> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}/achievements`,
         namespace: "profile",
@@ -152,11 +147,8 @@ export async function guildAchievements(
  * @param nameSlug - The slug of the guild.
  * @returns A promise that resolves to an object representing a single guild's roster by its name and realm.
  */
-export async function guildRoster(
-    realmSlug: string,
-    nameSlug: string,
-): Promise<GuildRoster> {
-    return await request({
+export async function guildRoster(ctx: ApiContext, realmSlug: string, nameSlug: string): Promise<GuildRoster> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/guild/${realmSlug}/${nameSlug}/roster`,
         namespace: "profile",

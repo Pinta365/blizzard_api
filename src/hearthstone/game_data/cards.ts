@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { LocalizedString, RequestOptions } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -31,8 +31,8 @@ export interface Card {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing an up-to-date list of all cards matching the search criteria.
  */
-export async function searchCards(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/cards", searchParameters) as Search;
+export async function searchCards(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/cards", searchParameters) as Search;
 }
 
 /**
@@ -41,7 +41,7 @@ export async function searchCards(searchParameters: SearchParameters): Promise<S
  * @param idorslug - The unique identifier for the card by slug.
  * @returns A promise that resolves to an object representing details about a card.
  */
-export async function fetchCard(idorslug: string, gameMode?: string): Promise<Card> {
+export async function fetchCard(ctx: ApiContext, idorslug: string, gameMode?: string): Promise<Card> {
     const reqOptions: RequestOptions = {
         method: "GET",
         url: `/hearthstone/cards/${idorslug}`,
@@ -51,5 +51,5 @@ export async function fetchCard(idorslug: string, gameMode?: string): Promise<Ca
         reqOptions["qs"] = { gameMode };
     }
 
-    return await request(reqOptions) as Card;
+    return await ctx.request(reqOptions) as Card;
 }

@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Professions extends LinkSelfHref {
@@ -54,8 +54,8 @@ export interface professionRecipieMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of professions.
  */
-export async function professions(): Promise<Professions> {
-    return await request({
+export async function professions(ctx: ApiContext): Promise<Professions> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/profession/index",
         namespace: "static",
@@ -68,8 +68,8 @@ export async function professions(): Promise<Professions> {
  * @param professionId - The unique identifier for the profession.
  * @returns A promise that resolves to an object representing details about a profession.
  */
-export async function profession(professionId: number): Promise<Profession> {
-    return await request({
+export async function profession(ctx: ApiContext, professionId: number): Promise<Profession> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/profession/${professionId}`,
         namespace: "static",
@@ -82,8 +82,8 @@ export async function profession(professionId: number): Promise<Profession> {
  * @param professionId - The unique identifier for the profession
  * @returns A promise that resolves to an object representing media details about a profession.
  */
-export async function professionMedia(professionId: number): Promise<ProfessionMedia> {
-    return await request({
+export async function professionMedia(ctx: ApiContext, professionId: number): Promise<ProfessionMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/profession/${professionId}`,
         namespace: "static",
@@ -97,8 +97,12 @@ export async function professionMedia(professionId: number): Promise<ProfessionM
  * @param skillTierId - The unique identifier for the skill tier
  * @returns A promise that resolves to an object representing details about a skill tier.
  */
-export async function professionSkillTier(professionId: number, skillTierId: number): Promise<ProfessionSkillTier> {
-    return await request({
+export async function professionSkillTier(
+    ctx: ApiContext,
+    professionId: number,
+    skillTierId: number,
+): Promise<ProfessionSkillTier> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/profession/${professionId}/skill-tier/${skillTierId}`,
         namespace: "static",
@@ -111,8 +115,8 @@ export async function professionSkillTier(professionId: number, skillTierId: num
  * @param recipeId - The unique identifier for the recipe.
  * @returns A promise that resolves to an object representing details about a recipe.
  */
-export async function professionRecipie(recipeId: number): Promise<ProfessionRecipie> {
-    return await request({
+export async function professionRecipie(ctx: ApiContext, recipeId: number): Promise<ProfessionRecipie> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/recipe/${recipeId}`,
         namespace: "static",
@@ -125,8 +129,8 @@ export async function professionRecipie(recipeId: number): Promise<ProfessionRec
  * @param recipeId - The unique identifier for the recipe
  * @returns A promise that resolves to an object representing media details about a recipe.
  */
-export async function professionRecipieMedia(recipeId: number): Promise<professionRecipieMedia> {
-    return await request({
+export async function professionRecipieMedia(ctx: ApiContext, recipeId: number): Promise<professionRecipieMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/recipe/${recipeId}`,
         namespace: "static",

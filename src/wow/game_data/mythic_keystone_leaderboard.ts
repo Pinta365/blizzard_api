@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId } from "../../shared/index.ts";
 
 export interface MythicKeystoneLeaderboards extends LinkSelfHref {
@@ -50,8 +50,11 @@ export interface MythicKeystoneLeaderboard extends LinkSelfHref {
  * @param connectedRealmId - The unique identifier for the connected realm
  * @returns A promise that resolves to an object representing an index of Mythic Keystone Leaderboard dungeon instances for a connected realm.
  */
-export async function mythicKeystoneLeaderboards(connectedRealmId: number): Promise<MythicKeystoneLeaderboards> {
-    return await request({
+export async function mythicKeystoneLeaderboards(
+    ctx: ApiContext,
+    connectedRealmId: number,
+): Promise<MythicKeystoneLeaderboards> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}/mythic-leaderboard/index`,
         namespace: "dynamic",
@@ -67,11 +70,12 @@ export async function mythicKeystoneLeaderboards(connectedRealmId: number): Prom
  * @returns A promise that resolves to an object representing details about a weekly Mythic Keystone Leaderboard by period.
  */
 export async function mythicKeystoneLeaderboard(
+    ctx: ApiContext,
     connectedRealmId: number,
     dungeonId: number,
     period: number,
 ): Promise<MythicKeystoneLeaderboard> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}/mythic-leaderboard/${dungeonId}/period/${period}`,
         namespace: "dynamic",

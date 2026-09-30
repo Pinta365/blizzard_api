@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyNameId, LinkSelfHref, LocalizedString, NameId, TypeName } from "../../shared/index.ts";
 
 export interface Covenants extends LinkSelfHref {
@@ -79,8 +79,8 @@ export interface CovenantConduit extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of all Covenants.
  */
-export async function covenants(): Promise<Covenants> {
-    return await request({
+export async function covenants(ctx: ApiContext): Promise<Covenants> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/covenant/index",
         namespace: "static",
@@ -93,8 +93,8 @@ export async function covenants(): Promise<Covenants> {
  * @param covenantId - The unique identifier for the Covenant
  * @returns A promise that resolves to an object representing details about a Covenant.
  */
-export async function covenant(covenantId: number): Promise<Covenant> {
-    return await request({
+export async function covenant(ctx: ApiContext, covenantId: number): Promise<Covenant> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/covenant/${covenantId}`,
         namespace: "static",
@@ -107,8 +107,8 @@ export async function covenant(covenantId: number): Promise<Covenant> {
  * @param covenantId - The unique identifier for the Covenant.
  * @returns A promise that resolves to an object representing media details about a Covenant.
  */
-export async function azeriteEssenceMedia(covenantId: number): Promise<CovenantMedia> {
-    return await request({
+export async function azeriteEssenceMedia(ctx: ApiContext, covenantId: number): Promise<CovenantMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/covenant/${covenantId}`,
         namespace: "static",
@@ -120,8 +120,8 @@ export async function azeriteEssenceMedia(covenantId: number): Promise<CovenantM
  *
  * @returns A promise that resolves to an object representing a list of all Covenant Soulbinds.
  */
-export async function covenantSoulbinds(): Promise<CovenantSoulbinds> {
-    return await request({
+export async function covenantSoulbinds(ctx: ApiContext): Promise<CovenantSoulbinds> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/covenant/soulbind/index",
         namespace: "static",
@@ -134,8 +134,8 @@ export async function covenantSoulbinds(): Promise<CovenantSoulbinds> {
  * @param soulbindId - The unique identifier for the Covenant Soulbind
  * @returns A promise that resolves to an object representing details about a Covenant Soulbind.
  */
-export async function covenantSoulbind(soulbindId: number): Promise<CovenantSoulbind> {
-    return await request({
+export async function covenantSoulbind(ctx: ApiContext, soulbindId: number): Promise<CovenantSoulbind> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/covenant/soulbind/${soulbindId}`,
         namespace: "static",
@@ -147,8 +147,8 @@ export async function covenantSoulbind(soulbindId: number): Promise<CovenantSoul
  *
  * @returns A promise that resolves to an object representing a list of all Covenant Conduits.
  */
-export async function covenantConduits(): Promise<CovenantConduits> {
-    return await request({
+export async function covenantConduits(ctx: ApiContext): Promise<CovenantConduits> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/covenant/conduit/index",
         namespace: "static",
@@ -161,8 +161,8 @@ export async function covenantConduits(): Promise<CovenantConduits> {
  * @param conduitId - The unique identifier for the Covenant Conduit
  * @returns A promise that resolves to an object representing details about a Covenant Conduit.
  */
-export async function covenantConduit(conduitId: number): Promise<CovenantConduit> {
-    return await request({
+export async function covenantConduit(ctx: ApiContext, conduitId: number): Promise<CovenantConduit> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/covenant/conduit/${conduitId}`,
         namespace: "static",

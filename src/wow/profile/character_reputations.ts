@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface CharacterReputations extends LinkSelfHref {
@@ -23,10 +23,11 @@ export interface CharacterReputations extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a character's reputations.
  */
 export async function characterReputations(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterReputations> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/reputations`,
         namespace: "profile",

@@ -6,12 +6,14 @@
  * @property {string} url - The API endpoint path.
  * @property {Namespaces} [namespace] - The optional Battle.net namespace for the request.
  * @property {Record<string, string | number>} [qs] - An optional object for query string parameters.
+ * @property {"user"} [auth] - Set to "user" for endpoints that require a user access token (authorization code flow).
  */
 export interface RequestOptions {
     method: "GET";
     url: string;
     namespace?: Namespaces;
     qs?: Record<string, string | number>;
+    auth?: "user";
 }
 
 /**

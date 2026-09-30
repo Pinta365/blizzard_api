@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface CharacterEncounters extends LinkSelfHref {
@@ -64,10 +64,11 @@ export interface CharacterEncounterRaids extends LinkSelfHref {
  * @returns A promise that resolves to an object representing details about character's encounters.
  */
 export async function characterEncounters(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterEncounters> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/encounters`,
         namespace: "profile",
@@ -82,10 +83,11 @@ export async function characterEncounters(
  * @returns A promise that resolves to an object representing details about character's completed dungeons.
  */
 export async function characterEncounterDungeons(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterEncounterDungeons> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/encounters/dungeons`,
         namespace: "profile",
@@ -100,10 +102,11 @@ export async function characterEncounterDungeons(
  * @returns A promise that resolves to an object representing details about character's completed raids.
  */
 export async function characterEncounterRaids(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterEncounterRaids> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/encounters/raids`,
         namespace: "profile",

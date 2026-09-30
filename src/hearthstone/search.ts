@@ -1,4 +1,4 @@
-import { request } from "../shared/index.ts";
+import type { ApiContext } from "../shared/index.ts";
 
 export interface SearchParameters {
     searchFields?: Record<string | symbol, string | number>;
@@ -21,7 +21,7 @@ export interface Search {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about the search.
  */
-export async function search(url: string, searchParameters: SearchParameters): Promise<Search> {
+export async function search(ctx: ApiContext, url: string, searchParameters: SearchParameters): Promise<Search> {
     const searchFields = searchParameters.searchFields
         ? Object.fromEntries(
             Object.entries(searchParameters.searchFields).map(([key, value]) => [key, value.toString()]),
@@ -44,7 +44,7 @@ export async function search(url: string, searchParameters: SearchParameters): P
         qs.pageSize = searchParameters.pageSize;
     }
 
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/hearthstone${url}`,
         qs,

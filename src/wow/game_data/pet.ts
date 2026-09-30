@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Pets extends LinkSelfHref {
@@ -62,8 +62,8 @@ export interface PetAbilityMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of the index of battle pets.
  */
-export async function pets(): Promise<Pets> {
-    return await request({
+export async function pets(ctx: ApiContext): Promise<Pets> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/pet/index",
         namespace: "static",
@@ -76,8 +76,8 @@ export async function pets(): Promise<Pets> {
  * @param petId - The unique identifier for the battle pet
  * @returns A promise that resolves to an object representing details about a battle pet.
  */
-export async function pet(petId: number): Promise<Pet> {
-    return await request({
+export async function pet(ctx: ApiContext, petId: number): Promise<Pet> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pet/${petId}`,
         namespace: "static",
@@ -90,8 +90,8 @@ export async function pet(petId: number): Promise<Pet> {
  * @param petId - The unique identifier for the battle pet
  * @returns A promise that resolves to an object representing media details about a battle pet.
  */
-export async function petMedia(petId: number): Promise<PetMedia> {
-    return await request({
+export async function petMedia(ctx: ApiContext, petId: number): Promise<PetMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/pet/${petId}`,
         namespace: "static",
@@ -103,8 +103,8 @@ export async function petMedia(petId: number): Promise<PetMedia> {
  *
  * @returns A promise that resolves to an object representing a list of the index of pet abilities.
  */
-export async function petAbilities(): Promise<PetAbilities> {
-    return await request({
+export async function petAbilities(ctx: ApiContext): Promise<PetAbilities> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/pet-ability/index",
         namespace: "static",
@@ -117,8 +117,8 @@ export async function petAbilities(): Promise<PetAbilities> {
  * @param petAbilityId - The unique identifier for the battle pet ability
  * @returns A promise that resolves to an object representing details about a battle pet ability.
  */
-export async function petAbility(petAbilityId: number): Promise<PetAbility> {
-    return await request({
+export async function petAbility(ctx: ApiContext, petAbilityId: number): Promise<PetAbility> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pet-ability/${petAbilityId}`,
         namespace: "static",
@@ -131,8 +131,8 @@ export async function petAbility(petAbilityId: number): Promise<PetAbility> {
  * @param petAbilityId - The unique identifier for the battle pet
  * @returns A promise that resolves to an object representing media details about a battle pet.
  */
-export async function petAbilityMedia(petAbilityId: number): Promise<PetAbilityMedia> {
-    return await request({
+export async function petAbilityMedia(ctx: ApiContext, petAbilityId: number): Promise<PetAbilityMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/pet-ability/${petAbilityId}`,
         namespace: "static",

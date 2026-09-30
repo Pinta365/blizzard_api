@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 
 interface Quest {
     id: number;
@@ -22,8 +22,8 @@ interface Acts {
  *
  * @returns A promise that resolves to an object representing an index of acts.
  */
-export async function acts(): Promise<Acts> {
-    return await request({
+export async function acts(ctx: ApiContext): Promise<Acts> {
+    return await ctx.request({
         method: "GET",
         url: "/d3/data/act/",
     }) as Acts;
@@ -35,8 +35,8 @@ export async function acts(): Promise<Acts> {
  * @param seasonId - The season for the leaderboard list.
  * @returns A promise that resolves to an object representing the data for a single act by ID.
  */
-export async function act(seasonId: number): Promise<Act> {
-    return await request({
+export async function act(ctx: ApiContext, seasonId: number): Promise<Act> {
+    return await ctx.request({
         method: "GET",
         url: `/d3/data/act/${seasonId}`,
     }) as Act;

@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { KeyName, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -30,8 +30,8 @@ export interface Realm extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of realms.
  */
-export async function realms(): Promise<Realms> {
-    return await request({
+export async function realms(ctx: ApiContext): Promise<Realms> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/realm/index",
         namespace: "dynamic",
@@ -44,8 +44,8 @@ export async function realms(): Promise<Realms> {
  * @param realmSlugOrId - The unique identifier for the realm.
  * @returns A promise that resolves to an object representing details about a realm.
  */
-export async function realm(realmSlugOrId: string | number): Promise<Realm> {
-    return await request({
+export async function realm(ctx: ApiContext, realmSlugOrId: string | number): Promise<Realm> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/realm/${realmSlugOrId}`,
         namespace: "dynamic",
@@ -58,6 +58,6 @@ export async function realm(realmSlugOrId: string | number): Promise<Realm> {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about a realm search.
  */
-export async function searchRealm(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/realm", "dynamic", searchParameters) as Search;
+export async function searchRealm(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/realm", "dynamic", searchParameters) as Search;
 }

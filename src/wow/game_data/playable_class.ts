@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface PlayableClasses extends LinkSelfHref {
@@ -39,8 +39,8 @@ export interface PlayableClassPvpTalentSlots extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of the index of playable classes.
  */
-export async function playableClasses(): Promise<PlayableClasses> {
-    return await request({
+export async function playableClasses(ctx: ApiContext): Promise<PlayableClasses> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/playable-class/index",
         namespace: "static",
@@ -53,8 +53,8 @@ export async function playableClasses(): Promise<PlayableClasses> {
  * @param classId - The unique identifier for the playable class
  * @returns A promise that resolves to an object representing details about a playable class.
  */
-export async function playableClass(classId: number): Promise<PlayableClass> {
-    return await request({
+export async function playableClass(ctx: ApiContext, classId: number): Promise<PlayableClass> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/playable-class/${classId}`,
         namespace: "static",
@@ -67,8 +67,8 @@ export async function playableClass(classId: number): Promise<PlayableClass> {
  * @param playableClassId - The unique identifier for the playable class
  * @returns A promise that resolves to an object representing media details about a playable class.
  */
-export async function playableClassMedia(playableClassId: number): Promise<PlayableClassMedia> {
-    return await request({
+export async function playableClassMedia(ctx: ApiContext, playableClassId: number): Promise<PlayableClassMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/playable-class/${playableClassId}`,
         namespace: "static",
@@ -81,8 +81,11 @@ export async function playableClassMedia(playableClassId: number): Promise<Playa
  * @param classId - The unique identifier for the playable class
  * @returns A promise that resolves to an object representing PvP talent slots for a playable class.
  */
-export async function playableClassPvpTalentSlots(classId: number): Promise<PlayableClassPvpTalentSlots> {
-    return await request({
+export async function playableClassPvpTalentSlots(
+    ctx: ApiContext,
+    classId: number,
+): Promise<PlayableClassPvpTalentSlots> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/playable-class/${classId}/pvp-talent-slots`,
         namespace: "static",

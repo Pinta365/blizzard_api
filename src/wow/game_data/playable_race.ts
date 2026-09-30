@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface PlayableRaces extends LinkSelfHref {
@@ -23,8 +23,8 @@ export interface PlayableRace extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of the index of playable races.
  */
-export async function playableRaces(): Promise<PlayableRaces> {
-    return await request({
+export async function playableRaces(ctx: ApiContext): Promise<PlayableRaces> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/playable-race/index",
         namespace: "static",
@@ -37,8 +37,8 @@ export async function playableRaces(): Promise<PlayableRaces> {
  * @param playableRaceId - The unique identifier for the playable race
  * @returns A promise that resolves to an object representing details about a playable race.
  */
-export async function playableRace(playableRaceId: number): Promise<PlayableRace> {
-    return await request({
+export async function playableRace(ctx: ApiContext, playableRaceId: number): Promise<PlayableRace> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/playable-race/${playableRaceId}`,
         namespace: "static",

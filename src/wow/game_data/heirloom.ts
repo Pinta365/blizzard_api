@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Heirlooms extends LinkSelfHref {
@@ -75,8 +75,8 @@ export interface Heirloom extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of all Heirlooms.
  */
-export async function heirlooms(): Promise<Heirlooms> {
-    return await request({
+export async function heirlooms(ctx: ApiContext): Promise<Heirlooms> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/heirloom/index",
         namespace: "static",
@@ -89,8 +89,8 @@ export async function heirlooms(): Promise<Heirlooms> {
  * @param heirloomId - The unique identifier for the Heirloom
  * @returns A promise that resolves to an object representing details about a Heirloom.
  */
-export async function heirloom(heirloomId: number): Promise<Heirloom> {
-    return await request({
+export async function heirloom(ctx: ApiContext, heirloomId: number): Promise<Heirloom> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/heirloom/${heirloomId}`,
         namespace: "static",

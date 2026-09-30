@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyId, KeyName, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface PlayableSpecializations extends LinkSelfHref {
@@ -40,8 +40,8 @@ export interface PlayableSpecializationMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of the index of playable specializations.
  */
-export async function playableSpecializations(): Promise<PlayableSpecializations> {
-    return await request({
+export async function playableSpecializations(ctx: ApiContext): Promise<PlayableSpecializations> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/playable-specialization/index",
         namespace: "static",
@@ -54,8 +54,8 @@ export async function playableSpecializations(): Promise<PlayableSpecializations
  * @param specId - The unique identifier for the playable specialization
  * @returns A promise that resolves to an object representing details about a playable specialization.
  */
-export async function playableSpecialization(specId: number): Promise<PlayableSpecialization> {
-    return await request({
+export async function playableSpecialization(ctx: ApiContext, specId: number): Promise<PlayableSpecialization> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/playable-specialization/${specId}`,
         namespace: "static",
@@ -68,8 +68,11 @@ export async function playableSpecialization(specId: number): Promise<PlayableSp
  * @param specId - The unique identifier for the playable specialization
  * @returns A promise that resolves to an object representing media details about a playable specialization.
  */
-export async function playableSpecializationMedia(specId: number): Promise<PlayableSpecializationMedia> {
-    return await request({
+export async function playableSpecializationMedia(
+    ctx: ApiContext,
+    specId: number,
+): Promise<PlayableSpecializationMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/playable-specialization/${specId}`,
         namespace: "static",

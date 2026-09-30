@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface CharacterAppearanceSummary extends LinkSelfHref {
@@ -76,10 +76,11 @@ export interface CharacterAppearanceSummary extends LinkSelfHref {
  * @returns A promise that resolves to an object representing details about a character's appearance settings.
  */
 export async function characterAppearanceSummary(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterAppearanceSummary> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/appearance`,
         namespace: "profile",

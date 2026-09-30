@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface Toys extends LinkSelfHref {
@@ -18,8 +18,8 @@ export interface Toy extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of toys.
  */
-export async function toys(): Promise<Toys> {
-    return await request({
+export async function toys(ctx: ApiContext): Promise<Toys> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/toy/index",
         namespace: "static",
@@ -32,8 +32,8 @@ export async function toys(): Promise<Toys> {
  * @param toyId - The unique identifier for the toy.
  * @returns A promise that resolves to an object representing details about a toy.
  */
-export async function toy(toyId: number): Promise<Toy> {
-    return await request({
+export async function toy(ctx: ApiContext, toyId: number): Promise<Toy> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/toy/${toyId}`,
         namespace: "static",

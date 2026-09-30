@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface AchievementCriteria {
@@ -84,10 +84,11 @@ export interface CharacterAchievementStatistics extends LinkSelfHref {
  * @returns A promise that resolves to an object representing details about a characters achievement summary.
  */
 export async function characterAchievementSummary(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterAchievementSummary> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/achievements`,
         namespace: "profile",
@@ -102,10 +103,11 @@ export async function characterAchievementSummary(
  * @returns A promise that resolves to an object representing details about a characters achievement statistics.
  */
 export async function characterAchievementStatistics(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterAchievementStatistics> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/achievements/statistics`,
         namespace: "profile",

@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface CharacterSoulbinds extends LinkSelfHref {
@@ -31,10 +31,11 @@ export interface CharacterSoulbinds extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a character's soulbinds.
  */
 export async function characterSoulbinds(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterSoulbinds> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/soulbinds`,
         namespace: "profile",

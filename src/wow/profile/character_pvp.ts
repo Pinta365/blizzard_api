@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface MatchStatistic {
@@ -46,11 +46,12 @@ export interface CharacterPvpSummary extends LinkSelfHref {
  * @returns A promise that resolves to an object representing the PvP bracket statistics for a character.
  */
 export async function characterPvpBracketStatistics(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
     pvpBracket: string,
 ): Promise<CharacterPvpBracketStatistics> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/pvp-bracket/${pvpBracket}`,
         namespace: "profile",
@@ -65,10 +66,11 @@ export async function characterPvpBracketStatistics(
  * @returns A promise that resolves to an object representing the PvP summary for a character.
  */
 export async function characterPvpSummary(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterPvpSummary> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/pvp-summary`,
         namespace: "profile",

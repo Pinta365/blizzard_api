@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyName, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface TalentTrees extends LinkSelfHref {
@@ -99,8 +99,8 @@ export interface PvpTalent extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of talent trees.
  */
-export async function talentTrees(): Promise<TalentTrees> {
-    return await request({
+export async function talentTrees(ctx: ApiContext): Promise<TalentTrees> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/talent-tree/index",
         namespace: "static",
@@ -114,8 +114,8 @@ export async function talentTrees(): Promise<TalentTrees> {
  * @param specId - The unique identifier for the specialization.
  * @returns A promise that resolves to an object representing details about a talent tree.
  */
-export async function talentTree(talentTreeId: number, specId: number): Promise<TalentTree> {
-    return await request({
+export async function talentTree(ctx: ApiContext, talentTreeId: number, specId: number): Promise<TalentTree> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/talent-tree/${talentTreeId}/playable-specialization/${specId}`,
         namespace: "static",
@@ -128,8 +128,8 @@ export async function talentTree(talentTreeId: number, specId: number): Promise<
  * @param talentTreeId - The unique identifier for the talent tree.
  * @returns A promise that resolves to an object representing details about the talent tree nodes.
  */
-export async function talentTreeNodes(talentTreeId: number): Promise<TalentTreeNodes> {
-    return await request({
+export async function talentTreeNodes(ctx: ApiContext, talentTreeId: number): Promise<TalentTreeNodes> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/talent-tree/${talentTreeId}`,
         namespace: "static",
@@ -141,8 +141,8 @@ export async function talentTreeNodes(talentTreeId: number): Promise<TalentTreeN
  *
  * @returns A promise that resolves to an object representing a list of talents.
  */
-export async function talents(): Promise<Talents> {
-    return await request({
+export async function talents(ctx: ApiContext): Promise<Talents> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/talent/index",
         namespace: "static",
@@ -155,8 +155,8 @@ export async function talents(): Promise<Talents> {
  * @param talentId - The unique identifier for the talent.
  * @returns A promise that resolves to an object representing details about the talent.
  */
-export async function talent(talentId: number): Promise<Talent> {
-    return await request({
+export async function talent(ctx: ApiContext, talentId: number): Promise<Talent> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/talent/${talentId}`,
         namespace: "static",
@@ -168,8 +168,8 @@ export async function talent(talentId: number): Promise<Talent> {
  *
  * @returns A promise that resolves to an object representing a list of PvP talents.
  */
-export async function pvpTalents(): Promise<PvpTalents> {
-    return await request({
+export async function pvpTalents(ctx: ApiContext): Promise<PvpTalents> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/pvp-talent/index",
         namespace: "static",
@@ -182,8 +182,8 @@ export async function pvpTalents(): Promise<PvpTalents> {
  * @param pvpTalentId - The unique identifier for the PvP talent.
  * @returns A promise that resolves to an object representing details about the PvP talent.
  */
-export async function pvpTalent(pvpTalentId: number): Promise<PvpTalent> {
-    return await request({
+export async function pvpTalent(ctx: ApiContext, pvpTalentId: number): Promise<PvpTalent> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pvp-talent/${pvpTalentId}`,
         namespace: "static",

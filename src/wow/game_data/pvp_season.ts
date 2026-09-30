@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Href, KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface PvpSeasons extends LinkSelfHref {
@@ -75,8 +75,8 @@ export interface PvpSeasonRewards extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of PvP seasons.
  */
-export async function pvpSeasons(): Promise<PvpSeasons> {
-    return await request({
+export async function pvpSeasons(ctx: ApiContext): Promise<PvpSeasons> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/pvp-season/index",
         namespace: "dynamic",
@@ -89,8 +89,8 @@ export async function pvpSeasons(): Promise<PvpSeasons> {
  * @param pvpSeasonId - The unique identifier for the PvP season.
  * @returns A promise that resolves to an object representing details about a PvP season.
  */
-export async function pvpSeason(pvpSeasonId: number): Promise<PvpSeason> {
-    return await request({
+export async function pvpSeason(ctx: ApiContext, pvpSeasonId: number): Promise<PvpSeason> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}`,
         namespace: "dynamic",
@@ -103,8 +103,8 @@ export async function pvpSeason(pvpSeasonId: number): Promise<PvpSeason> {
  * @param pvpSeasonId - The unique identifier for the PvP season.
  * @returns A promise that resolves to an object representing details about the PvP leaderboards.
  */
-export async function pvpSeasonLeaderboards(pvpSeasonId: number): Promise<PvpSeasonLeaderboards> {
-    return await request({
+export async function pvpSeasonLeaderboards(ctx: ApiContext, pvpSeasonId: number): Promise<PvpSeasonLeaderboards> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-leaderboard/index`,
         namespace: "dynamic",
@@ -119,8 +119,12 @@ export async function pvpSeasonLeaderboards(pvpSeasonId: number): Promise<PvpSea
  * pvpSeasonLeaderboards().
  * @returns A promise that resolves to an object representing details about the PvP bracket.
  */
-export async function pvpSeasonLeaderboard(pvpSeasonId: number, pvpBracket: string): Promise<PvpSeasonLeaderboard> {
-    return await request({
+export async function pvpSeasonLeaderboard(
+    ctx: ApiContext,
+    pvpSeasonId: number,
+    pvpBracket: string,
+): Promise<PvpSeasonLeaderboard> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-leaderboard/${pvpBracket}`,
         namespace: "dynamic",
@@ -133,8 +137,8 @@ export async function pvpSeasonLeaderboard(pvpSeasonId: number, pvpBracket: stri
  * @param pvpSeasonId - The unique identifier for the PvP season.
  * @returns A promise that resolves to an object representing details about the PvP rewards.
  */
-export async function pvpSeasonRewards(pvpSeasonId: number): Promise<PvpSeasonRewards> {
-    return await request({
+export async function pvpSeasonRewards(ctx: ApiContext, pvpSeasonId: number): Promise<PvpSeasonRewards> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-reward/index`,
         namespace: "dynamic",

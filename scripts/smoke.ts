@@ -6,10 +6,12 @@
 //   deno run --env-file=.env -A scripts/smoke.ts [filter]
 //
 // Reads BLIZZARD_CLIENT_ID / BLIZZARD_CLIENT_SECRET from the environment plus
-// the optional BLIZZARD_REGION (default "eu") and BLIZZARD_LOCALE (default
-// "en_GB"). Successful raw responses are written to fixtures/<case>.json.
+// the optional BLIZZARD_REGION (default "eu"), BLIZZARD_LOCALE (default
+// "en_GB") and BLIZZARD_USER_TOKEN (for the account profile cases, which are
+// skipped when it is unset). Successful raw responses are written to
+// fixtures/<case>.json.
 
-import { diablo3, errors, hearthstone, sc2, setup, wow, wowClassic } from "../mod.ts";
+import { createClient, errors, setup, wow as legacyWow } from "../mod.ts";
 import type { Locales, Regions } from "../src/shared/types.ts";
 
 const REALM_SLUG = "silvermoon";
@@ -18,6 +20,17 @@ const MOUNT_ID = 6;
 const ARTISAN_SLUG = "blacksmith";
 const FOLLOWER_SLUG = "templar";
 const HERO_SLUG = "barbarian";
+const USER_TOKEN = Deno.env.get("BLIZZARD_USER_TOKEN");
+
+// The primary client is created in main() from the environment configuration.
+let config: Parameters<typeof createClient>[0];
+let client!: ReturnType<typeof createClient>;
+let userClient: ReturnType<typeof createClient> | undefined;
+
+function requireUserClient(): ReturnType<typeof createClient> {
+    if (!userClient) throw new Error("needs BLIZZARD_USER_TOKEN");
+    return userClient;
+}
 
 // ---------------------------------------------------------------------------
 // Small shared helpers
@@ -86,12 +99,6 @@ function isAscii(value: string): boolean {
         if ((char.codePointAt(0) ?? 0) > 0x7f) return false;
     }
     return true;
-}
-
-function afterPrefix(value: string, prefix: string): string {
-    const marker = prefix.endsWith("/") ? prefix : prefix + "/";
-    const index = value.indexOf(marker);
-    return index >= 0 ? value.slice(index + marker.length) : lastSegment(value);
 }
 
 interface TalentTreeLink {
@@ -227,21 +234,23 @@ function detailStr(
 }
 
 function connectedRealmId(): Promise<number> {
-    return once("wow.connectedRealms", () => wow.connectedRealms()).then((source) => indexId(source));
+    return once("wow.connectedRealms", () => client.wow.connectedRealms()).then((source) => indexId(source));
 }
 
 function searchedSpellId(): Promise<number> {
-    return once("wow.searchSpell", () => wow.searchSpell({ pageSize: 1 })).then((result) => searchFirstId(result));
+    return once("wow.searchSpell", () => client.wow.searchSpell({ pageSize: 1 })).then((result) =>
+        searchFirstId(result)
+    );
 }
 
 function firstRecipeId(): Promise<number> {
     return once("wow.firstRecipe", async () => {
-        const professions = await wow.professions();
+        const professions = await client.wow.professions();
         const professionId = indexId(professions);
-        const profession = await wow.profession(professionId);
+        const profession = await client.wow.profession(professionId);
         const tierId = profession.skill_tiers[0]?.id;
         if (tierId === undefined) throw new Error("profession has no skill tiers");
-        const tier = await wow.professionSkillTier(professionId, tierId);
+        const tier = await client.wow.professionSkillTier(professionId, tierId);
         const recipe = tier.categories[0]?.recipes[0];
         if (!recipe) throw new Error("skill tier has no recipes");
         return recipe.id;
@@ -249,7 +258,7 @@ function firstRecipeId(): Promise<number> {
 }
 
 function newestPvpSeasonId(): Promise<number> {
-    return once("wow.pvpSeasons", () => wow.pvpSeasons()).then((seasons) => {
+    return once("wow.pvpSeasons", () => client.wow.pvpSeasons()).then((seasons) => {
         const list = seasons.seasons;
         const last = list[list.length - 1];
         const id = seasons.current_season?.id ?? last?.id;
@@ -277,14 +286,14 @@ function getContext(): Promise<SmokeContext> {
 }
 
 async function discoverContext(): Promise<SmokeContext> {
-    const realm = await wow.realm(REALM_SLUG);
+    const realm = await client.wow.realm(REALM_SLUG);
     const realmId = idFromHref(realm.connected_realm.href);
-    const periods = await wow.mythicKeystonePeriods();
+    const periods = await client.wow.mythicKeystonePeriods();
     const period = periods.current_period.id;
-    const leaderboards = await wow.mythicKeystoneLeaderboards(realmId);
+    const leaderboards = await client.wow.mythicKeystoneLeaderboards(realmId);
     const dungeon = leaderboards.current_leaderboards[0];
     if (!dungeon) throw new Error("no current mythic keystone leaderboards available");
-    const leaderboard = await wow.mythicKeystoneLeaderboard(realmId, dungeon.id, period);
+    const leaderboard = await client.wow.mythicKeystoneLeaderboard(realmId, dungeon.id, period);
 
     const ascii: SmokeContext[] = [];
     const any: SmokeContext[] = [];
@@ -300,9 +309,9 @@ async function discoverContext(): Promise<SmokeContext> {
     for (const member of members) {
         const memberRealm = member.profile.realm.slug;
         const memberName = member.profile.name.toLowerCase();
-        let profile: Awaited<ReturnType<typeof wow.characterProfile>>;
+        let profile: Awaited<ReturnType<typeof client.wow.characterProfile>>;
         try {
-            profile = await wow.characterProfile(memberRealm, memberName);
+            profile = await client.wow.characterProfile(memberRealm, memberName);
         } catch {
             continue;
         }
@@ -363,405 +372,528 @@ function skipped(name: string, reason: string): Case {
     return { name, fn: () => Promise.resolve(), skip: reason };
 }
 
-const cases: Case[] = [
-    // ----- wow: game data ------------------------------------------------
-    c("wow.achievementCategories", () => wow.achievementCategories()),
-    c(
-        "wow.achievementCategory",
-        detail("wow.achievementCategories", () => wow.achievementCategories(), wow.achievementCategory),
-    ),
-    c("wow.achievements", () => wow.achievements()),
-    c("wow.achievement", detail("wow.achievements", () => wow.achievements(), wow.achievement)),
-    c("wow.achievementMedia", detail("wow.achievements", () => wow.achievements(), wow.achievementMedia)),
-    c("wow.auctions", async () => await wow.auctions(await connectedRealmId())),
-    c("wow.commodities", () => wow.commodities()),
-    c("wow.azeriteEssences", () => wow.azeriteEssences()),
-    c("wow.azeriteEssence", detail("wow.azeriteEssences", () => wow.azeriteEssences(), wow.azeriteEssence)),
-    c("wow.azeriteEssenceMedia", detail("wow.azeriteEssences", () => wow.azeriteEssences(), wow.azeriteEssenceMedia)),
-    c("wow.searchAzeriteEssence", () => wow.searchAzeriteEssence({ pageSize: 1 })),
-    c("wow.connectedRealms", () => wow.connectedRealms()),
-    c("wow.connectedRealm", detail("wow.connectedRealms", () => wow.connectedRealms(), wow.connectedRealm)),
-    c("wow.searchConnectedRealm", () => wow.searchConnectedRealm({ pageSize: 1 })),
-    c("wow.covenants", () => wow.covenants()),
-    c("wow.covenant", detail("wow.covenants", () => wow.covenants(), wow.covenant)),
-    c("wow.covenantConduits", () => wow.covenantConduits()),
-    c("wow.covenantConduit", detail("wow.covenantConduits", () => wow.covenantConduits(), wow.covenantConduit)),
-    c("wow.covenantSoulbinds", () => wow.covenantSoulbinds()),
-    c("wow.covenantSoulbind", detail("wow.covenantSoulbinds", () => wow.covenantSoulbinds(), wow.covenantSoulbind)),
-    c("wow.creatureFamilies", () => wow.creatureFamilies()),
-    c("wow.creatureFamily", detail("wow.creatureFamilies", () => wow.creatureFamilies(), wow.creatureFamily)),
-    c("wow.creatureFamilyMedia", detail("wow.creatureFamilies", () => wow.creatureFamilies(), wow.creatureFamilyMedia)),
-    c("wow.creatureTypes", () => wow.creatureTypes()),
-    c("wow.creatureType", detail("wow.creatureTypes", () => wow.creatureTypes(), wow.creatureType)),
-    c("wow.creature", async () => await wow.creature(searchFirstId(await wow.searchCreature({ pageSize: 1 })))),
-    c("wow.searchCreature", () => wow.searchCreature({ pageSize: 1 })),
-    c("wow.creatureDisplayMedia", async () => {
-        const creatureId = searchFirstId(await wow.searchCreature({ pageSize: 1 }));
-        const creature = await wow.creature(creatureId);
-        const display = creature.creature_displays[0];
-        if (!display) throw new Error("creature has no displays");
-        return await wow.creatureDisplayMedia(display.id);
-    }),
-    c("wow.guildCrests", () => wow.guildCrests()),
-    c("wow.guildCrestBorder", detail("wow.guildCrests", () => wow.guildCrests(), wow.guildCrestBorder, "borders")),
-    c("wow.guildCrestEmblem", detail("wow.guildCrests", () => wow.guildCrests(), wow.guildCrestEmblem, "emblems")),
-    c("wow.heirlooms", () => wow.heirlooms()),
-    c("wow.heirloom", detail("wow.heirlooms", () => wow.heirlooms(), wow.heirloom)),
-    c("wow.decors", () => wow.decors()),
-    c("wow.decor", detail("wow.decors", () => wow.decors(), wow.decor)),
-    c("wow.searchDecor", () => wow.searchDecor({ pageSize: 1 })),
-    c("wow.fixtures", () => wow.fixtures()),
-    c("wow.fixture", detail("wow.fixtures", () => wow.fixtures(), wow.fixture)),
-    c("wow.searchFixture", () => wow.searchFixture({ pageSize: 1 })),
-    c("wow.fixtureHooks", () => wow.fixtureHooks()),
-    c("wow.fixtureHook", detail("wow.fixtureHooks", () => wow.fixtureHooks(), wow.fixtureHook)),
-    c("wow.searchFixtureHook", () => wow.searchFixtureHook({ pageSize: 1 })),
-    c("wow.rooms", () => wow.rooms()),
-    c("wow.room", detail("wow.rooms", () => wow.rooms(), wow.room)),
-    c("wow.searchRoom", () => wow.searchRoom({ pageSize: 1 })),
-    c("wow.itemClasses", () => wow.itemClasses()),
-    c("wow.itemClass", detail("wow.itemClasses", () => wow.itemClasses(), wow.itemClass)),
-    c("wow.itemSets", () => wow.itemSets()),
-    c("wow.itemSet", detail("wow.itemSets", () => wow.itemSets(), wow.itemSet)),
-    c("wow.itemSubclass", async () => {
-        const classes = await wow.itemClasses();
-        const classId = indexId(classes);
-        const cls = await wow.itemClass(classId);
-        const subclass = cls.item_subclasses[0];
-        if (!subclass) throw new Error("item class has no subclasses");
-        return await wow.itemSubclass(classId, subclass.id);
-    }),
-    c("wow.item", () => wow.item(ITEM_ID)),
-    c("wow.itemMedia", () => wow.itemMedia(ITEM_ID)),
-    c("wow.searchItem", () => wow.searchItem({ pageSize: 1 })),
-    c("wow.searchMedia", () => wow.searchMedia({ pageSize: 1 })),
-    c("wow.journalExpansions", () => wow.journalExpansions()),
-    c("wow.journalExpansion", detail("wow.journalExpansions", () => wow.journalExpansions(), wow.journalExpansion)),
-    c("wow.journalEncounters", () => wow.journalEncounters()),
-    c("wow.journalEncounter", detail("wow.journalEncounters", () => wow.journalEncounters(), wow.journalEncounter)),
-    c("wow.searchJournalEncounter", () => wow.searchJournalEncounter({ pageSize: 1 })),
-    c("wow.journalInstances", () => wow.journalInstances()),
-    c("wow.journalInstance", detail("wow.journalInstances", () => wow.journalInstances(), wow.journalInstance)),
-    c(
-        "wow.journalInstanceMedia",
-        detail("wow.journalInstances", () => wow.journalInstances(), wow.journalInstanceMedia),
-    ),
-    c("wow.modifiedCraftingParents", () => wow.modifiedCraftingParents()),
-    c("wow.modifiedCraftingCategories", () => wow.modifiedCraftingCategories()),
-    c(
-        "wow.modifiedCraftingCategory",
-        detail(
-            "wow.modifiedCraftingCategories",
-            () => wow.modifiedCraftingCategories(),
-            wow.modifiedCraftingCategory,
-        ),
-    ),
-    c("wow.modifiedCraftingSlotTypes", () => wow.modifiedCraftingSlotTypes()),
-    c(
-        "wow.modifiedCraftingSlotType",
-        detail(
-            "wow.modifiedCraftingSlotTypes",
-            () => wow.modifiedCraftingSlotTypes(),
-            wow.modifiedCraftingSlotType,
-        ),
-    ),
-    c("wow.mounts", () => wow.mounts()),
-    c("wow.mount", () => wow.mount(MOUNT_ID)),
-    c("wow.searchMount", () => wow.searchMount({ pageSize: 1 })),
-    c("wow.keystoneAffixes", () => wow.keystoneAffixes()),
-    c("wow.keystoneAffix", detail("wow.keystoneAffixes", () => wow.keystoneAffixes(), wow.keystoneAffix)),
-    c("wow.keystoneAffixMedia", detail("wow.keystoneAffixes", () => wow.keystoneAffixes(), wow.keystoneAffixMedia)),
-    c("wow.mythicKeystoneDungeons", () => wow.mythicKeystoneDungeons()),
-    c(
-        "wow.mythicKeystoneDungeon",
-        detail(
-            "wow.mythicKeystoneDungeons",
-            () => wow.mythicKeystoneDungeons(),
-            wow.mythicKeystoneDungeon,
-        ),
-    ),
-    c("wow.mythicKeystoneIndex", () => wow.mythicKeystoneIndex()),
-    c("wow.mythicKeystonePeriods", () => wow.mythicKeystonePeriods()),
-    c(
-        "wow.mythicKeystonePeriod",
-        detail(
-            "wow.mythicKeystonePeriods",
-            () => wow.mythicKeystonePeriods(),
-            wow.mythicKeystonePeriod,
-        ),
-    ),
-    c("wow.mythicKeystoneSeasons", () => wow.mythicKeystoneSeasons()),
-    c(
-        "wow.mythicKeystoneSeason",
-        detail(
-            "wow.mythicKeystoneSeasons",
-            () => wow.mythicKeystoneSeasons(),
-            wow.mythicKeystoneSeason,
-        ),
-    ),
-    c("wow.mythicKeystoneLeaderboards", async () => await wow.mythicKeystoneLeaderboards(await connectedRealmId())),
-    c("wow.mythicKeystoneLeaderboard", async () => {
-        const realmId = await connectedRealmId();
-        const leaderboards = await wow.mythicKeystoneLeaderboards(realmId);
-        const dungeon = leaderboards.current_leaderboards[0];
-        if (!dungeon) throw new Error("no current mythic keystone leaderboards available");
-        const periods = await wow.mythicKeystonePeriods();
-        return await wow.mythicKeystoneLeaderboard(realmId, dungeon.id, periods.current_period.id);
-    }),
-    c("wow.mythicRaidLeaderboard", () => wow.mythicRaidLeaderboard("uldir", "alliance")),
-    c("wow.neighborhoodMaps", () => wow.neighborhoodMaps()),
-    c("wow.neighborhoodMap", detail("wow.neighborhoodMaps", () => wow.neighborhoodMaps(), wow.neighborhoodMap)),
-    c("wow.neighborhood", async () => {
-        const maps = await wow.neighborhoodMaps();
-        return await wow.neighborhood(indexId(maps), 1);
-    }),
-    c("wow.pets", () => wow.pets()),
-    c("wow.pet", detail("wow.pets", () => wow.pets(), wow.pet)),
-    c("wow.petMedia", detail("wow.pets", () => wow.pets(), wow.petMedia)),
-    c("wow.petAbilities", () => wow.petAbilities()),
-    c("wow.petAbility", detail("wow.petAbilities", () => wow.petAbilities(), wow.petAbility)),
-    c("wow.petAbilityMedia", detail("wow.petAbilities", () => wow.petAbilities(), wow.petAbilityMedia)),
-    c("wow.playableClasses", () => wow.playableClasses()),
-    c("wow.playableClass", detail("wow.playableClasses", () => wow.playableClasses(), wow.playableClass)),
-    c("wow.playableClassMedia", detail("wow.playableClasses", () => wow.playableClasses(), wow.playableClassMedia)),
-    c(
-        "wow.playableClassPvpTalentSlots",
-        detail(
-            "wow.playableClasses",
-            () => wow.playableClasses(),
-            wow.playableClassPvpTalentSlots,
-        ),
-    ),
-    c("wow.playableRaces", () => wow.playableRaces()),
-    c("wow.playableRace", detail("wow.playableRaces", () => wow.playableRaces(), wow.playableRace)),
-    c("wow.powerTypes", () => wow.powerTypes()),
-    c("wow.powerType", detail("wow.powerTypes", () => wow.powerTypes(), wow.powerType)),
-    c("wow.professions", () => wow.professions()),
-    c("wow.profession", detail("wow.professions", () => wow.professions(), wow.profession)),
-    c("wow.professionMedia", detail("wow.professions", () => wow.professions(), wow.professionMedia)),
-    c("wow.professionSkillTier", async () => {
-        const professions = await wow.professions();
-        const professionId = indexId(professions);
-        const profession = await wow.profession(professionId);
-        const tierId = profession.skill_tiers[0]?.id;
-        if (tierId === undefined) throw new Error("profession has no skill tiers");
-        return await wow.professionSkillTier(professionId, tierId);
-    }),
-    c("wow.professionRecipie", async () => await wow.professionRecipie(await firstRecipeId())),
-    c("wow.professionRecipieMedia", async () => await wow.professionRecipieMedia(await firstRecipeId())),
-    c("wow.pvpSeasons", () => wow.pvpSeasons()),
-    c("wow.pvpSeason", async () => await wow.pvpSeason(await newestPvpSeasonId())),
-    c("wow.pvpSeasonLeaderboards", async () => await wow.pvpSeasonLeaderboards(await newestPvpSeasonId())),
-    c("wow.pvpSeasonLeaderboard", async () => {
-        const seasonId = await newestPvpSeasonId();
-        const leaderboards = await wow.pvpSeasonLeaderboards(seasonId);
-        const leaderboard = leaderboards.leaderboards[0];
-        if (!leaderboard) throw new Error("pvp season has no leaderboards");
-        return await wow.pvpSeasonLeaderboard(seasonId, leaderboard.name);
-    }),
-    c("wow.pvpSeasonRewards", async () => await wow.pvpSeasonRewards(await newestPvpSeasonId())),
-    c("wow.pvpTiers", () => wow.pvpTiers()),
-    c("wow.pvpTier", detail("wow.pvpTiers", () => wow.pvpTiers(), wow.pvpTier)),
-    c("wow.pvpTierMedia", detail("wow.pvpTiers", () => wow.pvpTiers(), wow.pvpTierMedia)),
-    c("wow.quests", () => wow.quests()),
-    c("wow.quest", async () => {
-        const categories = await wow.questCategories();
-        const category = await wow.questCategory(indexId(categories));
-        const quest = category.quests[0];
-        if (!quest) throw new Error("quest category has no quests");
-        return await wow.quest(quest.id);
-    }),
-    c("wow.questCategories", () => wow.questCategories()),
-    c("wow.questCategory", detail("wow.questCategories", () => wow.questCategories(), wow.questCategory)),
-    c("wow.questAreas", () => wow.questAreas()),
-    c("wow.questArea", detail("wow.questAreas", () => wow.questAreas(), wow.questArea)),
-    c("wow.questTypes", () => wow.questTypes()),
-    c("wow.questType", detail("wow.questTypes", () => wow.questTypes(), wow.questType)),
-    c("wow.realms", () => wow.realms()),
-    c("wow.realm", () => wow.realm(REALM_SLUG)),
-    c("wow.searchRealm", () => wow.searchRealm({ pageSize: 1 })),
-    c("wow.regions", () => wow.regions()),
-    c("wow.region", detail("wow.regions", () => wow.regions(), wow.region)),
-    c("wow.reputationFactions", () => wow.reputationFactions()),
-    c(
-        "wow.reputationFaction",
-        detailStr(
-            "wow.reputationFactions",
-            () => wow.reputationFactions(),
-            wow.reputationFaction,
-        ),
-    ),
-    c("wow.reputationTiers", () => wow.reputationTiers()),
-    c("wow.reputationTier", detailStr("wow.reputationTiers", () => wow.reputationTiers(), wow.reputationTier)),
-    c("wow.spell", async () => await wow.spell(await searchedSpellId())),
-    c("wow.spellMedia", async () => await wow.spellMedia(await searchedSpellId())),
-    c("wow.searchSpell", () => wow.searchSpell({ pageSize: 1 })),
-    c("wow.titles", () => wow.titles()),
-    c("wow.title", detail("wow.titles", () => wow.titles(), wow.title)),
-    c("wow.toys", () => wow.toys()),
-    c("wow.toy", detail("wow.toys", () => wow.toys(), wow.toy)),
-    c("wow.talents", () => wow.talents()),
-    c("wow.talent", detail("wow.talents", () => wow.talents(), wow.talent)),
-    c("wow.talentTrees", () => wow.talentTrees()),
-    c("wow.talentTree", async () => {
-        const trees = await once("wow.talentTrees", () => wow.talentTrees());
-        const link = talentTreeLinks(trees, "spec_talent_trees")[0];
-        const href = link?.key?.href;
-        if (!href) throw new Error("no spec talent trees available");
-        const { treeId, specId } = talentTreeIds(href);
-        return await wow.talentTree(treeId, specId);
-    }),
-    c("wow.talentTreeNodes", async () => {
-        const trees = await once("wow.talentTrees", () => wow.talentTrees());
-        const link = talentTreeLinks(trees, "class_talent_trees")[0];
-        if (!link) throw new Error("no class talent trees available");
-        const treeId = typeof link.id === "number" ? link.id : idFromHref(link.key?.href ?? "");
-        return await wow.talentTreeNodes(treeId);
-    }),
-    c("wow.pvpTalents", () => wow.pvpTalents()),
-    c("wow.pvpTalent", detail("wow.pvpTalents", () => wow.pvpTalents(), wow.pvpTalent)),
-    c("wow.techTalentTrees", () => wow.techTalentTrees()),
-    c("wow.techTalentTree", detail("wow.techTalentTrees", () => wow.techTalentTrees(), wow.techTalentTree)),
-    c("wow.techTalents", () => wow.techTalents()),
-    c("wow.techTalent", detail("wow.techTalents", () => wow.techTalents(), wow.techTalent)),
-    c("wow.techTalentMedia", detail("wow.techTalents", () => wow.techTalents(), wow.techTalentMedia)),
-    c("wow.token", () => wow.token()),
+function userCase(name: string, fn: () => Promise<unknown>): Case {
+    return USER_TOKEN ? { name, fn } : { name, fn: () => Promise.resolve(), skip: "needs BLIZZARD_USER_TOKEN" };
+}
 
-    // ----- wow: profile --------------------------------------------------
-    c("wow.characterProfile", () => profileCall(wow.characterProfile)),
-    c("wow.characterProfileStatus", () => profileCall(wow.characterProfileStatus)),
-    c("wow.characterAchievementSummary", () => profileCall(wow.characterAchievementSummary)),
-    c("wow.characterAchievementStatistics", () => profileCall(wow.characterAchievementStatistics)),
-    c("wow.characterAppearanceSummary", () => profileCall(wow.characterAppearanceSummary)),
-    c("wow.characterCollectionTypes", () => profileCall(wow.characterCollectionTypes)),
-    c("wow.characterCollectionMounts", () => profileCall(wow.characterCollectionMounts)),
-    c("wow.characterCollectionPets", () => profileCall(wow.characterCollectionPets)),
-    c("wow.characterCollectionToys", () => profileCall(wow.characterCollectionToys)),
-    c("wow.characterCollectionHeirlooms", () => profileCall(wow.characterCollectionHeirlooms)),
-    c("wow.characterCollectionDecor", () => profileCall(wow.characterCollectionDecor), "character-dependent"),
-    c("wow.characterEncounters", () => profileCall(wow.characterEncounters)),
-    c("wow.characterEncounterDungeons", () => profileCall(wow.characterEncounterDungeons)),
-    c("wow.characterEncounterRaids", () => profileCall(wow.characterEncounterRaids)),
-    c("wow.characterEquipments", () => profileCall(wow.characterEquipments)),
-    c("wow.characterHunterPets", () => profileCall(wow.characterHunterPets), "character-dependent"),
-    c("wow.characterMedia", () => profileCall(wow.characterMedia)),
-    c("wow.characterMythicKeystoneProfile", () => profileCall(wow.characterMythicKeystoneProfile)),
-    c("wow.characterMythicKeystoneSeasonDetails", async () => {
-        const ctx = await getContext();
-        const seasons = await wow.mythicKeystoneSeasons();
-        return await wow.characterMythicKeystoneSeasonDetails(ctx.realm, ctx.name, seasons.current_season.id);
-    }, "character-dependent"),
-    c("wow.characterProfessions", () => profileCall(wow.characterProfessions), "character-dependent"),
-    c("wow.characterPvpBracketStatistics", async () => {
-        const ctx = await getContext();
-        return await wow.characterPvpBracketStatistics(ctx.realm, ctx.name, "2v2");
-    }, "character-dependent"),
-    c("wow.characterPvpSummary", () => profileCall(wow.characterPvpSummary)),
-    c("wow.characterQuests", () => profileCall(wow.characterQuests)),
-    c("wow.characterCompletedQuests", () => profileCall(wow.characterCompletedQuests)),
-    c("wow.characterReputations", () => profileCall(wow.characterReputations)),
-    c("wow.characterSoulbinds", () => profileCall(wow.characterSoulbinds), "character-dependent"),
-    c("wow.characterSpecializations", () => profileCall(wow.characterSpecializations)),
-    c("wow.characterStatistics", () => profileCall(wow.characterStatistics)),
-    c("wow.characterTitles", () => profileCall(wow.characterTitles)),
-    c("wow.characterHouse", async () => {
-        const ctx = await getContext();
-        return await wow.characterHouse(ctx.realm, ctx.name, 1);
-    }, "character-dependent"),
-    c("wow.guild", () => guildCall(wow.guild)),
-    c("wow.guildActivity", () => guildCall(wow.guildActivity)),
-    c("wow.guildAchievements", () => guildCall(wow.guildAchievements)),
-    c("wow.guildRoster", () => guildCall(wow.guildRoster)),
+function buildCases(): Case[] {
+    return [
+        // ----- wow: game data ------------------------------------------------
+        c("wow.achievementCategories", () => client.wow.achievementCategories()),
+        c(
+            "wow.achievementCategory",
+            detail(
+                "wow.achievementCategories",
+                () => client.wow.achievementCategories(),
+                client.wow.achievementCategory,
+            ),
+        ),
+        c("wow.achievements", () => client.wow.achievements()),
+        c("wow.achievement", detail("wow.achievements", () => client.wow.achievements(), client.wow.achievement)),
+        c(
+            "wow.achievementMedia",
+            detail("wow.achievements", () => client.wow.achievements(), client.wow.achievementMedia),
+        ),
+        c("wow.auctions", async () => await client.wow.auctions(await connectedRealmId())),
+        c("wow.commodities", () => client.wow.commodities()),
+        c("wow.azeriteEssences", () => client.wow.azeriteEssences()),
+        c(
+            "wow.azeriteEssence",
+            detail("wow.azeriteEssences", () => client.wow.azeriteEssences(), client.wow.azeriteEssence),
+        ),
+        c(
+            "wow.azeriteEssenceMedia",
+            detail("wow.azeriteEssences", () => client.wow.azeriteEssences(), client.wow.azeriteEssenceMedia),
+        ),
+        c("wow.searchAzeriteEssence", () => client.wow.searchAzeriteEssence({ pageSize: 1 })),
+        c("wow.connectedRealms", () => client.wow.connectedRealms()),
+        c(
+            "wow.connectedRealm",
+            detail("wow.connectedRealms", () => client.wow.connectedRealms(), client.wow.connectedRealm),
+        ),
+        c("wow.searchConnectedRealm", () => client.wow.searchConnectedRealm({ pageSize: 1 })),
+        c("wow.covenants", () => client.wow.covenants()),
+        c("wow.covenant", detail("wow.covenants", () => client.wow.covenants(), client.wow.covenant)),
+        c("wow.covenantConduits", () => client.wow.covenantConduits()),
+        c(
+            "wow.covenantConduit",
+            detail("wow.covenantConduits", () => client.wow.covenantConduits(), client.wow.covenantConduit),
+        ),
+        c("wow.covenantSoulbinds", () => client.wow.covenantSoulbinds()),
+        c(
+            "wow.covenantSoulbind",
+            detail("wow.covenantSoulbinds", () => client.wow.covenantSoulbinds(), client.wow.covenantSoulbind),
+        ),
+        c("wow.creatureFamilies", () => client.wow.creatureFamilies()),
+        c(
+            "wow.creatureFamily",
+            detail("wow.creatureFamilies", () => client.wow.creatureFamilies(), client.wow.creatureFamily),
+        ),
+        c(
+            "wow.creatureFamilyMedia",
+            detail("wow.creatureFamilies", () => client.wow.creatureFamilies(), client.wow.creatureFamilyMedia),
+        ),
+        c("wow.creatureTypes", () => client.wow.creatureTypes()),
+        c("wow.creatureType", detail("wow.creatureTypes", () => client.wow.creatureTypes(), client.wow.creatureType)),
+        c(
+            "wow.creature",
+            async () => await client.wow.creature(searchFirstId(await client.wow.searchCreature({ pageSize: 1 }))),
+        ),
+        c("wow.searchCreature", () => client.wow.searchCreature({ pageSize: 1 })),
+        c("wow.creatureDisplayMedia", async () => {
+            const creatureId = searchFirstId(await client.wow.searchCreature({ pageSize: 1 }));
+            const creature = await client.wow.creature(creatureId);
+            const display = creature.creature_displays[0];
+            if (!display) throw new Error("creature has no displays");
+            return await client.wow.creatureDisplayMedia(display.id);
+        }),
+        c("wow.guildCrests", () => client.wow.guildCrests()),
+        c(
+            "wow.guildCrestBorder",
+            detail("wow.guildCrests", () => client.wow.guildCrests(), client.wow.guildCrestBorder, "borders"),
+        ),
+        c(
+            "wow.guildCrestEmblem",
+            detail("wow.guildCrests", () => client.wow.guildCrests(), client.wow.guildCrestEmblem, "emblems"),
+        ),
+        c("wow.heirlooms", () => client.wow.heirlooms()),
+        c("wow.heirloom", detail("wow.heirlooms", () => client.wow.heirlooms(), client.wow.heirloom)),
+        c("wow.decors", () => client.wow.decors()),
+        c("wow.decor", detail("wow.decors", () => client.wow.decors(), client.wow.decor)),
+        c("wow.searchDecor", () => client.wow.searchDecor({ pageSize: 1 })),
+        c("wow.fixtures", () => client.wow.fixtures()),
+        c("wow.fixture", detail("wow.fixtures", () => client.wow.fixtures(), client.wow.fixture)),
+        c("wow.searchFixture", () => client.wow.searchFixture({ pageSize: 1 })),
+        c("wow.fixtureHooks", () => client.wow.fixtureHooks()),
+        c("wow.fixtureHook", detail("wow.fixtureHooks", () => client.wow.fixtureHooks(), client.wow.fixtureHook)),
+        c("wow.searchFixtureHook", () => client.wow.searchFixtureHook({ pageSize: 1 })),
+        c("wow.rooms", () => client.wow.rooms()),
+        c("wow.room", detail("wow.rooms", () => client.wow.rooms(), client.wow.room)),
+        c("wow.searchRoom", () => client.wow.searchRoom({ pageSize: 1 })),
+        c("wow.itemClasses", () => client.wow.itemClasses()),
+        c("wow.itemClass", detail("wow.itemClasses", () => client.wow.itemClasses(), client.wow.itemClass)),
+        c("wow.itemSets", () => client.wow.itemSets()),
+        c("wow.itemSet", detail("wow.itemSets", () => client.wow.itemSets(), client.wow.itemSet)),
+        c("wow.itemSubclass", async () => {
+            const classes = await client.wow.itemClasses();
+            const classId = indexId(classes);
+            const cls = await client.wow.itemClass(classId);
+            const subclass = cls.item_subclasses[0];
+            if (!subclass) throw new Error("item class has no subclasses");
+            return await client.wow.itemSubclass(classId, subclass.id);
+        }),
+        c("wow.item", () => client.wow.item(ITEM_ID)),
+        c("wow.itemMedia", () => client.wow.itemMedia(ITEM_ID)),
+        c("wow.searchItem", () => client.wow.searchItem({ pageSize: 1 })),
+        c("wow.searchMedia", () => client.wow.searchMedia({ pageSize: 1 })),
+        c("wow.journalExpansions", () => client.wow.journalExpansions()),
+        c(
+            "wow.journalExpansion",
+            detail("wow.journalExpansions", () => client.wow.journalExpansions(), client.wow.journalExpansion),
+        ),
+        c("wow.journalEncounters", () => client.wow.journalEncounters()),
+        c(
+            "wow.journalEncounter",
+            detail("wow.journalEncounters", () => client.wow.journalEncounters(), client.wow.journalEncounter),
+        ),
+        c("wow.searchJournalEncounter", () => client.wow.searchJournalEncounter({ pageSize: 1 })),
+        c("wow.journalInstances", () => client.wow.journalInstances()),
+        c(
+            "wow.journalInstance",
+            detail("wow.journalInstances", () => client.wow.journalInstances(), client.wow.journalInstance),
+        ),
+        c(
+            "wow.journalInstanceMedia",
+            detail("wow.journalInstances", () => client.wow.journalInstances(), client.wow.journalInstanceMedia),
+        ),
+        c("wow.modifiedCraftingParents", () => client.wow.modifiedCraftingParents()),
+        c("wow.modifiedCraftingCategories", () => client.wow.modifiedCraftingCategories()),
+        c(
+            "wow.modifiedCraftingCategory",
+            detail(
+                "wow.modifiedCraftingCategories",
+                () => client.wow.modifiedCraftingCategories(),
+                client.wow.modifiedCraftingCategory,
+            ),
+        ),
+        c("wow.modifiedCraftingSlotTypes", () => client.wow.modifiedCraftingSlotTypes()),
+        c(
+            "wow.modifiedCraftingSlotType",
+            detail(
+                "wow.modifiedCraftingSlotTypes",
+                () => client.wow.modifiedCraftingSlotTypes(),
+                client.wow.modifiedCraftingSlotType,
+            ),
+        ),
+        c("wow.mounts", () => client.wow.mounts()),
+        c("wow.mount", () => client.wow.mount(MOUNT_ID)),
+        c("wow.searchMount", () => client.wow.searchMount({ pageSize: 1 })),
+        c("wow.keystoneAffixes", () => client.wow.keystoneAffixes()),
+        c(
+            "wow.keystoneAffix",
+            detail("wow.keystoneAffixes", () => client.wow.keystoneAffixes(), client.wow.keystoneAffix),
+        ),
+        c(
+            "wow.keystoneAffixMedia",
+            detail("wow.keystoneAffixes", () => client.wow.keystoneAffixes(), client.wow.keystoneAffixMedia),
+        ),
+        c("wow.mythicKeystoneDungeons", () => client.wow.mythicKeystoneDungeons()),
+        c(
+            "wow.mythicKeystoneDungeon",
+            detail(
+                "wow.mythicKeystoneDungeons",
+                () => client.wow.mythicKeystoneDungeons(),
+                client.wow.mythicKeystoneDungeon,
+            ),
+        ),
+        c("wow.mythicKeystoneIndex", () => client.wow.mythicKeystoneIndex()),
+        c("wow.mythicKeystonePeriods", () => client.wow.mythicKeystonePeriods()),
+        c(
+            "wow.mythicKeystonePeriod",
+            detail(
+                "wow.mythicKeystonePeriods",
+                () => client.wow.mythicKeystonePeriods(),
+                client.wow.mythicKeystonePeriod,
+            ),
+        ),
+        c("wow.mythicKeystoneSeasons", () => client.wow.mythicKeystoneSeasons()),
+        c(
+            "wow.mythicKeystoneSeason",
+            detail(
+                "wow.mythicKeystoneSeasons",
+                () => client.wow.mythicKeystoneSeasons(),
+                client.wow.mythicKeystoneSeason,
+            ),
+        ),
+        c(
+            "wow.mythicKeystoneLeaderboards",
+            async () => await client.wow.mythicKeystoneLeaderboards(await connectedRealmId()),
+        ),
+        c("wow.mythicKeystoneLeaderboard", async () => {
+            const realmId = await connectedRealmId();
+            const leaderboards = await client.wow.mythicKeystoneLeaderboards(realmId);
+            const dungeon = leaderboards.current_leaderboards[0];
+            if (!dungeon) throw new Error("no current mythic keystone leaderboards available");
+            const periods = await client.wow.mythicKeystonePeriods();
+            return await client.wow.mythicKeystoneLeaderboard(realmId, dungeon.id, periods.current_period.id);
+        }),
+        c("wow.mythicRaidLeaderboard", () => client.wow.mythicRaidLeaderboard("uldir", "alliance")),
+        c("wow.neighborhoodMaps", () => client.wow.neighborhoodMaps()),
+        c(
+            "wow.neighborhoodMap",
+            detail("wow.neighborhoodMaps", () => client.wow.neighborhoodMaps(), client.wow.neighborhoodMap),
+        ),
+        c("wow.neighborhood", async () => {
+            const maps = await client.wow.neighborhoodMaps();
+            return await client.wow.neighborhood(indexId(maps), 1);
+        }),
+        c("wow.pets", () => client.wow.pets()),
+        c("wow.pet", detail("wow.pets", () => client.wow.pets(), client.wow.pet)),
+        c("wow.petMedia", detail("wow.pets", () => client.wow.pets(), client.wow.petMedia)),
+        c("wow.petAbilities", () => client.wow.petAbilities()),
+        c("wow.petAbility", detail("wow.petAbilities", () => client.wow.petAbilities(), client.wow.petAbility)),
+        c(
+            "wow.petAbilityMedia",
+            detail("wow.petAbilities", () => client.wow.petAbilities(), client.wow.petAbilityMedia),
+        ),
+        c("wow.playableClasses", () => client.wow.playableClasses()),
+        c(
+            "wow.playableClass",
+            detail("wow.playableClasses", () => client.wow.playableClasses(), client.wow.playableClass),
+        ),
+        c(
+            "wow.playableClassMedia",
+            detail("wow.playableClasses", () => client.wow.playableClasses(), client.wow.playableClassMedia),
+        ),
+        c(
+            "wow.playableClassPvpTalentSlots",
+            detail(
+                "wow.playableClasses",
+                () => client.wow.playableClasses(),
+                client.wow.playableClassPvpTalentSlots,
+            ),
+        ),
+        c("wow.playableRaces", () => client.wow.playableRaces()),
+        c("wow.playableRace", detail("wow.playableRaces", () => client.wow.playableRaces(), client.wow.playableRace)),
+        c("wow.powerTypes", () => client.wow.powerTypes()),
+        c("wow.powerType", detail("wow.powerTypes", () => client.wow.powerTypes(), client.wow.powerType)),
+        c("wow.professions", () => client.wow.professions()),
+        c("wow.profession", detail("wow.professions", () => client.wow.professions(), client.wow.profession)),
+        c("wow.professionMedia", detail("wow.professions", () => client.wow.professions(), client.wow.professionMedia)),
+        c("wow.professionSkillTier", async () => {
+            const professions = await client.wow.professions();
+            const professionId = indexId(professions);
+            const profession = await client.wow.profession(professionId);
+            const tierId = profession.skill_tiers[0]?.id;
+            if (tierId === undefined) throw new Error("profession has no skill tiers");
+            return await client.wow.professionSkillTier(professionId, tierId);
+        }),
+        c("wow.professionRecipie", async () => await client.wow.professionRecipie(await firstRecipeId())),
+        c("wow.professionRecipieMedia", async () => await client.wow.professionRecipieMedia(await firstRecipeId())),
+        c("wow.pvpSeasons", () => client.wow.pvpSeasons()),
+        c("wow.pvpSeason", async () => await client.wow.pvpSeason(await newestPvpSeasonId())),
+        c("wow.pvpSeasonLeaderboards", async () => await client.wow.pvpSeasonLeaderboards(await newestPvpSeasonId())),
+        c("wow.pvpSeasonLeaderboard", async () => {
+            const seasonId = await newestPvpSeasonId();
+            const leaderboards = await client.wow.pvpSeasonLeaderboards(seasonId);
+            const leaderboard = leaderboards.leaderboards[0];
+            if (!leaderboard) throw new Error("pvp season has no leaderboards");
+            return await client.wow.pvpSeasonLeaderboard(seasonId, leaderboard.name);
+        }),
+        c("wow.pvpSeasonRewards", async () => await client.wow.pvpSeasonRewards(await newestPvpSeasonId())),
+        c("wow.pvpTiers", () => client.wow.pvpTiers()),
+        c("wow.pvpTier", detail("wow.pvpTiers", () => client.wow.pvpTiers(), client.wow.pvpTier)),
+        c("wow.pvpTierMedia", detail("wow.pvpTiers", () => client.wow.pvpTiers(), client.wow.pvpTierMedia)),
+        c("wow.quests", () => client.wow.quests()),
+        c("wow.quest", async () => {
+            const categories = await client.wow.questCategories();
+            const category = await client.wow.questCategory(indexId(categories));
+            const quest = category.quests[0];
+            if (!quest) throw new Error("quest category has no quests");
+            return await client.wow.quest(quest.id);
+        }),
+        c("wow.questCategories", () => client.wow.questCategories()),
+        c(
+            "wow.questCategory",
+            detail("wow.questCategories", () => client.wow.questCategories(), client.wow.questCategory),
+        ),
+        c("wow.questAreas", () => client.wow.questAreas()),
+        c("wow.questArea", detail("wow.questAreas", () => client.wow.questAreas(), client.wow.questArea)),
+        c("wow.questTypes", () => client.wow.questTypes()),
+        c("wow.questType", detail("wow.questTypes", () => client.wow.questTypes(), client.wow.questType)),
+        c("wow.realms", () => client.wow.realms()),
+        c("wow.realm", () => client.wow.realm(REALM_SLUG)),
+        c("wow.searchRealm", () => client.wow.searchRealm({ pageSize: 1 })),
+        c("wow.regions", () => client.wow.regions()),
+        c("wow.region", detail("wow.regions", () => client.wow.regions(), client.wow.region)),
+        c("wow.reputationFactions", () => client.wow.reputationFactions()),
+        c(
+            "wow.reputationFaction",
+            detailStr(
+                "wow.reputationFactions",
+                () => client.wow.reputationFactions(),
+                client.wow.reputationFaction,
+            ),
+        ),
+        c("wow.reputationTiers", () => client.wow.reputationTiers()),
+        c(
+            "wow.reputationTier",
+            detailStr("wow.reputationTiers", () => client.wow.reputationTiers(), client.wow.reputationTier),
+        ),
+        c("wow.spell", async () => await client.wow.spell(await searchedSpellId())),
+        c("wow.spellMedia", async () => await client.wow.spellMedia(await searchedSpellId())),
+        c("wow.searchSpell", () => client.wow.searchSpell({ pageSize: 1 })),
+        c("wow.titles", () => client.wow.titles()),
+        c("wow.title", detail("wow.titles", () => client.wow.titles(), client.wow.title)),
+        c("wow.toys", () => client.wow.toys()),
+        c("wow.toy", detail("wow.toys", () => client.wow.toys(), client.wow.toy)),
+        c("wow.talents", () => client.wow.talents()),
+        c("wow.talent", detail("wow.talents", () => client.wow.talents(), client.wow.talent)),
+        c("wow.talentTrees", () => client.wow.talentTrees()),
+        c("wow.talentTree", async () => {
+            const trees = await once("wow.talentTrees", () => client.wow.talentTrees());
+            const link = talentTreeLinks(trees, "spec_talent_trees")[0];
+            const href = link?.key?.href;
+            if (!href) throw new Error("no spec talent trees available");
+            const { treeId, specId } = talentTreeIds(href);
+            return await client.wow.talentTree(treeId, specId);
+        }),
+        c("wow.talentTreeNodes", async () => {
+            const trees = await once("wow.talentTrees", () => client.wow.talentTrees());
+            const link = talentTreeLinks(trees, "class_talent_trees")[0];
+            if (!link) throw new Error("no class talent trees available");
+            const treeId = typeof link.id === "number" ? link.id : idFromHref(link.key?.href ?? "");
+            return await client.wow.talentTreeNodes(treeId);
+        }),
+        c("wow.pvpTalents", () => client.wow.pvpTalents()),
+        c("wow.pvpTalent", detail("wow.pvpTalents", () => client.wow.pvpTalents(), client.wow.pvpTalent)),
+        c("wow.techTalentTrees", () => client.wow.techTalentTrees()),
+        c(
+            "wow.techTalentTree",
+            detail("wow.techTalentTrees", () => client.wow.techTalentTrees(), client.wow.techTalentTree),
+        ),
+        c("wow.techTalents", () => client.wow.techTalents()),
+        c("wow.techTalent", detail("wow.techTalents", () => client.wow.techTalents(), client.wow.techTalent)),
+        c("wow.techTalentMedia", detail("wow.techTalents", () => client.wow.techTalents(), client.wow.techTalentMedia)),
+        c("wow.token", () => client.wow.token()),
 
-    // ----- wow classic ---------------------------------------------------
-    c("wowClassic.realms", () => wowClassic.realms()),
-    c("wowClassic.realm", async () => {
-        const realms = await wowClassic.realms();
-        const realm = realms.realms[0];
-        if (!realm) throw new Error("no classic realms available");
-        return await wowClassic.realm(realm.slug);
-    }),
-    c("wowClassic.searchRealm", () => wowClassic.searchRealm({ pageSize: 1 })),
+        // ----- wow: profile --------------------------------------------------
+        c("wow.characterProfile", () => profileCall(client.wow.characterProfile)),
+        c("wow.characterProfileStatus", () => profileCall(client.wow.characterProfileStatus)),
+        c("wow.characterAchievementSummary", () => profileCall(client.wow.characterAchievementSummary)),
+        c("wow.characterAchievementStatistics", () => profileCall(client.wow.characterAchievementStatistics)),
+        c("wow.characterAppearanceSummary", () => profileCall(client.wow.characterAppearanceSummary)),
+        c("wow.characterCollectionTypes", () => profileCall(client.wow.characterCollectionTypes)),
+        c("wow.characterCollectionMounts", () => profileCall(client.wow.characterCollectionMounts)),
+        c("wow.characterCollectionPets", () => profileCall(client.wow.characterCollectionPets)),
+        c("wow.characterCollectionToys", () => profileCall(client.wow.characterCollectionToys)),
+        c("wow.characterCollectionHeirlooms", () => profileCall(client.wow.characterCollectionHeirlooms)),
+        c(
+            "wow.characterCollectionDecor",
+            () => profileCall(client.wow.characterCollectionDecor),
+            "character-dependent",
+        ),
+        c("wow.characterEncounters", () => profileCall(client.wow.characterEncounters)),
+        c("wow.characterEncounterDungeons", () => profileCall(client.wow.characterEncounterDungeons)),
+        c("wow.characterEncounterRaids", () => profileCall(client.wow.characterEncounterRaids)),
+        c("wow.characterEquipments", () => profileCall(client.wow.characterEquipments)),
+        c("wow.characterHunterPets", () => profileCall(client.wow.characterHunterPets), "character-dependent"),
+        c("wow.characterMedia", () => profileCall(client.wow.characterMedia)),
+        c("wow.characterMythicKeystoneProfile", () => profileCall(client.wow.characterMythicKeystoneProfile)),
+        c("wow.characterMythicKeystoneSeasonDetails", async () => {
+            const ctx = await getContext();
+            const seasons = await client.wow.mythicKeystoneSeasons();
+            return await client.wow.characterMythicKeystoneSeasonDetails(
+                ctx.realm,
+                ctx.name,
+                seasons.current_season.id,
+            );
+        }, "character-dependent"),
+        c("wow.characterProfessions", () => profileCall(client.wow.characterProfessions), "character-dependent"),
+        c("wow.characterPvpBracketStatistics", async () => {
+            const ctx = await getContext();
+            return await client.wow.characterPvpBracketStatistics(ctx.realm, ctx.name, "2v2");
+        }, "character-dependent"),
+        c("wow.characterPvpSummary", () => profileCall(client.wow.characterPvpSummary)),
+        c("wow.characterQuests", () => profileCall(client.wow.characterQuests)),
+        c("wow.characterCompletedQuests", () => profileCall(client.wow.characterCompletedQuests)),
+        c("wow.characterReputations", () => profileCall(client.wow.characterReputations)),
+        c("wow.characterSoulbinds", () => profileCall(client.wow.characterSoulbinds), "character-dependent"),
+        c("wow.characterSpecializations", () => profileCall(client.wow.characterSpecializations)),
+        c("wow.characterStatistics", () => profileCall(client.wow.characterStatistics)),
+        c("wow.characterTitles", () => profileCall(client.wow.characterTitles)),
+        c("wow.characterHouse", async () => {
+            const ctx = await getContext();
+            return await client.wow.characterHouse(ctx.realm, ctx.name, 1);
+        }, "character-dependent"),
+        c("wow.guild", () => guildCall(client.wow.guild)),
+        c("wow.guildActivity", () => guildCall(client.wow.guildActivity)),
+        c("wow.guildAchievements", () => guildCall(client.wow.guildAchievements)),
+        c("wow.guildRoster", () => guildCall(client.wow.guildRoster)),
 
-    // ----- hearthstone ---------------------------------------------------
-    c("hearthstone.searchCards", () => hearthstone.searchCards({ pageSize: 1 })),
-    c("hearthstone.fetchCard", async () => {
-        const card = searchFirstStr(await hearthstone.searchCards({ pageSize: 1 }));
-        return await hearthstone.fetchCard(card);
-    }),
-    c("hearthstone.searchCardbacks", () => hearthstone.searchCardbacks({ pageSize: 1 })),
-    c("hearthstone.fetchCardback", async () => {
-        const cardback = searchFirstStr(await hearthstone.searchCardbacks({ pageSize: 1 }));
-        return await hearthstone.fetchCardback(cardback);
-    }),
-    c("hearthstone.metadata", () => hearthstone.metadata("sets")),
-    skipped(
-        "hearthstone.fetchDeck",
-        "skipped: needs a deck code or card ids (not discoverable from the API)",
-    ),
+        // ----- wow classic ---------------------------------------------------
+        c("wowClassic.realms", () => client.wowClassic.realms()),
+        c("wowClassic.realm", async () => {
+            const realms = await client.wowClassic.realms();
+            const realm = realms.realms[0];
+            if (!realm) throw new Error("no classic realms available");
+            return await client.wowClassic.realm(realm.slug);
+        }),
+        c("wowClassic.searchRealm", () => client.wowClassic.searchRealm({ pageSize: 1 })),
 
-    // ----- starcraft 2 ---------------------------------------------------
-    c("sc2.leagueData", () => sc2.leagueData(37, 201, 0, 0)),
+        // ----- hearthstone ---------------------------------------------------
+        c("hearthstone.searchCards", () => client.hearthstone.searchCards({ pageSize: 1 })),
+        c("hearthstone.fetchCard", async () => {
+            const card = searchFirstStr(await client.hearthstone.searchCards({ pageSize: 1 }));
+            return await client.hearthstone.fetchCard(card);
+        }),
+        c("hearthstone.searchCardbacks", () => client.hearthstone.searchCardbacks({ pageSize: 1 })),
+        c("hearthstone.fetchCardback", async () => {
+            const cardback = searchFirstStr(await client.hearthstone.searchCardbacks({ pageSize: 1 }));
+            return await client.hearthstone.fetchCardback(cardback);
+        }),
+        c("hearthstone.metadata", () => client.hearthstone.metadata("sets")),
+        skipped(
+            "hearthstone.fetchDeck",
+            "skipped: needs a deck code or card ids (not discoverable from the API)",
+        ),
 
-    // ----- diablo 3 ------------------------------------------------------
-    c("diablo3.seasons", () => diablo3.seasons()),
-    c("diablo3.season", async () => {
-        const seasons = await diablo3.seasons();
-        return await diablo3.season(seasons.current_season);
-    }),
-    c("diablo3.seasonLeaderboard", async () => {
-        const seasons = await diablo3.seasons();
-        const season = await diablo3.season(seasons.current_season);
-        const leaderboard = season.leaderboard[0];
-        if (!leaderboard) throw new Error("season has no leaderboards");
-        return await diablo3.seasonLeaderboard(seasons.current_season, lastSegment(leaderboard.ladder.href));
-    }),
-    c("diablo3.eras", () => diablo3.eras()),
-    c("diablo3.era", async () => {
-        const eras = await diablo3.eras();
-        return await diablo3.era(eras.current_era);
-    }),
-    c("diablo3.eraLeaderboard", async () => {
-        const eras = await diablo3.eras();
-        const era = await diablo3.era(eras.current_era);
-        const leaderboard = era.leaderboard[0];
-        if (!leaderboard) throw new Error("era has no leaderboards");
-        return await diablo3.eraLeaderboard(eras.current_era, lastSegment(leaderboard.ladder.href));
-    }),
-    c("diablo3.acts", () => diablo3.acts()),
-    c("diablo3.act", async () => {
-        const acts = await diablo3.acts();
-        return await diablo3.act(acts.acts[0]?.number ?? 1);
-    }),
-    c("diablo3.artisan", () => diablo3.artisan(ARTISAN_SLUG)),
-    c("diablo3.artisanRecipe", async () => {
-        const artisan = await diablo3.artisan(ARTISAN_SLUG);
-        const recipes = artisan.training.tiers.flatMap((tier) => [
-            ...tier.trainedRecipes,
-            ...(tier.taughtRecipes ?? []),
-        ]);
-        const recipe = recipes[0];
-        if (!recipe) throw new Error("artisan has no recipes");
-        return await diablo3.artisanRecipe(ARTISAN_SLUG, recipe.slug);
-    }),
-    c("diablo3.follower", () => diablo3.follower(FOLLOWER_SLUG)),
-    c("diablo3.heroClass", () => diablo3.heroClass(HERO_SLUG)),
-    c("diablo3.heroSkill", async () => {
-        const hero = await diablo3.heroClass(HERO_SLUG);
-        const skill = hero.skills.active[0] ?? hero.skills.passive[0];
-        if (!skill) throw new Error("hero class has no skills");
-        return await diablo3.heroSkill(HERO_SLUG, skill.slug);
-    }),
-    c("diablo3.itemTypes", () => diablo3.itemTypes()),
-    c("diablo3.itemType", async () => {
-        const types = await diablo3.itemTypes();
-        const type = types[0];
-        if (!type) throw new Error("no item types available");
-        return await diablo3.itemType(lastSegment(type.path));
-    }),
-    // Chaining from the item-type index can land on items the API 500s on (e.g. Ethereals), so use the documented example.
-    c("diablo3.item", () => diablo3.item("corrupted-ashbringer-Unique_Sword_2H_104_x1")),
-];
+        // ----- starcraft 2 ---------------------------------------------------
+        c("sc2.leagueData", () => client.sc2.leagueData(37, 201, 0, 0)),
+
+        // ----- diablo 3 ------------------------------------------------------
+        c("diablo3.seasons", () => client.diablo3.seasons()),
+        c("diablo3.season", async () => {
+            const seasons = await client.diablo3.seasons();
+            return await client.diablo3.season(seasons.current_season);
+        }),
+        c("diablo3.seasonLeaderboard", async () => {
+            const seasons = await client.diablo3.seasons();
+            const season = await client.diablo3.season(seasons.current_season);
+            const leaderboard = season.leaderboard[0];
+            if (!leaderboard) throw new Error("season has no leaderboards");
+            return await client.diablo3.seasonLeaderboard(seasons.current_season, lastSegment(leaderboard.ladder.href));
+        }),
+        c("diablo3.eras", () => client.diablo3.eras()),
+        c("diablo3.era", async () => {
+            const eras = await client.diablo3.eras();
+            return await client.diablo3.era(eras.current_era);
+        }),
+        c("diablo3.eraLeaderboard", async () => {
+            const eras = await client.diablo3.eras();
+            const era = await client.diablo3.era(eras.current_era);
+            const leaderboard = era.leaderboard[0];
+            if (!leaderboard) throw new Error("era has no leaderboards");
+            return await client.diablo3.eraLeaderboard(eras.current_era, lastSegment(leaderboard.ladder.href));
+        }),
+        c("diablo3.acts", () => client.diablo3.acts()),
+        c("diablo3.act", async () => {
+            const acts = await client.diablo3.acts();
+            return await client.diablo3.act(acts.acts[0]?.number ?? 1);
+        }),
+        c("diablo3.artisan", () => client.diablo3.artisan(ARTISAN_SLUG)),
+        c("diablo3.artisanRecipe", async () => {
+            const artisan = await client.diablo3.artisan(ARTISAN_SLUG);
+            const recipes = artisan.training.tiers.flatMap((tier) => [
+                ...tier.trainedRecipes,
+                ...(tier.taughtRecipes ?? []),
+            ]);
+            const recipe = recipes[0];
+            if (!recipe) throw new Error("artisan has no recipes");
+            return await client.diablo3.artisanRecipe(ARTISAN_SLUG, recipe.slug);
+        }),
+        c("diablo3.follower", () => client.diablo3.follower(FOLLOWER_SLUG)),
+        c("diablo3.heroClass", () => client.diablo3.heroClass(HERO_SLUG)),
+        c("diablo3.heroSkill", async () => {
+            const hero = await client.diablo3.heroClass(HERO_SLUG);
+            const skill = hero.skills.active[0] ?? hero.skills.passive[0];
+            if (!skill) throw new Error("hero class has no skills");
+            return await client.diablo3.heroSkill(HERO_SLUG, skill.slug);
+        }),
+        c("diablo3.itemTypes", () => client.diablo3.itemTypes()),
+        c("diablo3.itemType", async () => {
+            const types = await client.diablo3.itemTypes();
+            const type = types[0];
+            if (!type) throw new Error("no item types available");
+            return await client.diablo3.itemType(lastSegment(type.path));
+        }),
+        // Chaining from the item-type index can land on items the API 500s on (e.g. Ethereals), so use the documented example.
+        c("diablo3.item", () => client.diablo3.item("corrupted-ashbringer-Unique_Sword_2H_104_x1")),
+
+        // ----- wow: user-token account profile (client.forUser) ---------------
+        userCase("wow.accountProfileSummary", () => requireUserClient().wow.accountProfileSummary()),
+        userCase("wow.protectedCharacterProfile", async () => {
+            const summary = await requireUserClient().wow.accountProfileSummary();
+            const character = summary.wow_accounts[0]?.characters[0];
+            if (!character) throw new Error("account has no characters");
+            return await requireUserClient().wow.protectedCharacterProfile(character.realm.id, character.id);
+        }),
+        userCase("wow.accountCollectionsIndex", () => requireUserClient().wow.accountCollectionsIndex()),
+        userCase("wow.accountMountsCollection", () => requireUserClient().wow.accountMountsCollection()),
+        userCase("wow.accountPetsCollection", () => requireUserClient().wow.accountPetsCollection()),
+        userCase("wow.accountToysCollection", () => requireUserClient().wow.accountToysCollection()),
+        userCase("wow.accountHeirloomsCollection", () => requireUserClient().wow.accountHeirloomsCollection()),
+        userCase("wow.accountTransmogsCollection", () => requireUserClient().wow.accountTransmogsCollection()),
+        userCase("wow.accountDecorCollection", () => requireUserClient().wow.accountDecorCollection()),
+
+        // ----- client / legacy compatibility ----------------------------------
+        c("client.missingUserToken", async () => {
+            try {
+                await client.wow.accountProfileSummary();
+            } catch (error) {
+                if (error instanceof errors.MissingUserTokenError) return { missingUserToken: true };
+                throw new Error(
+                    `expected MissingUserTokenError but got ${error instanceof Error ? error.name : typeof error}`,
+                );
+            }
+            throw new Error("expected MissingUserTokenError but accountProfileSummary succeeded");
+        }),
+        c("legacy.setup.wow.mount", async () => {
+            setup(config);
+            return await legacyWow.mount(MOUNT_ID);
+        }),
+    ];
+}
 
 // ---------------------------------------------------------------------------
 // Runner
@@ -831,15 +963,20 @@ async function main(): Promise<void> {
         console.error("Missing BLIZZARD_CLIENT_ID and/or BLIZZARD_CLIENT_SECRET environment variables.");
         Deno.exit(1);
     }
-    setup({
+    config = {
         clientId,
         clientSecret,
         region: (Deno.env.get("BLIZZARD_REGION") ?? "eu") as Regions,
         locale: (Deno.env.get("BLIZZARD_LOCALE") ?? "en_GB") as Locales,
-    });
+    };
+    client = createClient(config);
+    setup(config);
+
+    if (USER_TOKEN) userClient = client.forUser(USER_TOKEN);
 
     await Deno.mkdir("fixtures", { recursive: true });
 
+    const cases = buildCases();
     const filter = Deno.args[0];
     const selected = filter ? cases.filter((testCase) => testCase.name.includes(filter)) : cases;
     if (selected.length === 0) {

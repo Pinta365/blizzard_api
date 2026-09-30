@@ -2,7 +2,8 @@
  * This module provides interfaces and API function definitions for fetching World of Warcraft neighborhood map data using the Blizzard API.
  */
 
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
+
 import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface NeighborhoodMaps extends LinkSelfHref {
@@ -25,8 +26,8 @@ export interface Neighborhood extends LinkSelfHref {
 /**
  * Returns an index of neighborhood maps.
  */
-export async function neighborhoodMaps(): Promise<NeighborhoodMaps> {
-    return await request({
+export async function neighborhoodMaps(ctx: ApiContext): Promise<NeighborhoodMaps> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/neighborhood-map/index",
         namespace: "dynamic",
@@ -38,8 +39,8 @@ export async function neighborhoodMaps(): Promise<NeighborhoodMaps> {
  *
  * @param neighborhoodMapId - The ID of the neighborhood map.
  */
-export async function neighborhoodMap(neighborhoodMapId: number): Promise<NeighborhoodMap> {
-    return await request({
+export async function neighborhoodMap(ctx: ApiContext, neighborhoodMapId: number): Promise<NeighborhoodMap> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/neighborhood-map/${neighborhoodMapId}`,
         namespace: "dynamic",
@@ -53,10 +54,11 @@ export async function neighborhoodMap(neighborhoodMapId: number): Promise<Neighb
  * @param neighborhoodId - The ID of the neighborhood.
  */
 export async function neighborhood(
+    ctx: ApiContext,
     neighborhoodMapId: number,
     neighborhoodId: number,
 ): Promise<Neighborhood> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/neighborhood-map/${neighborhoodMapId}/neighborhood/${neighborhoodId}`,
         namespace: "dynamic",

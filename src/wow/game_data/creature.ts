@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -58,8 +58,8 @@ export interface CreatureFamilyMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of all creature families.
  */
-export async function creatureFamilies(): Promise<CreatureFamilies> {
-    return await request({
+export async function creatureFamilies(ctx: ApiContext): Promise<CreatureFamilies> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/creature-family/index",
         namespace: "static",
@@ -72,8 +72,8 @@ export async function creatureFamilies(): Promise<CreatureFamilies> {
  * @param creatureFamilyId - The unique identifier for the creature family
  * @returns A promise that resolves to an object representing details about a creature family.
  */
-export async function creatureFamily(creatureFamilyId: number): Promise<CreatureFamily> {
-    return await request({
+export async function creatureFamily(ctx: ApiContext, creatureFamilyId: number): Promise<CreatureFamily> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/creature-family/${creatureFamilyId}`,
         namespace: "static",
@@ -85,8 +85,8 @@ export async function creatureFamily(creatureFamilyId: number): Promise<Creature
  *
  * @returns A promise that resolves to an object representing a list of all creature types.
  */
-export async function creatureTypes(): Promise<CreatureTypes> {
-    return await request({
+export async function creatureTypes(ctx: ApiContext): Promise<CreatureTypes> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/creature-type/index",
         namespace: "static",
@@ -99,8 +99,8 @@ export async function creatureTypes(): Promise<CreatureTypes> {
  * @param creatureTypeId - The unique identifier for the creature types
  * @returns A promise that resolves to an object representing details about a creature types.
  */
-export async function creatureType(creatureTypeId: number): Promise<CreatureType> {
-    return await request({
+export async function creatureType(ctx: ApiContext, creatureTypeId: number): Promise<CreatureType> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/creature-type/${creatureTypeId}`,
         namespace: "static",
@@ -113,8 +113,8 @@ export async function creatureType(creatureTypeId: number): Promise<CreatureType
  * @param creatureId - The unique identifier for the creature
  * @returns A promise that resolves to an object representing details about a creature.
  */
-export async function creature(creatureId: number): Promise<Creature> {
-    return await request({
+export async function creature(ctx: ApiContext, creatureId: number): Promise<Creature> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/creature/${creatureId}`,
         namespace: "static",
@@ -127,8 +127,8 @@ export async function creature(creatureId: number): Promise<Creature> {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about a creature search.
  */
-export async function searchCreature(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/creature", "static", searchParameters) as Search;
+export async function searchCreature(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/creature", "static", searchParameters) as Search;
 }
 
 /**
@@ -137,8 +137,8 @@ export async function searchCreature(searchParameters: SearchParameters): Promis
  * @param creatureDisplayId - The unique identifier Creature display Id.
  * @returns A promise that resolves to an object representing media details about a Creature display.
  */
-export async function creatureDisplayMedia(creatureDisplayId: number): Promise<CreatureDisplayMedia> {
-    return await request({
+export async function creatureDisplayMedia(ctx: ApiContext, creatureDisplayId: number): Promise<CreatureDisplayMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/creature-display/${creatureDisplayId}`,
         namespace: "static",
@@ -151,8 +151,8 @@ export async function creatureDisplayMedia(creatureDisplayId: number): Promise<C
  * @param creatureFamilyId - The unique identifier Creature family Id.
  * @returns A promise that resolves to an object representing media details about a Creature family.
  */
-export async function creatureFamilyMedia(creatureFamilyId: number): Promise<CreatureFamilyMedia> {
-    return await request({
+export async function creatureFamilyMedia(ctx: ApiContext, creatureFamilyId: number): Promise<CreatureFamilyMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/creature-family/${creatureFamilyId}`,
         namespace: "static",

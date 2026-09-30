@@ -1,4 +1,4 @@
-import { request } from "../shared/index.ts";
+import type { ApiContext } from "../shared/index.ts";
 import type { Namespaces } from "../shared/index.ts";
 
 export interface SearchParameters {
@@ -22,7 +22,12 @@ export interface Search {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about the search.
  */
-export async function search(url: string, namespace: Namespaces, searchParameters: SearchParameters): Promise<Search> {
+export async function search(
+    ctx: ApiContext,
+    url: string,
+    namespace: Namespaces,
+    searchParameters: SearchParameters,
+): Promise<Search> {
     const searchFields = searchParameters.searchFields
         ? Object.fromEntries(
             Object.entries(searchParameters.searchFields).map(([key, value]) => [key, value.toString()]),
@@ -45,7 +50,7 @@ export async function search(url: string, namespace: Namespaces, searchParameter
         qs._pageSize = searchParameters.pageSize;
     }
 
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/search${url}`,
         qs,

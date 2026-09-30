@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface CharacterQuests extends LinkSelfHref {
@@ -22,10 +22,11 @@ export interface CharacterCompletedQuests extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a character's active quests as well as a link to the character's completed quests.
  */
 export async function characterQuests(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterQuests> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/quests`,
         namespace: "profile",
@@ -40,10 +41,11 @@ export async function characterQuests(
  * @returns A promise that resolves to an object representing a list of quests that a character has completed.
  */
 export async function characterCompletedQuests(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterCompletedQuests> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/quests/completed`,
         namespace: "profile",

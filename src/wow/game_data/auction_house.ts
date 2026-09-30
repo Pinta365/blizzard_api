@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { LinkSelfHref } from "../../shared/index.ts";
 
 export interface AuctionItem {
@@ -58,8 +58,8 @@ export interface Commodities extends LinkSelfHref {
  * @param connectedRealmId - The id of the connected realm to return auctions from.
  * @returns A promise that resolves to an object representing the auctions being listed.
  */
-export async function auctions(connectedRealmId: number): Promise<Auctions> {
-    return await request({
+export async function auctions(ctx: ApiContext, connectedRealmId: number): Promise<Auctions> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/connected-realm/${connectedRealmId}/auctions`,
         namespace: "dynamic",
@@ -75,8 +75,8 @@ export async function auctions(connectedRealmId: number): Promise<Auctions> {
  *
  * @returns A promise that resolves to an object representing the commodities being listed.
  */
-export async function commodities(): Promise<Commodities> {
-    return await request({
+export async function commodities(ctx: ApiContext): Promise<Commodities> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/auctions/commodities",
         namespace: "dynamic",

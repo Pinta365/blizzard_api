@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyNameId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface MythicRaidLeaderboard extends LinkSelfHref {
@@ -31,10 +31,11 @@ export interface MythicRaidLeaderboard extends LinkSelfHref {
  * @returns A promise that resolves to an object representing the leaderboard for a given raid and faction.
  */
 export async function mythicRaidLeaderboard(
+    ctx: ApiContext,
     raid: string,
     faction: "alliance" | "horde",
 ): Promise<MythicRaidLeaderboard> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/leaderboard/hall-of-fame/${raid}/${faction}`,
         namespace: "dynamic",

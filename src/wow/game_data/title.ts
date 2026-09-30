@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface Titles extends LinkSelfHref {
@@ -19,8 +19,8 @@ export interface Title extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of titles.
  */
-export async function titles(): Promise<Titles> {
-    return await request({
+export async function titles(ctx: ApiContext): Promise<Titles> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/title/index",
         namespace: "static",
@@ -33,8 +33,8 @@ export async function titles(): Promise<Titles> {
  * @param titleId - The unique identifier for the title.
  * @returns A promise that resolves to an object representing details about a title.
  */
-export async function title(titleId: number): Promise<Title> {
-    return await request({
+export async function title(ctx: ApiContext, titleId: number): Promise<Title> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/title/${titleId}`,
         namespace: "static",

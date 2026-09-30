@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { Asset, KeyId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -21,8 +21,8 @@ export interface SpellMedia extends LinkSelfHref {
  * @param spellId - The unique identifier for the spell.
  * @returns A promise that resolves to an object representing details about a spell.
  */
-export async function spell(spellId: number): Promise<Spell> {
-    return await request({
+export async function spell(ctx: ApiContext, spellId: number): Promise<Spell> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/spell/${spellId}`,
         namespace: "static",
@@ -35,8 +35,8 @@ export async function spell(spellId: number): Promise<Spell> {
  * @param spellId - The unique identifier for the spell.
  * @returns A promise that resolves to an object representing details about a spell.
  */
-export async function spellMedia(spellId: number): Promise<SpellMedia> {
-    return await request({
+export async function spellMedia(ctx: ApiContext, spellId: number): Promise<SpellMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/spell/${spellId}`,
         namespace: "static",
@@ -49,6 +49,6 @@ export async function spellMedia(spellId: number): Promise<SpellMedia> {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about a spell search.
  */
-export async function searchSpell(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/spell", "static", searchParameters) as Search;
+export async function searchSpell(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/spell", "static", searchParameters) as Search;
 }

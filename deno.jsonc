@@ -3,16 +3,21 @@
     "version": "0.4.0",
     "exports": "./mod.ts",
     "publish": {
-        "exclude": [".github/", "scripts/", "fixtures/", "PLAN.md"]
+        "exclude": [".github/", "scripts/", "tests/", "fixtures/", "PLAN.md"]
     },
     "imports": {
-        "@deno/dnt": "jsr:@deno/dnt@^0.43.2"
+        "@deno/dnt": "jsr:@deno/dnt@^0.43.2",
+        "@std/assert": "jsr:@std/assert@^1"
     },
 
     "tasks": {
         "build_npm": "deno run -A scripts/build_npm.ts",
         "publish-dry": "deno publish --dry-run",
+        "test": "deno test",
         "smoke": "deno run --env-file=.env -A scripts/smoke.ts"
+    },
+    "test": {
+        "include": ["tests/"]
     },
     "fmt": {
         "lineWidth": 120,

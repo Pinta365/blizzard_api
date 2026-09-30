@@ -2,7 +2,8 @@
  * This module provides interfaces and API function definitions for fetching World of Warcraft housing data (decor, fixtures, fixture hooks, rooms) using the Blizzard API.
  */
 
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
+
 import { search } from "../search.ts";
 import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -57,8 +58,8 @@ export interface Room extends LinkSelfHref {
 /**
  * Returns an index of decor.
  */
-export async function decors(): Promise<Decors> {
-    return await request({
+export async function decors(ctx: ApiContext): Promise<Decors> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/decor/index",
         namespace: "static",
@@ -70,8 +71,8 @@ export async function decors(): Promise<Decors> {
  *
  * @param decorId - The ID of the decor.
  */
-export async function decor(decorId: number): Promise<Decor> {
-    return await request({
+export async function decor(ctx: ApiContext, decorId: number): Promise<Decor> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/decor/${decorId}`,
         namespace: "static",
@@ -83,15 +84,15 @@ export async function decor(decorId: number): Promise<Decor> {
  *
  * @param searchParameters - Object containing search parameters.
  */
-export async function searchDecor(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/decor", "static", searchParameters) as Search;
+export async function searchDecor(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/decor", "static", searchParameters) as Search;
 }
 
 /**
  * Returns an index of fixtures.
  */
-export async function fixtures(): Promise<Fixtures> {
-    return await request({
+export async function fixtures(ctx: ApiContext): Promise<Fixtures> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/fixture/index",
         namespace: "static",
@@ -103,8 +104,8 @@ export async function fixtures(): Promise<Fixtures> {
  *
  * @param fixtureId - The ID of the fixture.
  */
-export async function fixture(fixtureId: number): Promise<Fixture> {
-    return await request({
+export async function fixture(ctx: ApiContext, fixtureId: number): Promise<Fixture> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/fixture/${fixtureId}`,
         namespace: "static",
@@ -116,15 +117,15 @@ export async function fixture(fixtureId: number): Promise<Fixture> {
  *
  * @param searchParameters - Object containing search parameters.
  */
-export async function searchFixture(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/fixture", "static", searchParameters) as Search;
+export async function searchFixture(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/fixture", "static", searchParameters) as Search;
 }
 
 /**
  * Returns an index of fixture hooks.
  */
-export async function fixtureHooks(): Promise<FixtureHooks> {
-    return await request({
+export async function fixtureHooks(ctx: ApiContext): Promise<FixtureHooks> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/fixture-hook/index",
         namespace: "static",
@@ -136,8 +137,8 @@ export async function fixtureHooks(): Promise<FixtureHooks> {
  *
  * @param fixtureHookId - The ID of the fixture hook.
  */
-export async function fixtureHook(fixtureHookId: number): Promise<FixtureHook> {
-    return await request({
+export async function fixtureHook(ctx: ApiContext, fixtureHookId: number): Promise<FixtureHook> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/fixture-hook/${fixtureHookId}`,
         namespace: "static",
@@ -149,15 +150,15 @@ export async function fixtureHook(fixtureHookId: number): Promise<FixtureHook> {
  *
  * @param searchParameters - Object containing search parameters.
  */
-export async function searchFixtureHook(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/fixture-hook", "static", searchParameters) as Search;
+export async function searchFixtureHook(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/fixture-hook", "static", searchParameters) as Search;
 }
 
 /**
  * Returns an index of rooms.
  */
-export async function rooms(): Promise<Rooms> {
-    return await request({
+export async function rooms(ctx: ApiContext): Promise<Rooms> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/room/index",
         namespace: "static",
@@ -169,8 +170,8 @@ export async function rooms(): Promise<Rooms> {
  *
  * @param roomId - The ID of the room.
  */
-export async function room(roomId: number): Promise<Room> {
-    return await request({
+export async function room(ctx: ApiContext, roomId: number): Promise<Room> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/room/${roomId}`,
         namespace: "static",
@@ -182,6 +183,6 @@ export async function room(roomId: number): Promise<Room> {
  *
  * @param searchParameters - Object containing search parameters.
  */
-export async function searchRoom(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/room", "static", searchParameters) as Search;
+export async function searchRoom(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/room", "static", searchParameters) as Search;
 }

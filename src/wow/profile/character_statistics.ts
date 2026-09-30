@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface CharacterStatistics extends LinkSelfHref {
@@ -117,10 +117,11 @@ export interface CharacterStatistics extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a statistics summary for a character.
  */
 export async function characterStatistics(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterStatistics> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/statistics`,
         namespace: "profile",

@@ -1,6 +1,6 @@
-export { setup } from "./config.ts";
-export { authenticate, getAccessToken, getAuthConfig } from "./auth.ts";
-export { request, requestHref } from "./request.ts";
+export { apiBaseUrl, ApiContext, assertConfig, oauthBaseUrl } from "./context.ts";
+export type { AuthConfig, AuthorizeUrlOptions, ClientConfig, ExchangeCodeOptions, TokenResponse } from "./context.ts";
+export { bindAll, type Bound } from "./bind.ts";
 
 export type {
     Asset,
@@ -10,9 +10,11 @@ export type {
     KeyName,
     KeyNameId,
     LinkSelfHref,
+    Locales,
     LocalizedString,
     NameId,
     Namespaces,
+    Regions,
     RequestOptions,
     TypeName,
 } from "./types.ts";

@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyNameId, LinkSelfHref, NameId } from "../../shared/index.ts";
 
 export interface Tier {
@@ -29,10 +29,11 @@ export interface CharacterProfessions extends LinkSelfHref {
  * @returns A promise that resolves to an object representing a summary of professions for a character.
  */
 export async function characterProfessions(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterProfessions> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/professions`,
         namespace: "profile",

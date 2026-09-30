@@ -4,7 +4,8 @@
  * @author Pinta <https://github.com/Pinta365>
  */
 
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
+
 import type { LinkSelfHref } from "../../shared/index.ts";
 
 export interface WowToken extends LinkSelfHref {
@@ -17,8 +18,8 @@ export interface WowToken extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing price and last updated timestamp.
  */
-export async function token(): Promise<WowToken> {
-    const tokenData = await request({
+export async function token(ctx: ApiContext): Promise<WowToken> {
+    const tokenData = await ctx.request({
         method: "GET",
         url: "/data/wow/token/index",
         namespace: "dynamic",

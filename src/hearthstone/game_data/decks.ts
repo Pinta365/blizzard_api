@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { LocalizedString } from "../../shared/index.ts";
 
 export interface Options {
@@ -89,8 +89,8 @@ export interface Deck {
  * @param options - find parameters fort the search.
  * @returns A promise that resolves to an object representing details about a card.
  */
-export async function fetchDeck(options?: Options): Promise<Deck> {
-    return await request({
+export async function fetchDeck(ctx: ApiContext, options?: Options): Promise<Deck> {
+    return await ctx.request({
         method: "GET",
         url: `/hearthstone/deck`,
         qs: options as Record<string, string | number>,

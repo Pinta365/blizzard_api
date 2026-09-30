@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface Rgba {
@@ -133,10 +133,11 @@ export interface characterEquipments extends LinkSelfHref {
  * @returns A promise that resolves to an object representing details about items equipped by a character.
  */
 export async function characterEquipments(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<characterEquipments> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/equipment`,
         namespace: "profile",

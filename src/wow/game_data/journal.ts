@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, TypeName } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
@@ -82,8 +82,8 @@ export interface JournalInstanceMedia extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of journal expansions.
  */
-export async function journalExpansions(): Promise<JournalExpansions> {
-    return await request({
+export async function journalExpansions(ctx: ApiContext): Promise<JournalExpansions> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/journal-expansion/index",
         namespace: "static",
@@ -96,8 +96,8 @@ export async function journalExpansions(): Promise<JournalExpansions> {
  * @param journalExpansionId - The unique identifier for the journal expansion.
  * @returns A promise that resolves to an object representing details about a journal expansion.
  */
-export async function journalExpansion(journalExpansionId: number): Promise<JournalExpansion> {
-    return await request({
+export async function journalExpansion(ctx: ApiContext, journalExpansionId: number): Promise<JournalExpansion> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/journal-expansion/${journalExpansionId}`,
         namespace: "static",
@@ -109,8 +109,8 @@ export async function journalExpansion(journalExpansionId: number): Promise<Jour
  *
  * @returns A promise that resolves to an object representing a list of journal expansions.
  */
-export async function journalEncounters(): Promise<JournalEncounters> {
-    return await request({
+export async function journalEncounters(ctx: ApiContext): Promise<JournalEncounters> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/journal-encounter/index",
         namespace: "static",
@@ -123,8 +123,8 @@ export async function journalEncounters(): Promise<JournalEncounters> {
  * @param journalEncounterId - The unique identifier for the journal encounter.
  * @returns A promise that resolves to an object representing details about a journal encounter.
  */
-export async function journalEncounter(journalEncounterId: number): Promise<JournalEncounter> {
-    return await request({
+export async function journalEncounter(ctx: ApiContext, journalEncounterId: number): Promise<JournalEncounter> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/journal-encounter/${journalEncounterId}`,
         namespace: "static",
@@ -137,8 +137,8 @@ export async function journalEncounter(journalEncounterId: number): Promise<Jour
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing details about a journal encounter search.
  */
-export async function searchJournalEncounter(searchParameters: SearchParameters): Promise<Search> {
-    return await search("/journal-encounter", "static", searchParameters) as Search;
+export async function searchJournalEncounter(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
+    return await search(ctx, "/journal-encounter", "static", searchParameters) as Search;
 }
 
 /**
@@ -146,8 +146,8 @@ export async function searchJournalEncounter(searchParameters: SearchParameters)
  *
  * @returns A promise that resolves to an object representing a list of journal instances.
  */
-export async function journalInstances(): Promise<JournalInstances> {
-    return await request({
+export async function journalInstances(ctx: ApiContext): Promise<JournalInstances> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/journal-instance/index",
         namespace: "static",
@@ -160,8 +160,8 @@ export async function journalInstances(): Promise<JournalInstances> {
  * @param journalInstanceId - The unique identifier for the journal instances.
  * @returns A promise that resolves to an object representing details about a journal instances.
  */
-export async function journalInstance(journalInstanceId: number): Promise<JournalInstance> {
-    return await request({
+export async function journalInstance(ctx: ApiContext, journalInstanceId: number): Promise<JournalInstance> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/journal-instance/${journalInstanceId}`,
         namespace: "static",
@@ -174,8 +174,8 @@ export async function journalInstance(journalInstanceId: number): Promise<Journa
  * @param journalInstanceId - The unique identifier for the journal instance
  * @returns A promise that resolves to an object representing media details about a journal instance.
  */
-export async function journalInstanceMedia(journalInstanceId: number): Promise<JournalInstanceMedia> {
-    return await request({
+export async function journalInstanceMedia(ctx: ApiContext, journalInstanceId: number): Promise<JournalInstanceMedia> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/media/journal-instance/${journalInstanceId}`,
         namespace: "static",

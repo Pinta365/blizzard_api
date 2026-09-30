@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface PowerTypes extends LinkSelfHref {
@@ -15,8 +15,8 @@ export interface PowerType extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing a list of power types.
  */
-export async function powerTypes(): Promise<PowerTypes> {
-    return await request({
+export async function powerTypes(ctx: ApiContext): Promise<PowerTypes> {
+    return await ctx.request({
         method: "GET",
         url: "/data/wow/power-type/index",
         namespace: "static",
@@ -29,8 +29,8 @@ export async function powerTypes(): Promise<PowerTypes> {
  * @param powerTypeId - The unique identifier for the power type.
  * @returns A promise that resolves to an object representing details about a power type.
  */
-export async function powerType(powerTypeId: number): Promise<PowerType> {
-    return await request({
+export async function powerType(ctx: ApiContext, powerTypeId: number): Promise<PowerType> {
+    return await ctx.request({
         method: "GET",
         url: `/data/wow/power-type/${powerTypeId}`,
         namespace: "static",

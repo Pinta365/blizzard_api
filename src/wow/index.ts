@@ -187,6 +187,18 @@ export { token } from "./game_data/token.ts";
 
 export { characterAchievementStatistics, characterAchievementSummary } from "./profile/character_achievements.ts";
 
+export {
+    accountCollectionsIndex,
+    accountDecorCollection,
+    accountHeirloomsCollection,
+    accountMountsCollection,
+    accountPetsCollection,
+    accountProfileSummary,
+    accountToysCollection,
+    accountTransmogsCollection,
+    protectedCharacterProfile,
+} from "./profile/account_profile.ts";
+
 export { characterAppearanceSummary } from "./profile/character_appearance.ts";
 
 export {

@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface Seasons extends LinkSelfHref {
@@ -96,8 +96,8 @@ export interface Era extends LinkSelfHref {
  *
  * @returns A promise that resolves to an object representing an index of available seasons.
  */
-export async function seasons(): Promise<Seasons> {
-    return await request({
+export async function seasons(ctx: ApiContext): Promise<Seasons> {
+    return await ctx.request({
         method: "GET",
         url: "/data/d3/season/",
     }) as Seasons;
@@ -109,8 +109,8 @@ export async function seasons(): Promise<Seasons> {
  * @param seasonId - The season for the leaderboard list.
  * @returns A promise that resolves to an object representing the data for a league.
  */
-export async function season(seasonId: number): Promise<Season> {
-    return await request({
+export async function season(ctx: ApiContext, seasonId: number): Promise<Season> {
+    return await ctx.request({
         method: "GET",
         url: `/data/d3/season/${seasonId}`,
     }) as Season;
@@ -123,8 +123,12 @@ export async function season(seasonId: number): Promise<Season> {
  * @param leaderboard - The leaderboard to retrieve.
  * @returns A promise that resolves to an object representing the data for a the specified leaderboard for the specified season.
  */
-export async function seasonLeaderboard(seasonId: number, leaderboard: string): Promise<SeasonLeaderboard> {
-    return await request({
+export async function seasonLeaderboard(
+    ctx: ApiContext,
+    seasonId: number,
+    leaderboard: string,
+): Promise<SeasonLeaderboard> {
+    return await ctx.request({
         method: "GET",
         url: `/data/d3/season/${seasonId}/leaderboard/${leaderboard}`,
     }) as SeasonLeaderboard;
@@ -135,8 +139,8 @@ export async function seasonLeaderboard(seasonId: number, leaderboard: string): 
  *
  * @returns A promise that resolves to an object representing an index of available eras.
  */
-export async function eras(): Promise<Eras> {
-    return await request({
+export async function eras(ctx: ApiContext): Promise<Eras> {
+    return await ctx.request({
         method: "GET",
         url: "/data/d3/era/",
     }) as Eras;
@@ -148,8 +152,8 @@ export async function eras(): Promise<Eras> {
  * @param eraId - The era to retrieve.
  * @returns A promise that resolves to an object representing a leaderboard list for a particular era.
  */
-export async function era(eraId: number): Promise<Era> {
-    return await request({
+export async function era(ctx: ApiContext, eraId: number): Promise<Era> {
+    return await ctx.request({
         method: "GET",
         url: `/data/d3/era/${eraId}`,
     }) as Era;
@@ -162,8 +166,8 @@ export async function era(eraId: number): Promise<Era> {
  * @param leaderboard - The leaderboard to retrieve.
  * @returns A promise that resolves to an object representing the data for a the specified leaderboard for the specified era.
  */
-export async function eraLeaderboard(eraId: number, leaderboard: string): Promise<EraLeaderboard> {
-    return await request({
+export async function eraLeaderboard(ctx: ApiContext, eraId: number, leaderboard: string): Promise<EraLeaderboard> {
+    return await ctx.request({
         method: "GET",
         url: `/data/d3/era/${eraId}/leaderboard/${leaderboard}`,
     }) as EraLeaderboard;

@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { Character, KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface Href {
@@ -77,10 +77,11 @@ export interface CharacterCollectionDecor extends LinkSelfHref {
  * @returns A promise that resolves to an object representing details about collection types for a character.
  */
 export async function characterCollectionTypes(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterCollectionTypes> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections`,
         namespace: "profile",
@@ -95,10 +96,11 @@ export async function characterCollectionTypes(
  * @returns A promise that resolves to an object representing details about mounts a character has obtained.
  */
 export async function characterCollectionMounts(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterCollectionMounts> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/mounts`,
         namespace: "profile",
@@ -113,10 +115,11 @@ export async function characterCollectionMounts(
  * @returns A promise that resolves to an object representing details about pets a character has obtained.
  */
 export async function characterCollectionPets(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterCollectionPets> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/pets`,
         namespace: "profile",
@@ -131,10 +134,11 @@ export async function characterCollectionPets(
  * @returns A promise that resolves to an object representing details about toys a character has obtained.
  */
 export async function characterCollectionToys(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterCollectionToys> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/toys`,
         namespace: "profile",
@@ -149,10 +153,11 @@ export async function characterCollectionToys(
  * @returns A promise that resolves to an object representing details about heirlooms a character has obtained.
  */
 export async function characterCollectionHeirlooms(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterCollectionHeirlooms> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/heirlooms`,
         namespace: "profile",
@@ -167,10 +172,11 @@ export async function characterCollectionHeirlooms(
  * @returns A promise that resolves to an object representing details about decor a character has collected.
  */
 export async function characterCollectionDecor(
+    ctx: ApiContext,
     realmSlug: string,
     characterName: string,
 ): Promise<CharacterCollectionDecor> {
-    return await request({
+    return await ctx.request({
         method: "GET",
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/decor`,
         namespace: "profile",

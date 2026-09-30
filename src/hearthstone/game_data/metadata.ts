@@ -1,4 +1,4 @@
-import { request } from "../../shared/index.ts";
+import type { ApiContext } from "../../shared/index.ts";
 import type { LocalizedString } from "../../shared/index.ts";
 
 export interface Metadata {
@@ -94,8 +94,8 @@ type MetaTypes = "sets" | "setGroups" | "types" | "rarities" | "classes" | "mini
  *
  * @returns A promise that resolves to an object representing the Metadata.
  */
-export async function metadata(type: MetaTypes): Promise<Partial<Metadata>> {
-    return await request({
+export async function metadata(ctx: ApiContext, type: MetaTypes): Promise<Partial<Metadata>> {
+    return await ctx.request({
         method: "GET",
         url: `/hearthstone/metadata/${type}`,
     }) as Metadata;
