@@ -659,6 +659,70 @@ function buildEraCases(): Case[] {
     ];
 }
 
+interface DiabloIds {
+    battleTag: string;
+    heroId: number;
+}
+
+function getDiabloIds(): Promise<DiabloIds> {
+    return once("diablo3.ids", async () => {
+        const seasons = await client.diablo3.seasons();
+        const seasonId = seasons.current_season ?? seasons.service_current_season;
+        const season = await client.diablo3.season(seasonId);
+        let battleTag: string | undefined;
+        for (const board of season.leaderboard) {
+            if (!board.ladder?.href) continue;
+            let leaderboard;
+            try {
+                leaderboard = await client.diablo3.seasonLeaderboard(seasonId, lastSegment(board.ladder.href));
+            } catch {
+                continue;
+            }
+            for (const row of leaderboard.row) {
+                for (const player of row.player) {
+                    const tag = player.data.find((entry) => entry.id === "HeroBattleTag")?.string;
+                    if (tag) {
+                        battleTag = tag;
+                        break;
+                    }
+                }
+                if (battleTag) break;
+            }
+            if (battleTag) break;
+        }
+        if (!battleTag) throw new SkipError("could not discover a Diablo III battle tag from the season leaderboards");
+        const account = await client.diablo3.account(battleTag);
+        const character = account.heroes[0];
+        if (!character) throw new SkipError("the Diablo III account has no heroes");
+        return { battleTag, heroId: character.id };
+    });
+}
+
+interface Sc2Ids {
+    regionId: number;
+    realmId: number;
+    profileId: number;
+}
+
+function getSc2Ids(): Promise<Sc2Ids> {
+    return once("sc2.ids", async () => {
+        const regionId = 2;
+        const leaderboard = await client.sc2.grandmasterLeaderboard(regionId);
+        const member = leaderboard.ladderTeams[0]?.teamMembers[0];
+        if (!member) throw new SkipError("no StarCraft II grandmaster ladder teams for region 2");
+        return { regionId, realmId: member.realm, profileId: Number(member.id) };
+    });
+}
+
+function getSc2LadderId(ids: Sc2Ids): Promise<string> {
+    return once("sc2.ladderId", async () => {
+        const summary = await client.sc2.ladderSummary(ids.regionId, ids.realmId, ids.profileId);
+        const entry = summary.showCaseEntries[0];
+        if (!entry) throw new SkipError("no StarCraft II showcase ladder entries for the profile");
+        return entry.ladderId;
+    });
+}
+
 function buildCases(): Case[] {
     return [
         // ----- wow: game data ------------------------------------------------
@@ -1100,13 +1164,57 @@ function buildCases(): Case[] {
             return await client.hearthstone.fetchCardback(cardback);
         }),
         c("hearthstone.metadata", () => client.hearthstone.metadata("sets")),
-        skipped(
-            "hearthstone.fetchDeck",
-            "skipped: needs a deck code or card ids (not discoverable from the API)",
-        ),
+        c("hearthstone.fetchDeck", async () => {
+            // Build a deck from card ids, then round-trip it through its deck code.
+            const found = await client.hearthstone.searchCards({
+                searchFields: { class: "mage", collectible: 1, type: "minion" },
+                pageSize: 5,
+            }) as unknown as { cards: { id: number }[] };
+            const ids = found.cards.map((card) => card.id).join(",");
+            const deck = await client.hearthstone.fetchDeck({ ids, hero: "637" });
+            return await client.hearthstone.fetchDeck({ code: deck.deckCode });
+        }),
 
         // ----- starcraft 2 ---------------------------------------------------
         c("sc2.leagueData", () => client.sc2.leagueData(37, 201, 0, 0)),
+        c("sc2.staticProfile", () => client.sc2.staticProfile(2)),
+        c("sc2.metadataProfile", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.metadataProfile(ids.regionId, ids.realmId, ids.profileId);
+        }),
+        c("sc2.profile", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.profile(ids.regionId, ids.realmId, ids.profileId);
+        }),
+        c("sc2.ladderSummary", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.ladderSummary(ids.regionId, ids.realmId, ids.profileId);
+        }),
+        c("sc2.ladder", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.ladder(ids.regionId, ids.realmId, ids.profileId, await getSc2LadderId(ids));
+        }),
+        c("sc2.grandmasterLeaderboard", () => client.sc2.grandmasterLeaderboard(2)),
+        c("sc2.season", () => client.sc2.season(2)),
+        c("sc2.player", () => client.sc2.player(12345)),
+        c("sc2.legacyProfile", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.legacyProfile(ids.regionId, ids.realmId, ids.profileId);
+        }),
+        c("sc2.legacyLadders", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.legacyLadders(ids.regionId, ids.realmId, ids.profileId);
+        }),
+        c("sc2.legacyMatches", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.legacyMatches(ids.regionId, ids.realmId, ids.profileId);
+        }),
+        c("sc2.legacyLadder", async () => {
+            const ids = await getSc2Ids();
+            return await client.sc2.legacyLadder(ids.regionId, await getSc2LadderId(ids));
+        }),
+        c("sc2.legacyAchievements", () => client.sc2.legacyAchievements(2)),
+        c("sc2.legacyRewards", () => client.sc2.legacyRewards(2)),
 
         // ----- diablo 3 ------------------------------------------------------
         c("diablo3.seasons", () => client.diablo3.seasons()),
@@ -1166,6 +1274,19 @@ function buildCases(): Case[] {
         }),
         // Chaining from the item-type index can land on items the API 500s on (e.g. Ethereals), so use the documented example.
         c("diablo3.item", () => client.diablo3.item("corrupted-ashbringer-Unique_Sword_2H_104_x1")),
+        c("diablo3.account", async () => await client.diablo3.account((await getDiabloIds()).battleTag)),
+        c("diablo3.hero", async () => {
+            const ids = await getDiabloIds();
+            return await client.diablo3.hero(ids.battleTag, ids.heroId);
+        }),
+        c("diablo3.heroItems", async () => {
+            const ids = await getDiabloIds();
+            return await client.diablo3.heroItems(ids.battleTag, ids.heroId);
+        }),
+        c("diablo3.heroFollowerItems", async () => {
+            const ids = await getDiabloIds();
+            return await client.diablo3.heroFollowerItems(ids.battleTag, ids.heroId);
+        }),
 
         // ----- wow: user-token account profile (client.forUser) ---------------
         userCase("wow.accountProfileSummary", () => requireUserClient().wow.accountProfileSummary()),

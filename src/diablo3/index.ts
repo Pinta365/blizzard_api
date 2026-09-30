@@ -6,4 +6,4 @@ export { follower } from "./community/follower.ts";
 export { heroClass, heroSkill } from "./community/hero.ts";
 export { itemType, itemTypes } from "./community/item_type.ts";
 export { item } from "./community/item.ts";
-//export {} from "./game_data/profile.ts";
+export { account, hero, heroFollowerItems, heroItems } from "./community/profile.ts";
