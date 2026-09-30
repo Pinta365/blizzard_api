@@ -5,36 +5,38 @@
 import type { ApiContext } from "../../shared/index.ts";
 
 import { search } from "../search.ts";
-import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { LinkSelfHref, NamedRef } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
 
 // Decor
 export interface Decors extends LinkSelfHref {
-    decor_items: KeyNameId[];
+    decor_items: NamedRef[];
 }
 
 export interface Decor extends LinkSelfHref {
     id: number;
-    /** Reference to the in-game item. */
-    items: KeyNameId;
-    name: LocalizedString;
+    name: string;
+    /** Reference to the in-game item (a single item despite the plural name). */
+    items: NamedRef;
+    /** How many of this decor a new collection starts with. */
+    default_collection_count: number;
 }
 
 // Fixture
 export interface Fixtures extends LinkSelfHref {
-    fixtures: KeyNameId[];
+    fixtures: NamedRef[];
 }
 
 export interface Fixture extends LinkSelfHref {
     id: number;
-    name: LocalizedString;
-    /** Fixture hooks (e.g. Door, Window) on this fixture. */
-    hooks: KeyNameId[];
+    name: string;
+    /** Fixture hooks (e.g. Door, Window) on this fixture. Absent when the fixture has none. */
+    hooks?: NamedRef[];
 }
 
 // Fixture Hook
 export interface FixtureHooks extends LinkSelfHref {
-    fixture_hooks: KeyNameId[];
+    fixture_hooks: NamedRef[];
 }
 
 export interface FixtureHook extends LinkSelfHref {
@@ -42,17 +44,17 @@ export interface FixtureHook extends LinkSelfHref {
     /** Hook type (e.g. "Door", "Window"). */
     type_name: string;
     /** Parent fixture this hook belongs to. */
-    parent_fixture: KeyNameId;
+    parent_fixture: NamedRef;
 }
 
 // Room
 export interface Rooms extends LinkSelfHref {
-    rooms: KeyNameId[];
+    rooms: NamedRef[];
 }
 
 export interface Room extends LinkSelfHref {
     id: number;
-    name: LocalizedString;
+    name: string;
 }
 
 /**

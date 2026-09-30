@@ -1,5 +1,13 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Character, KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
+import type {
+    Character,
+    Href as SharedHref,
+    KeyId,
+    KeyNameId,
+    LinkSelfHref,
+    NamedRef,
+    TypeName,
+} from "../../shared/index.ts";
 
 export interface Href {
     href: string;
@@ -11,6 +19,8 @@ export interface CharacterCollectionTypes extends LinkSelfHref {
     heirlooms: Href;
     toys: Href;
     character: Character;
+    transmogs: Href;
+    decors?: Href;
 }
 
 export interface Mount {
@@ -62,11 +72,27 @@ export interface CharacterCollectionHeirlooms extends LinkSelfHref {
 }
 
 export interface DecorItem {
-    decor: KeyNameId;
+    decor: NamedRef;
+    /** How many of this decor are owned. */
+    quantity: number;
 }
 
 export interface CharacterCollectionDecor extends LinkSelfHref {
-    decors: DecorItem[];
+    decor_collected: DecorItem[];
+}
+
+export interface TransmogrifiedSlot {
+    slot: {
+        type: string;
+        name: string;
+    };
+    appearances: KeyId[];
+}
+
+export interface CharacterCollectionTransmogs {
+    "_links": { self: SharedHref };
+    appearance_sets: NamedRef[];
+    slots: TransmogrifiedSlot[];
 }
 
 /**
@@ -181,4 +207,23 @@ export async function characterCollectionDecor(
         url: `/profile/wow/character/${realmSlug}/${characterName}/collections/decor`,
         namespace: "profile",
     }) as CharacterCollectionDecor;
+}
+
+/**
+ * Returns a summary of the transmog appearances a character has obtained.
+ *
+ * @param realmSlug - The slug of the realm.
+ * @param characterName - The lowercase name of the character.
+ * @returns A promise that resolves to an object representing details about transmog appearances a character has collected.
+ */
+export async function characterCollectionTransmogs(
+    ctx: ApiContext,
+    realmSlug: string,
+    characterName: string,
+): Promise<CharacterCollectionTransmogs> {
+    return await ctx.request({
+        method: "GET",
+        url: `/profile/wow/character/${realmSlug}/${characterName}/collections/transmogs`,
+        namespace: "profile",
+    }) as CharacterCollectionTransmogs;
 }

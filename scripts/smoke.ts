@@ -484,7 +484,21 @@ function buildCases(): Case[] {
         }),
         c("wow.item", () => client.wow.item(ITEM_ID)),
         c("wow.itemMedia", () => client.wow.itemMedia(ITEM_ID)),
+        c("wow.itemAppearance", async () => {
+            const slot = await client.wow.itemAppearanceSlot("HEAD");
+            const appearance = slot.appearances[0];
+            if (!appearance) throw new Error("item appearance slot has no appearances");
+            return await client.wow.itemAppearance(appearance.id);
+        }),
+        c("wow.itemAppearanceSets", () => client.wow.itemAppearanceSets()),
+        c(
+            "wow.itemAppearanceSet",
+            detail("wow.itemAppearanceSets", () => client.wow.itemAppearanceSets(), client.wow.itemAppearanceSet),
+        ),
+        c("wow.itemAppearanceSlots", () => client.wow.itemAppearanceSlots()),
+        c("wow.itemAppearanceSlot", () => client.wow.itemAppearanceSlot("HEAD")),
         c("wow.searchItem", () => client.wow.searchItem({ pageSize: 1 })),
+        c("wow.searchItemAppearance", () => client.wow.searchItemAppearance({ pageSize: 1 })),
         c("wow.searchMedia", () => client.wow.searchMedia({ pageSize: 1 })),
         c("wow.journalExpansions", () => client.wow.journalExpansions()),
         c(
@@ -731,6 +745,11 @@ function buildCases(): Case[] {
         c(
             "wow.characterCollectionDecor",
             () => profileCall(client.wow.characterCollectionDecor),
+            "character-dependent",
+        ),
+        c(
+            "wow.characterCollectionTransmogs",
+            () => profileCall(client.wow.characterCollectionTransmogs),
             "character-dependent",
         ),
         c("wow.characterEncounters", () => profileCall(client.wow.characterEncounters)),

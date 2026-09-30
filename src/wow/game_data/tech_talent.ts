@@ -16,6 +16,7 @@ export interface TechTalentTrees extends LinkSelfHref {
 export interface TechTalentTree extends LinkSelfHref {
     id: number;
     max_tiers: number;
+    playable_class: KeyNameId;
     talents: KeyNameId[];
 }
 

@@ -90,6 +90,16 @@ export interface KeyNameId {
 }
 
 /**
+ * Represents a reference to another resource: a key (link), a name and an ID.
+ * The name is a string when a locale is configured.
+ */
+export interface NamedRef {
+    key: Href;
+    name: string;
+    id: number;
+}
+
+/**
  * Represents an object with a key (link) and LocalizedString name.
  */
 export interface KeyName {

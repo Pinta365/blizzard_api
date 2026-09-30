@@ -10,6 +10,7 @@ export interface Regions extends LinkSelfHref {
 export interface Region extends LinkSelfHref {
     id: number;
     name: LocalizedString;
+    patch_string: string;
     tag: string;
 }
 

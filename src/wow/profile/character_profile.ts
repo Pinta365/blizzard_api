@@ -51,6 +51,7 @@ export interface CharacterProfile extends LinkSelfHref {
         soulbinds: Href;
     };
     name_search: string;
+    is_remix: boolean;
 }
 
 export interface CharacterProfileStatus extends LinkSelfHref {

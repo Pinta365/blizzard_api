@@ -14,6 +14,7 @@ export interface PvpSeason extends LinkSelfHref {
     rewards: {
         href: string;
     };
+    season_name: string;
     season_start_timestamp: number;
     season_end_timestamp: number;
 }

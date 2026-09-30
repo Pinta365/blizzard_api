@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Character, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { Character, KeyNameId, LinkSelfHref, LocalizedString, NamedRef } from "../../shared/index.ts";
 
 export interface Detail {
     talent: KeyNameId;
@@ -36,6 +36,7 @@ export interface CharacterSpecializations extends LinkSelfHref {
         }[];
     }[];
     active_specialization: KeyNameId;
+    active_hero_talent_tree: NamedRef;
     character: Character;
 }
 

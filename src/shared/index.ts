@@ -12,6 +12,7 @@ export type {
     LinkSelfHref,
     Locales,
     LocalizedString,
+    NamedRef,
     NameId,
     Namespaces,
     Regions,

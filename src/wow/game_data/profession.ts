@@ -33,6 +33,7 @@ export interface ProfessionSkillTier extends LinkSelfHref {
 export interface ProfessionRecipie extends LinkSelfHref {
     id: number;
     name: LocalizedString;
+    rank: number;
     media: KeyId;
     crafted_item: KeyNameId;
     reagents: {

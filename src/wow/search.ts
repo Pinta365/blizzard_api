@@ -13,6 +13,7 @@ export interface Search {
     pageSize: number;
     maxPageSize: number;
     pageCount: number;
+    resultCountCapped?: boolean;
     results: unknown[]; // Depends on the search.
 }
 

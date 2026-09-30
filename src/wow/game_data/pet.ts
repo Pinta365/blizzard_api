@@ -28,6 +28,7 @@ export interface Pet extends LinkSelfHref {
     icon: string;
     creature: KeyNameId;
     is_random_creature_display: boolean;
+    should_exclude_if_uncollected: boolean;
     media: KeyId;
 }
 

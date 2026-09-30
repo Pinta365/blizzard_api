@@ -6,10 +6,12 @@
 
 import type { ApiContext } from "../../shared/index.ts";
 
-import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, NamedRef } from "../../shared/index.ts";
 
 export interface AchievementCategories extends LinkSelfHref {
     categories: KeyNameId[];
+    root_categories: NamedRef[];
+    guild_categories: NamedRef[];
 }
 
 export interface AggregatesByFaction {

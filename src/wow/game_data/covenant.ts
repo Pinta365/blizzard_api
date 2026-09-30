@@ -1,5 +1,14 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Asset, KeyNameId, LinkSelfHref, LocalizedString, NameId, TypeName } from "../../shared/index.ts";
+import type {
+    Asset,
+    KeyId,
+    KeyNameId,
+    LinkSelfHref,
+    LocalizedString,
+    NamedRef,
+    NameId,
+    TypeName,
+} from "../../shared/index.ts";
 
 export interface Covenants extends LinkSelfHref {
     covenants: KeyNameId[];
@@ -31,6 +40,11 @@ export interface Covenant extends LinkSelfHref {
     description: LocalizedString;
     signature_ability: SignatureAbility;
     class_abilities: ClassAbility[];
+    renown_rewards: {
+        level: number;
+        reward: NamedRef;
+    }[];
+    media: KeyId;
 }
 
 export interface CovenantMedia extends LinkSelfHref {

@@ -1,6 +1,15 @@
 import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
-import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId, TypeName } from "../../shared/index.ts";
+import type {
+    Asset,
+    KeyId,
+    KeyNameId,
+    LinkSelfHref,
+    LocalizedString,
+    NamedRef,
+    NameId,
+    TypeName,
+} from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
 
 export interface JournalExpansions extends LinkSelfHref {
@@ -12,6 +21,7 @@ export interface JournalExpansion extends LinkSelfHref {
     name: LocalizedString;
     dungeons: KeyNameId[];
     raids: KeyNameId[];
+    world_bosses: NamedRef[];
 }
 
 export interface JournalEncounters extends LinkSelfHref {
@@ -68,6 +78,7 @@ export interface JournalInstance extends LinkSelfHref {
     }[];
     media: KeyId;
     minimum_level: number;
+    order_index: number;
     category: {
         type: string;
     };

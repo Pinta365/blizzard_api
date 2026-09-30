@@ -109,7 +109,7 @@ export interface AccountTransmogsCollection extends LinkSelfHref {
 }
 
 export interface AccountDecorCollection extends LinkSelfHref {
-    decors: DecorItem[];
+    decor_collected: DecorItem[];
 }
 
 /**

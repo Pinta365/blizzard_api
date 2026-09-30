@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type { KeyNameId, LinkSelfHref, LocalizedString, NamedRef, TypeName } from "../../shared/index.ts";
 
 export interface PlayableRaces extends LinkSelfHref {
     races: KeyNameId[];
@@ -16,6 +16,7 @@ export interface PlayableRace extends LinkSelfHref {
     is_selectable: boolean;
     is_allied_race: boolean;
     playable_classes: KeyNameId[];
+    racial_spells: NamedRef[];
 }
 
 /**

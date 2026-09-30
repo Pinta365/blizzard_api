@@ -17,7 +17,12 @@ export interface MythicKeystoneDungeon extends LinkSelfHref {
         upgrade_level: number;
         qualifying_duration: number;
     }[];
+    keystone_upgrades: {
+        upgrade_level: number;
+        qualifying_duration: number;
+    }[];
     is_traacked: boolean;
+    is_tracked: boolean;
 }
 
 export interface MythicKeystoneIndex extends LinkSelfHref {

@@ -1,9 +1,10 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { KeyName, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { KeyId, KeyName, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface TalentTrees extends LinkSelfHref {
     spec_talent_trees: KeyNameId;
     class_talent_trees: KeyName;
+    hero_talent_trees: KeyNameId[];
 }
 
 export interface SpellTooltip {
@@ -42,6 +43,13 @@ export interface TalentNode {
     raw_position_y: number;
 }
 
+export interface HeroTalentTree {
+    id: number;
+    name: string;
+    media: KeyId;
+    hero_talent_nodes: TalentNode[];
+}
+
 export interface TalentTree extends LinkSelfHref {
     id: number;
     playable_class: KeyNameId;
@@ -58,6 +66,8 @@ export interface TalentTree extends LinkSelfHref {
         is_for_class: boolean;
     }[];
     class_talent_nodes: TalentNode[];
+    spec_talent_nodes: TalentNode[];
+    hero_talent_trees: HeroTalentTree[];
 }
 
 export interface TalentTreeNodes extends LinkSelfHref {

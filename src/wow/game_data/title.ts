@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { KeyNameId, LinkSelfHref, LocalizedString, NamedRef } from "../../shared/index.ts";
 
 export interface Titles extends LinkSelfHref {
     titles: KeyNameId[];
@@ -11,6 +11,13 @@ export interface Title extends LinkSelfHref {
     gender_name: {
         male: LocalizedString;
         female: LocalizedString;
+    };
+    source: {
+        type: {
+            type: string;
+            name: string;
+        };
+        achievements: NamedRef[];
     };
 }
 

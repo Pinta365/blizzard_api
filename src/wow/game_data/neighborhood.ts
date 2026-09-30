@@ -4,21 +4,21 @@
 
 import type { ApiContext } from "../../shared/index.ts";
 
-import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { LinkSelfHref, NamedRef } from "../../shared/index.ts";
 
 export interface NeighborhoodMaps extends LinkSelfHref {
-    maps: KeyNameId[];
+    maps: NamedRef[];
 }
 
 export interface NeighborhoodMap extends LinkSelfHref {
     id: number;
-    name: LocalizedString;
+    name: string;
 }
 
 export interface Neighborhood extends LinkSelfHref {
     id: number;
     /** The neighborhood map this neighborhood belongs to. */
-    neighborhood_map: KeyNameId;
+    neighborhood_map: NamedRef;
     /** Plot/address identifier (e.g. "63-74-67"). */
     neighborhood_name: string;
 }

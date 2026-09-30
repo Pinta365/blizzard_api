@@ -73,6 +73,15 @@ export {
     searchItem,
 } from "./game_data/item.ts";
 
+export {
+    itemAppearance,
+    itemAppearanceSet,
+    itemAppearanceSets,
+    itemAppearanceSlot,
+    itemAppearanceSlots,
+    searchItemAppearance,
+} from "./game_data/item_appearance.ts";
+
 export { searchMedia } from "./game_data/media_search.ts";
 
 export {
@@ -207,6 +216,7 @@ export {
     characterCollectionMounts,
     characterCollectionPets,
     characterCollectionToys,
+    characterCollectionTransmogs,
     characterCollectionTypes,
 } from "./profile/character_collections.ts";
 

@@ -1,6 +1,6 @@
 import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
-import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString, NamedRef, TypeName } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
 
 export interface ItemClasses extends LinkSelfHref {
@@ -29,9 +29,12 @@ export interface ItemSet extends LinkSelfHref {
 }
 
 export interface ItemSubclass extends LinkSelfHref {
+    id: number;
     class_id: number;
     subclass_id: number;
+    item_class: NamedRef;
     display_name: LocalizedString;
+    verbose_name: string;
     hide_subclass_in_tooltips?: boolean;
 }
 
@@ -112,6 +115,7 @@ export interface Item extends LinkSelfHref {
         };
     };
     purchase_quantity: number;
+    appearances: KeyId[];
 }
 
 export interface ItemMedia extends LinkSelfHref {
