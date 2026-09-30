@@ -94,7 +94,7 @@ export {
     modifiedCraftingSlotTypes,
 } from "./game_data/modified_crafting.ts";
 
-export { mount, mounts } from "./game_data/mount.ts";
+export { mount, mounts, searchMount } from "./game_data/mount.ts";
 
 export { keystoneAffix, keystoneAffixes, keystoneAffixMedia } from "./game_data/keystone_affix.ts";
 

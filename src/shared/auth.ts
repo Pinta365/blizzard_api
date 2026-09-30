@@ -23,6 +23,11 @@ interface TokenResponse {
 }
 
 /**
+ * Renew the token this long before it actually expires, so in-flight requests don't race the expiry.
+ */
+const TOKEN_EXPIRY_MARGIN_MS = 60_000;
+
+/**
  * Global storage for authentication configuration data.
  */
 const authConfig: AuthConfig = {
@@ -78,7 +83,7 @@ export async function authenticate(forceNewToken = false): Promise<string> {
 
     if (
         !forceNewToken && authConfig.accessToken && authConfig.tokenExpiration &&
-        new Date() < new Date(authConfig.tokenExpiration)
+        Date.now() < authConfig.tokenExpiration - TOKEN_EXPIRY_MARGIN_MS
     ) {
         return authConfig.accessToken;
     }

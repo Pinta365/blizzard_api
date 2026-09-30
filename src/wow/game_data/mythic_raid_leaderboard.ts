@@ -26,11 +26,14 @@ export interface MythicRaidLeaderboard extends LinkSelfHref {
 /**
  * Returns the leaderboard for a given raid and faction.
  *
- * @param raid - The unique identifier for the raid
- * @param faction - The unique identifier for the faction
+ * @param raid - The slug of the raid (e.g. "uldir", "nyalotha-the-waking-city").
+ * @param faction - The faction, "alliance" or "horde".
  * @returns A promise that resolves to an object representing the leaderboard for a given raid and faction.
  */
-export async function mythicRaidLeaderboard(raid: number, faction: number): Promise<MythicRaidLeaderboard> {
+export async function mythicRaidLeaderboard(
+    raid: string,
+    faction: "alliance" | "horde",
+): Promise<MythicRaidLeaderboard> {
     return await request({
         method: "GET",
         url: `/data/wow/leaderboard/hall-of-fame/${raid}/${faction}`,

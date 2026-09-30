@@ -1,5 +1,7 @@
 import { request } from "../../shared/index.ts";
+import { search } from "../search.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type { Search, SearchParameters } from "../search.ts";
 
 export interface Mounts extends LinkSelfHref {
     mounts: KeyNameId[];
@@ -45,7 +47,12 @@ export async function mount(mountId: number): Promise<Mount> {
     }) as Mount;
 }
 
-export function searchMount() {
-    //TODO: Placeholder for the mount Search, will probably be using ./search.ts
-    throw new Error("Not implemented yet!");
+/**
+ * Performs a search of mounts.
+ *
+ * @param searchParameters - Object containing search parameters.
+ * @returns A promise that resolves to an object representing details about a mount search.
+ */
+export async function searchMount(searchParameters: SearchParameters): Promise<Search> {
+    return await search("/mount", "static", searchParameters) as Search;
 }

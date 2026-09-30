@@ -1,4 +1,4 @@
-import { KeyNameId, LinkSelfHref, LocalizedString, request, TypeName } from "../../shared/index.ts";
+import { type KeyNameId, type LinkSelfHref, type LocalizedString, request, type TypeName } from "../../shared/index.ts";
 
 export interface Href {
     href: string;

@@ -23,12 +23,8 @@ interface BlizzardAPIErrorResponse {
  * @throws {AuthenticationError} (Potentially) If authentication fails during the process.
  */
 export async function request(requestOptions: RequestOptions) {
-    if (
-        !getauthConfig().accessToken || (getauthConfig().accessToken && getauthConfig().tokenExpiration &&
-            new Date() < new Date(getauthConfig().tokenExpiration))
-    ) {
-        await authenticate(true);
-    }
+    // Reuses the cached token while it is valid; fetches a new one otherwise.
+    await authenticate();
 
     const { method, url, namespace } = requestOptions;
     let { qs } = requestOptions;
@@ -92,12 +88,8 @@ export async function request(requestOptions: RequestOptions) {
  * @throws {AuthenticationError} (Potentially) If authentication fails during the process.
  */
 export async function requestHref(href: string, qs?: Record<string, string | number>): Promise<unknown> {
-    if (
-        !getauthConfig().accessToken || (getauthConfig().accessToken && getauthConfig().tokenExpiration &&
-            new Date() < new Date(getauthConfig().tokenExpiration))
-    ) {
-        await authenticate(true);
-    }
+    // Reuses the cached token while it is valid; fetches a new one otherwise.
+    await authenticate();
 
     const url = new URL(href);
 

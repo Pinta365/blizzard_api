@@ -1,5 +1,5 @@
 import { request } from "../../shared/index.ts";
-import type { KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
+import type { Href, KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
 
 export interface PvpSeasons extends LinkSelfHref {
     seasons: KeyId[];
@@ -20,7 +20,8 @@ export interface PvpSeason extends LinkSelfHref {
 
 export interface PvpSeasonLeaderboards extends LinkSelfHref {
     season: KeyId;
-    leaderboards: KeyNameId[];
+    /** Brackets are addressed by `name`; only some (e.g. 2v2, 3v3) carry an `id`. */
+    leaderboards: { key: Href; name: string; id?: number }[];
 }
 
 export interface PvpSeasonLeaderboard extends LinkSelfHref {
@@ -114,10 +115,11 @@ export async function pvpSeasonLeaderboards(pvpSeasonId: number): Promise<PvpSea
  * Returns the PvP leaderboard of a specific PvP bracket for a PvP season.
  *
  * @param pvpSeasonId - The unique identifier for the PvP season.
- * @param pvpBracket - The unique identifier for the PvP bracket.
+ * @param pvpBracket - The name of the PvP bracket (e.g. "2v2", "3v3", "rbg", "shuffle-overall"), as listed by
+ * pvpSeasonLeaderboards().
  * @returns A promise that resolves to an object representing details about the PvP bracket.
  */
-export async function pvpSeasonLeaderboard(pvpSeasonId: number, pvpBracket: number): Promise<PvpSeasonLeaderboard> {
+export async function pvpSeasonLeaderboard(pvpSeasonId: number, pvpBracket: string): Promise<PvpSeasonLeaderboard> {
     return await request({
         method: "GET",
         url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-leaderboard/${pvpBracket}`,
@@ -134,7 +136,7 @@ export async function pvpSeasonLeaderboard(pvpSeasonId: number, pvpBracket: numb
 export async function pvpSeasonRewards(pvpSeasonId: number): Promise<PvpSeasonRewards> {
     return await request({
         method: "GET",
-        url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-leaderboard/index`,
+        url: `/data/wow/pvp-season/${pvpSeasonId}/pvp-reward/index`,
         namespace: "dynamic",
     }) as PvpSeasonRewards;
 }

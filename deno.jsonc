@@ -2,10 +2,17 @@
     "name": "@pinta365/blizzard-api",
     "version": "0.4.0",
     "exports": "./mod.ts",
+    "publish": {
+        "exclude": [".github/", "scripts/", "fixtures/", "PLAN.md"]
+    },
+    "imports": {
+        "@deno/dnt": "jsr:@deno/dnt@^0.43.2"
+    },
 
     "tasks": {
         "build_npm": "deno run -A scripts/build_npm.ts",
-        "publish-dry": "deno publish --dry-run"
+        "publish-dry": "deno publish --dry-run",
+        "smoke": "deno run --env-file=.env -A scripts/smoke.ts"
     },
     "fmt": {
         "lineWidth": 120,

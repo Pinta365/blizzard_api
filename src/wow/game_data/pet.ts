@@ -134,7 +134,7 @@ export async function petAbility(petAbilityId: number): Promise<PetAbility> {
 export async function petAbilityMedia(petAbilityId: number): Promise<PetAbilityMedia> {
     return await request({
         method: "GET",
-        url: `/data/wow/media/pet-ability${petAbilityId}`,
+        url: `/data/wow/media/pet-ability/${petAbilityId}`,
         namespace: "static",
     }) as PetAbilityMedia;
 }

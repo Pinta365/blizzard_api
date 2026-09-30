@@ -3,3 +3,5 @@
 test.ts
 npm/
 deno.lock
+fixtures/
+PLAN.md
