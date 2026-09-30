@@ -12,6 +12,7 @@
 // fixtures/<case>.json.
 
 import { createClient, errors, setup, wow as legacyWow } from "../mod.ts";
+import type { BlizzardClient } from "../mod.ts";
 import type { Locales, Regions } from "../src/shared/types.ts";
 
 const REALM_SLUG = "silvermoon";
@@ -50,6 +51,14 @@ interface Result {
     status: "ok" | "pass" | "failed" | "skipped";
     durationMs: number;
     detail?: string;
+}
+
+/** Thrown by a case when its prerequisites aren't available; counted as skipped, not failed. */
+class SkipError extends Error {
+    constructor(reason: string) {
+        super(reason);
+        this.name = "SkipError";
+    }
 }
 
 function isObject(value: unknown): value is JsonObject {
@@ -376,6 +385,280 @@ function userCase(name: string, fn: () => Promise<unknown>): Case {
     return USER_TOKEN ? { name, fn } : { name, fn: () => Promise.resolve(), skip: "needs BLIZZARD_USER_TOKEN" };
 }
 
+// ---------------------------------------------------------------------------
+// WoW Classic (progression "classic" + Era "classic1x")
+// ---------------------------------------------------------------------------
+
+type SharedClassicApi = Pick<
+    BlizzardClient["wowClassic"],
+    Exclude<
+        keyof BlizzardClient["wowClassic"] & keyof BlizzardClient["wowClassicEra"],
+        // Era returns a different shape for specializations (talent trees, not loadouts).
+        "characterSpecializations"
+    >
+>;
+
+interface ClassicContext {
+    realm: string;
+    name: string;
+    guildRealm: string;
+    guildSlug: string;
+}
+
+function guildFromProfile(profile: { guild?: unknown }): { guildRealm: string; guildSlug: string } | undefined {
+    const guild = profile.guild as unknown as
+        | { key?: { href?: string }; realm?: { slug?: string } }
+        | null;
+    const href = guild?.key?.href;
+    if (!href || !guild?.realm || typeof guild.realm.slug !== "string") return undefined;
+    return { guildRealm: guild.realm.slug, guildSlug: decodeURIComponent(lastSegment(href)) };
+}
+
+function getProgressionContext(): Promise<ClassicContext> {
+    return once("wowClassic.context", async () => {
+        const api = client.wowClassic;
+        const seasons = await api.pvpSeasons();
+        const seasonId = seasons.current_season?.id ?? seasons.seasons[seasons.seasons.length - 1]?.id;
+        if (seasonId === undefined) throw new SkipError("no Classic progression PvP season available");
+        const leaderboards = await api.pvpSeasonLeaderboards(seasonId);
+        let character: { realm: string; name: string } | undefined;
+        for (const board of leaderboards.leaderboards) {
+            let leaderboard;
+            try {
+                leaderboard = await api.pvpSeasonLeaderboard(seasonId, board.name);
+            } catch {
+                continue;
+            }
+            const entry = leaderboard.entries[0];
+            if (!entry) continue;
+            const realm = entry.character.realm.slug;
+            const name = entry.character.name.toLowerCase();
+            character ??= { realm, name };
+            let profile;
+            try {
+                profile = await api.characterProfile(realm, name);
+            } catch {
+                continue;
+            }
+            const guild = guildFromProfile(profile);
+            if (guild) return { realm, name, ...guild };
+        }
+        if (character) return { ...character, guildRealm: character.realm, guildSlug: "" };
+        throw new SkipError("could not discover a Classic progression character from PvP leaderboards");
+    });
+}
+
+function getEraContext(): Promise<ClassicContext> {
+    return once("wowClassicEra.context", async () => {
+        const api = client.wowClassicEra;
+        const realm = "dragonfang";
+        const name = "aragorn";
+        let profile;
+        try {
+            profile = await api.characterProfile(realm, name);
+        } catch {
+            throw new SkipError("could not load the Classic Era reference character");
+        }
+        const guild = guildFromProfile(profile);
+        return guild ? { realm, name, ...guild } : { realm, name, guildRealm: realm, guildSlug: "" };
+    });
+}
+
+function buildSharedClassicCases(
+    label: string,
+    api: SharedClassicApi,
+    getContext: () => Promise<ClassicContext>,
+): Case[] {
+    const key = (name: string) => `${label}.${name}`;
+    const detailCase = (
+        name: string,
+        indexFn: () => Promise<unknown>,
+        fn: (id: number) => Promise<unknown>,
+        arrayKey?: string,
+    ): Case => c(key(name), detail(key(name), indexFn, fn, arrayKey));
+    const profileCase = (
+        name: string,
+        fn: (realm: string, name: string) => Promise<unknown>,
+        allow404?: string,
+    ): Case =>
+        c(key(name), async () => {
+            const ctx = await getContext();
+            return await fn(ctx.realm, ctx.name);
+        }, allow404);
+    const guildCase = (name: string, fn: (realm: string, name: string) => Promise<unknown>): Case =>
+        c(key(name), async () => {
+            const ctx = await getContext();
+            if (!ctx.guildSlug) throw new SkipError("no guild discovered for the reference character");
+            return await fn(ctx.guildRealm, ctx.guildSlug);
+        });
+
+    return [
+        c(key("achievementCategories"), () => api.achievementCategories()),
+        detailCase("achievementCategory", () => api.achievementCategories(), api.achievementCategory),
+        c(key("achievements"), () => api.achievements()),
+        detailCase("achievement", () => api.achievements(), api.achievement),
+        detailCase("achievementMedia", () => api.achievements(), api.achievementMedia),
+        c(key("connectedRealms"), () => api.connectedRealms()),
+        detailCase("connectedRealm", () => api.connectedRealms(), api.connectedRealm),
+        c(key("searchConnectedRealm"), () => api.searchConnectedRealm({ pageSize: 1 })),
+        c(key("creatureFamilies"), () => api.creatureFamilies()),
+        detailCase("creatureFamily", () => api.creatureFamilies(), api.creatureFamily),
+        detailCase("creatureFamilyMedia", () => api.creatureFamilies(), api.creatureFamilyMedia),
+        c(key("creatureTypes"), () => api.creatureTypes()),
+        detailCase("creatureType", () => api.creatureTypes(), api.creatureType),
+        c(key("creature"), async () => await api.creature(searchFirstId(await api.searchCreature({ pageSize: 1 })))),
+        c(key("searchCreature"), () => api.searchCreature({ pageSize: 1 })),
+        c(key("creatureDisplayMedia"), async () => {
+            const creature = await api.creature(searchFirstId(await api.searchCreature({ pageSize: 1 })));
+            const display = creature.creature_displays[0];
+            if (!display) throw new Error("creature has no displays");
+            return await api.creatureDisplayMedia(display.id);
+        }),
+        c(key("guildCrests"), () => api.guildCrests()),
+        detailCase("guildCrestBorder", () => api.guildCrests(), api.guildCrestBorder, "borders"),
+        detailCase("guildCrestEmblem", () => api.guildCrests(), api.guildCrestEmblem, "emblems"),
+        c(key("item"), () => api.item(ITEM_ID)),
+        c(key("itemClasses"), () => api.itemClasses()),
+        detailCase("itemClass", () => api.itemClasses(), api.itemClass),
+        c(key("itemMedia"), () => api.itemMedia(ITEM_ID)),
+        c(key("itemSubclass"), async () => {
+            const classes = await api.itemClasses();
+            const classId = indexId(classes);
+            const cls = await api.itemClass(classId);
+            const subclass = cls.item_subclasses[0];
+            if (!subclass) throw new Error("item class has no subclasses");
+            return await api.itemSubclass(classId, subclass.id);
+        }),
+        c(key("searchItem"), () => api.searchItem({ pageSize: 1 })),
+        c(key("searchMedia"), () => api.searchMedia({ pageSize: 1 })),
+        c(key("playableClasses"), () => api.playableClasses()),
+        detailCase("playableClass", () => api.playableClasses(), api.playableClass),
+        detailCase("playableClassMedia", () => api.playableClasses(), api.playableClassMedia),
+        c(key("playableRaces"), () => api.playableRaces()),
+        detailCase("playableRace", () => api.playableRaces(), api.playableRace),
+        c(key("powerTypes"), () => api.powerTypes()),
+        detailCase("powerType", () => api.powerTypes(), api.powerType),
+        c(key("realms"), () => api.realms()),
+        c(key("realm"), async () => {
+            const realms = await api.realms();
+            const realm = realms.realms[0];
+            if (!realm) throw new Error("no realms available");
+            return await api.realm(realm.slug);
+        }),
+        c(key("searchRealm"), () => api.searchRealm({ pageSize: 1 })),
+        c(key("regions"), () => api.regions()),
+        detailCase("region", () => api.regions(), api.region),
+        profileCase("characterProfile", api.characterProfile),
+        profileCase("characterProfileStatus", api.characterProfileStatus),
+        profileCase("characterAppearanceSummary", api.characterAppearanceSummary),
+        profileCase("characterEquipments", api.characterEquipments),
+        profileCase("characterHunterPets", api.characterHunterPets, "character-dependent"),
+        profileCase("characterMedia", api.characterMedia),
+        profileCase("characterPvpSummary", api.characterPvpSummary),
+        profileCase("characterReputations", api.characterReputations),
+        profileCase("characterStatistics", api.characterStatistics),
+        guildCase("guild", api.guild),
+        guildCase("guildAchievements", api.guildAchievements),
+        guildCase("guildActivity", api.guildActivity),
+        guildCase("guildRoster", api.guildRoster),
+    ];
+}
+
+function buildProgressionCases(getContext: () => Promise<ClassicContext>): Case[] {
+    const api = client.wowClassic;
+    const label = "wowClassic";
+    const key = (name: string) => `${label}.${name}`;
+    const detailCase = (
+        name: string,
+        indexFn: () => Promise<unknown>,
+        fn: (id: number) => Promise<unknown>,
+    ): Case => c(key(name), detail(key(name), indexFn, fn));
+    const connectedRealm = () =>
+        once(key("connectedRealms"), () => api.connectedRealms()).then((source) => indexId(source));
+    const newestPvpSeasonId = () =>
+        once(key("pvpSeasons"), () => api.pvpSeasons()).then((seasons) => {
+            const last = seasons.seasons[seasons.seasons.length - 1];
+            const id = seasons.current_season?.id ?? last?.id;
+            if (id === undefined) throw new SkipError("no Classic progression PvP season available");
+            return id;
+        });
+
+    return [
+        c(key("auctions"), async () => await api.auctions(await connectedRealm())),
+        c(key("commodities"), () => api.commodities()),
+        c(key("mythicKeystonePeriods"), () => api.mythicKeystonePeriods()),
+        detailCase("mythicKeystonePeriod", () => api.mythicKeystonePeriods(), api.mythicKeystonePeriod),
+        c(key("mythicKeystoneSeasons"), () => api.mythicKeystoneSeasons()),
+        detailCase("mythicKeystoneSeason", () => api.mythicKeystoneSeasons(), api.mythicKeystoneSeason),
+        c(key("mythicKeystoneLeaderboards"), async () => await api.mythicKeystoneLeaderboards(await connectedRealm())),
+        c(key("mythicKeystoneLeaderboard"), async () => {
+            const realmId = await connectedRealm();
+            const leaderboards = await api.mythicKeystoneLeaderboards(realmId);
+            const dungeon = leaderboards.current_leaderboards?.[0];
+            if (!dungeon) throw new SkipError("no current Classic progression mythic keystone leaderboards");
+            const periods = await api.mythicKeystonePeriods();
+            return await api.mythicKeystoneLeaderboard(realmId, dungeon.id, periods.current_period.id);
+        }),
+        c(key("playableSpecializations"), () => api.playableSpecializations()),
+        detailCase("playableSpecialization", () => api.playableSpecializations(), api.playableSpecialization),
+        detailCase(
+            "playableSpecializationMedia",
+            () => api.playableSpecializations(),
+            api.playableSpecializationMedia,
+        ),
+        c(key("pvpSeasons"), () => api.pvpSeasons()),
+        c(key("pvpSeason"), async () => await api.pvpSeason(await newestPvpSeasonId())),
+        c(key("pvpSeasonLeaderboards"), async () => await api.pvpSeasonLeaderboards(await newestPvpSeasonId())),
+        c(key("pvpSeasonLeaderboard"), async () => {
+            const seasonId = await newestPvpSeasonId();
+            const leaderboards = await api.pvpSeasonLeaderboards(seasonId);
+            const leaderboard = leaderboards.leaderboards[0];
+            if (!leaderboard) throw new SkipError("no Classic progression PvP leaderboards for the season");
+            return await api.pvpSeasonLeaderboard(seasonId, leaderboard.name);
+        }),
+        c(key("pvpSeasonRewards"), async () => await api.pvpSeasonRewards(await newestPvpSeasonId())),
+        c(key("token"), () => api.token()),
+        c(key("characterSpecializations"), async () => {
+            const ctx = await getContext();
+            return await api.characterSpecializations(ctx.realm, ctx.name);
+        }),
+        c(key("characterAchievementSummary"), async () => {
+            const ctx = await getContext();
+            return await api.characterAchievementSummary(ctx.realm, ctx.name);
+        }, "character-dependent"),
+        c(key("characterAchievementStatistics"), async () => {
+            const ctx = await getContext();
+            return await api.characterAchievementStatistics(ctx.realm, ctx.name);
+        }, "character-dependent"),
+        c(key("characterPvpBracketStatistics"), async () => {
+            const ctx = await getContext();
+            return await api.characterPvpBracketStatistics(ctx.realm, ctx.name, "2v2");
+        }, "character-dependent"),
+    ];
+}
+
+function buildEraCases(): Case[] {
+    const api = client.wowClassicEra;
+    const key = (name: string) => `wowClassicEra.${name}`;
+    const connectedRealm = () =>
+        once(key("connectedRealms"), () => api.connectedRealms()).then((source) => indexId(source));
+
+    return [
+        c(key("auctionHouses"), async () => await api.auctionHouses(await connectedRealm())),
+        c(key("auctionHouse"), async () => {
+            const realmId = await connectedRealm();
+            const houses = await api.auctionHouses(realmId);
+            const house = houses.auctions[0];
+            if (!house) throw new SkipError("no Classic Era auction houses for the connected realm");
+            return await api.auctionHouse(realmId, house.id);
+        }, "known Blizzard issue: Classic Era auction houses"),
+        c(key("characterSpecializations"), async () => {
+            const ctx = await getEraContext();
+            return await api.characterSpecializations(ctx.realm, ctx.name);
+        }),
+    ];
+}
+
 function buildCases(): Case[] {
     return [
         // ----- wow: game data ------------------------------------------------
@@ -627,6 +910,15 @@ function buildCases(): Case[] {
                 client.wow.playableClassPvpTalentSlots,
             ),
         ),
+        c("wow.playableSpecializations", () => client.wow.playableSpecializations()),
+        c("wow.playableSpecialization", async () => {
+            const index = await client.wow.playableSpecializations();
+            return await client.wow.playableSpecialization(index.character_specializations[0].id);
+        }),
+        c("wow.playableSpecializationMedia", async () => {
+            const index = await client.wow.playableSpecializations();
+            return await client.wow.playableSpecializationMedia(index.character_specializations[0].id);
+        }),
         c("wow.playableRaces", () => client.wow.playableRaces()),
         c("wow.playableRace", detail("wow.playableRaces", () => client.wow.playableRaces(), client.wow.playableRace)),
         c("wow.powerTypes", () => client.wow.powerTypes()),
@@ -790,15 +1082,11 @@ function buildCases(): Case[] {
         c("wow.guildAchievements", () => guildCall(client.wow.guildAchievements)),
         c("wow.guildRoster", () => guildCall(client.wow.guildRoster)),
 
-        // ----- wow classic ---------------------------------------------------
-        c("wowClassic.realms", () => client.wowClassic.realms()),
-        c("wowClassic.realm", async () => {
-            const realms = await client.wowClassic.realms();
-            const realm = realms.realms[0];
-            if (!realm) throw new Error("no classic realms available");
-            return await client.wowClassic.realm(realm.slug);
-        }),
-        c("wowClassic.searchRealm", () => client.wowClassic.searchRealm({ pageSize: 1 })),
+        // ----- wow classic (progression + Era) -------------------------------
+        ...buildSharedClassicCases("wowClassic", client.wowClassic, getProgressionContext),
+        ...buildProgressionCases(getProgressionContext),
+        ...buildSharedClassicCases("wowClassicEra", client.wowClassicEra, getEraContext),
+        ...buildEraCases(),
 
         // ----- hearthstone ---------------------------------------------------
         c("hearthstone.searchCards", () => client.hearthstone.searchCards({ pageSize: 1 })),
@@ -933,6 +1221,9 @@ async function runCase(testCase: Case): Promise<Result> {
         return { name: testCase.name, status: "ok", durationMs: performance.now() - start };
     } catch (error) {
         const durationMs = performance.now() - start;
+        if (error instanceof SkipError) {
+            return { name: testCase.name, status: "skipped", durationMs, detail: error.message };
+        }
         if (error instanceof errors.APIError) {
             if (error.statusCode === 404 && testCase.allow404) {
                 return { name: testCase.name, status: "pass", durationMs, detail: `PASS* ${testCase.allow404}` };

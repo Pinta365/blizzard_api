@@ -1,13 +1,25 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Asset, KeyId, KeyName, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type {
+    Asset,
+    KeyId,
+    KeyName,
+    KeyNameId,
+    LinkSelfHref,
+    LocalizedString,
+    NamedRef,
+    TypeName,
+} from "../../shared/index.ts";
 
 export interface PlayableSpecializations extends LinkSelfHref {
-    character_specializations: KeyNameId;
+    character_specializations: NamedRef[];
+    pet_specializations: NamedRef[];
 }
 
 export interface PlayableSpecialization {
     id: number;
     playable_class: KeyNameId;
+    /** Hero talent trees available to this specialization (Retail). */
+    hero_talent_trees?: NamedRef[];
     name: LocalizedString;
     gender_description: {
         male: LocalizedString;

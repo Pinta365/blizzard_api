@@ -15,11 +15,27 @@
 import { ApiContext, assertConfig } from "./src/shared/index.ts";
 import type { AuthConfig, ClientConfig } from "./src/shared/index.ts";
 import { clientFromContext } from "./src/client.ts";
-import type { BlizzardClient, Diablo3Api, HearthstoneApi, Sc2Api, WowApi, WowClassicApi } from "./src/client.ts";
+import type {
+    BlizzardClient,
+    Diablo3Api,
+    HearthstoneApi,
+    Sc2Api,
+    WowApi,
+    WowClassicApi,
+    WowClassicEraApi,
+} from "./src/client.ts";
 import * as errors from "./src/shared/errors.ts";
 
 export { createClient } from "./src/client.ts";
-export type { BlizzardClient, Diablo3Api, HearthstoneApi, Sc2Api, WowApi, WowClassicApi } from "./src/client.ts";
+export type {
+    BlizzardClient,
+    Diablo3Api,
+    HearthstoneApi,
+    Sc2Api,
+    WowApi,
+    WowClassicApi,
+    WowClassicEraApi,
+} from "./src/client.ts";
 export type {
     AuthConfig,
     AuthorizeUrlOptions,
@@ -79,8 +95,10 @@ export function requestHref(href: string, qs?: Record<string, string | number>):
 
 /** World of Warcraft endpoints on the default client. */
 export const wow: WowApi = defaultClient.wow;
-/** World of Warcraft Classic endpoints on the default client. */
+/** World of Warcraft Classic (progression) endpoints on the default client. */
 export const wowClassic: WowClassicApi = defaultClient.wowClassic;
+/** World of Warcraft Classic Era endpoints on the default client. */
+export const wowClassicEra: WowClassicEraApi = defaultClient.wowClassicEra;
 /** Hearthstone endpoints on the default client. */
 export const hearthstone: HearthstoneApi = defaultClient.hearthstone;
 /** StarCraft II endpoints on the default client. */

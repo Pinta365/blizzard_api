@@ -10,14 +10,17 @@ import type {
 import { bindAll, type Bound } from "./shared/bind.ts";
 import * as wowEndpoints from "./wow/index.ts";
 import * as wowClassicEndpoints from "./wow_classic/index.ts";
+import * as wowClassicEraEndpoints from "./wow_classic/era.ts";
 import * as hearthstoneEndpoints from "./hearthstone/index.ts";
 import * as sc2Endpoints from "./starcraft2/index.ts";
 import * as diablo3Endpoints from "./diablo3/index.ts";
 
 /** World of Warcraft endpoints bound to a client. */
 export type WowApi = Bound<typeof wowEndpoints>;
-/** World of Warcraft Classic endpoints bound to a client. */
+/** World of Warcraft Classic (progression) endpoints bound to a client. */
 export type WowClassicApi = Bound<typeof wowClassicEndpoints>;
+/** World of Warcraft Classic Era endpoints bound to a client. */
+export type WowClassicEraApi = Bound<typeof wowClassicEraEndpoints>;
 /** Hearthstone endpoints bound to a client. */
 export type HearthstoneApi = Bound<typeof hearthstoneEndpoints>;
 /** StarCraft II endpoints bound to a client. */
@@ -31,8 +34,10 @@ export type Diablo3Api = Bound<typeof diablo3Endpoints>;
 export interface BlizzardClient {
     /** World of Warcraft endpoints. */
     readonly wow: WowApi;
-    /** World of Warcraft Classic endpoints. */
+    /** World of Warcraft Classic (progression, e.g. Mists of Pandaria Classic) endpoints. */
     readonly wowClassic: WowClassicApi;
+    /** World of Warcraft Classic Era endpoints (Era, Season of Discovery, Hardcore, Anniversary). */
+    readonly wowClassicEra: WowClassicEraApi;
     /** Hearthstone endpoints. */
     readonly hearthstone: HearthstoneApi;
     /** StarCraft II endpoints. */
@@ -82,7 +87,8 @@ export interface BlizzardClient {
 export function clientFromContext(ctx: ApiContext): BlizzardClient {
     return Object.freeze({
         wow: bindAll(ctx, wowEndpoints),
-        wowClassic: bindAll(ctx, wowClassicEndpoints),
+        wowClassic: bindAll(ctx.withNamespaceVariant("classic"), wowClassicEndpoints),
+        wowClassicEra: bindAll(ctx.withNamespaceVariant("classic1x"), wowClassicEraEndpoints),
         hearthstone: bindAll(ctx, hearthstoneEndpoints),
         sc2: bindAll(ctx, sc2Endpoints),
         diablo3: bindAll(ctx, diablo3Endpoints),

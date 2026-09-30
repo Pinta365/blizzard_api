@@ -73,6 +73,11 @@ interface BlizzardAPIErrorResponse {
     type?: string;
 }
 
+interface ContextOptions {
+    userToken?: string;
+    namespaceVariant?: string;
+}
+
 interface TokenState extends AuthConfig {
     pending?: Promise<string>;
 }
@@ -81,6 +86,19 @@ interface TokenState extends AuthConfig {
  * Renew the token this long before it actually expires, so in-flight requests don't race the expiry.
  */
 const TOKEN_EXPIRY_MARGIN_MS = 60_000;
+
+/**
+ * How often a request is retried after a 429 (Too Many Requests) response, and the base backoff between tries.
+ */
+const MAX_RATE_LIMIT_RETRIES = 3;
+const RATE_LIMIT_BACKOFF_MS = 1_000;
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+function retryAfterMs(header: string | null): number | undefined {
+    const seconds = header === null ? NaN : Number(header);
+    return Number.isFinite(seconds) && seconds >= 0 ? Math.min(seconds, 60) * 1000 : undefined;
+}
 
 /**
  * Generates the OAuth base URL based on the specified region.
@@ -126,16 +144,18 @@ export class ApiContext {
     readonly #config: Partial<ClientConfig>;
     readonly #token: TokenState;
     readonly #userToken?: string;
+    readonly #namespaceVariant?: string;
 
     /**
-     * @param {Partial<ClientConfig>} config - The client configuration. Shared by reference with contexts made by forUser().
-     * @param {TokenState} [token] - Token state to share (used by forUser()).
-     * @param {string} [userToken] - A user access token from the authorization code flow.
+     * @param {Partial<ClientConfig>} config - The client configuration. Shared by reference with derived contexts.
+     * @param {TokenState} [token] - Token state to share (used by derived contexts).
+     * @param {ContextOptions} [options] - User token and namespace variant.
      */
-    constructor(config: Partial<ClientConfig> = {}, token?: TokenState, userToken?: string) {
+    constructor(config: Partial<ClientConfig> = {}, token?: TokenState, options: ContextOptions = {}) {
         this.#config = config;
         this.#token = token ?? { accessToken: "", tokenExpiration: 0 };
-        this.#userToken = userToken;
+        this.#userToken = options.userToken;
+        this.#namespaceVariant = options.namespaceVariant;
     }
 
     /**
@@ -173,7 +193,17 @@ export class ApiContext {
      * @param {string} userToken - A user access token from the authorization code flow.
      */
     forUser(userToken: string): ApiContext {
-        return new ApiContext(this.#config, this.#token, userToken);
+        return new ApiContext(this.#config, this.#token, { userToken, namespaceVariant: this.#namespaceVariant });
+    }
+
+    /**
+     * Returns a context for another game version: base namespaces ("static", "dynamic", "profile") get the variant
+     * inserted before the region, e.g. "classic1x" turns "static" into "static-classic1x-eu".
+     * It shares configuration, tokens and the user token with this context.
+     * @param {string} namespaceVariant - The namespace variant, e.g. "classic" or "classic1x".
+     */
+    withNamespaceVariant(namespaceVariant: string): ApiContext {
+        return new ApiContext(this.#config, this.#token, { userToken: this.#userToken, namespaceVariant });
     }
 
     /**
@@ -258,7 +288,11 @@ export class ApiContext {
         const params = new URLSearchParams(toQueryParams({ locale: config.locale, ...qs }));
         const query = params.size ? `?${params}` : "";
         const fullUrl = apiBaseUrl(config.region) + encodeURI(url) + query;
-        return this.#send(fullUrl, namespace ? `${namespace}-${config.region}` : undefined, auth === "user");
+        return this.#send(
+            fullUrl,
+            namespace ? this.#namespaceHeader(namespace, config.region) : undefined,
+            auth === "user",
+        );
     }
 
     /**
@@ -279,6 +313,13 @@ export class ApiContext {
         return this.#send(url.toString(), undefined, url.pathname.startsWith("/profile/user/"));
     }
 
+    #namespaceHeader(namespace: string, region: Regions): string {
+        const isBase = namespace === "static" || namespace === "dynamic" || namespace === "profile";
+        return isBase && this.#namespaceVariant
+            ? `${namespace}-${this.#namespaceVariant}-${region}`
+            : `${namespace}-${region}`;
+    }
+
     async #send(url: string, namespaceHeader: string | undefined, userScoped: boolean): Promise<unknown> {
         if (userScoped && !this.#userToken) {
             throw new MissingUserTokenError();
@@ -296,6 +337,14 @@ export class ApiContext {
             // The cached token may have been revoked or expired early; retry once with a fresh one.
             await response.body?.cancel();
             response = await doFetch(true);
+        }
+        for (let attempt = 1; response.status === 429 && attempt <= MAX_RATE_LIMIT_RETRIES; attempt++) {
+            // Rate limited: wait for Retry-After (seconds) if given, otherwise back off exponentially.
+            await response.body?.cancel();
+            await sleep(
+                retryAfterMs(response.headers.get("Retry-After")) ?? RATE_LIMIT_BACKOFF_MS * 2 ** (attempt - 1),
+            );
+            response = await doFetch(false);
         }
 
         if (response.ok) {

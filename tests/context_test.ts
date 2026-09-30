@@ -181,3 +181,47 @@ Deno.test("module-level setup() API still works", async () => {
         assertEquals(calls.filter((call) => !isToken(call)).length, 1);
     });
 });
+
+Deno.test("retries after 429 using Retry-After", async () => {
+    let apiCalls = 0;
+    await withFetch(
+        (call) => {
+            if (isToken(call)) return tokenResponse("t1");
+            return ++apiCalls < 3
+                ? new Response("", { status: 429, headers: { "Retry-After": "0" } })
+                : json({ ok: true });
+        },
+        async () => {
+            const client = createClient(config);
+            assertEquals(await client.wow.mount(6), { ok: true } as unknown);
+            assertEquals(apiCalls, 3);
+        },
+    );
+});
+
+Deno.test("gives up after repeated 429s", async () => {
+    await withFetch(
+        (call) =>
+            isToken(call) ? tokenResponse("t1") : new Response("", { status: 429, headers: { "Retry-After": "0" } }),
+        async (calls) => {
+            const client = createClient(config);
+            const error = await assertRejects(() => client.wow.mount(6), errors.APIError);
+            assertEquals(error.statusCode, 429);
+            assertEquals(calls.filter((call) => !isToken(call)).length, 4);
+        },
+    );
+});
+
+Deno.test("classic clients add the namespace variant", async () => {
+    await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
+        const client = createClient(config);
+        await client.wowClassic.item(19019);
+        await client.wowClassicEra.realms();
+        await client.wowClassicEra.characterProfile("dragonfang", "aragorn");
+        await client.wow.item(19019);
+        const namespaces = calls.filter((call) => !isToken(call)).map((call) => header(call, "Battlenet-Namespace"));
+        assertEquals(namespaces, ["static-classic-eu", "dynamic-classic1x-eu", "profile-classic1x-eu", "static-eu"]);
+        // All flavors share one token.
+        assertEquals(calls.filter(isToken).length, 1);
+    });
+});

@@ -132,6 +132,12 @@ export {
     playableClassPvpTalentSlots,
 } from "./game_data/playable_class.ts";
 
+export {
+    playableSpecialization,
+    playableSpecializationMedia,
+    playableSpecializations,
+} from "./game_data/playable_specialization.ts";
+
 export { playableRace, playableRaces } from "./game_data/playable_race.ts";
 
 export { powerType, powerTypes } from "./game_data/power_type.ts";
