@@ -14,7 +14,7 @@ export interface Covenants extends LinkSelfHref {
     covenants: KeyNameId[];
 }
 
-export interface SpellTooltip {
+export interface CovenantAbilitySpellTooltip {
     spell: KeyNameId;
     description: LocalizedString;
     cast_time: string;
@@ -25,13 +25,13 @@ export interface SpellTooltip {
 
 export interface SignatureAbility {
     id: number;
-    spell_tooltip: SpellTooltip;
+    spell_tooltip: CovenantAbilitySpellTooltip;
 }
 
 export interface ClassAbility {
     id: number;
     playable_class: KeyNameId;
-    spell_tooltip: SpellTooltip;
+    spell_tooltip: CovenantAbilitySpellTooltip;
 }
 
 export interface Covenant extends LinkSelfHref {
@@ -68,16 +68,16 @@ export interface CovenantConduits extends LinkSelfHref {
     conduits: KeyNameId;
 }
 
-export interface SpellTooltip {
+export interface CovenantConduitSpellTooltip {
     spell: KeyNameId;
     description: LocalizedString;
     cast_time: string;
 }
 
-export interface Rank {
+export interface CovenantConduitRank {
     id: number;
     tier: number;
-    spell_tooltip: SpellTooltip;
+    spell_tooltip: CovenantConduitSpellTooltip;
 }
 
 export interface CovenantConduit extends LinkSelfHref {
@@ -85,7 +85,7 @@ export interface CovenantConduit extends LinkSelfHref {
     name: LocalizedString;
     item: KeyNameId;
     socket_type: TypeName;
-    ranks: Rank[];
+    ranks: CovenantConduitRank[];
 }
 
 /**

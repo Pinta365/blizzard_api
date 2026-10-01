@@ -5,7 +5,7 @@
 
 import type { ApiContext } from "../../shared/index.ts";
 import type { Href, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
-import type { DecorItem, Heirloom, Pet, Toy } from "./character_collections.ts";
+import type { CollectedHeirloom, CollectedPet, CollectedToy, DecorItem } from "./character_collections.ts";
 
 export interface AccountCharacter {
     character: Href;
@@ -88,16 +88,16 @@ export interface AccountMountsCollection extends LinkSelfHref {
 }
 
 export interface AccountPetsCollection extends LinkSelfHref {
-    pets: Pet[];
+    pets: CollectedPet[];
     unlocked_battle_pet_slots: number;
 }
 
 export interface AccountToysCollection extends LinkSelfHref {
-    toys: Toy[];
+    toys: CollectedToy[];
 }
 
 export interface AccountHeirloomsCollection extends LinkSelfHref {
-    heirlooms: Heirloom[];
+    heirlooms: CollectedHeirloom[];
 }
 
 export interface AccountTransmogsCollection extends LinkSelfHref {

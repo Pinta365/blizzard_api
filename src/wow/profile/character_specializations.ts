@@ -13,7 +13,7 @@ export interface Detail {
     };
 }
 
-export interface Talent {
+export interface CharacterSpecializationTalent {
     id: number;
     rank: number;
     tooltip: Detail;
@@ -31,8 +31,8 @@ export interface CharacterSpecializations extends LinkSelfHref {
         loadouts: {
             is_active: boolean;
             talent_loadout_code: string;
-            selected_class_talents: Talent[];
-            selected_spec_talents: Talent[];
+            selected_class_talents: CharacterSpecializationTalent[];
+            selected_spec_talents: CharacterSpecializationTalent[];
         }[];
     }[];
     active_specialization: KeyNameId;

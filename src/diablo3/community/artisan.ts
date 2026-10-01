@@ -13,7 +13,7 @@ interface Reagent {
     item: Item;
 }
 
-interface Recipe {
+export interface Recipe {
     id: string;
     slug: string;
     name: string;
@@ -32,7 +32,7 @@ interface Training {
     tiers: Tier[];
 }
 
-interface Artisan {
+export interface Artisan {
     slug: string;
     name: string;
     portrait: string;

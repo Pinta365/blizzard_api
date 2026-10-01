@@ -17,4 +17,5 @@ jobs:
             - run: deno lint
             - run: deno check mod.ts scripts/*.ts tests/*.ts
             - run: deno test
+            - run: deno task gen:api --check
             - run: deno publish --dry-run --allow-dirty

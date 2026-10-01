@@ -15,18 +15,27 @@ import * as hearthstoneEndpoints from "./hearthstone/index.ts";
 import * as sc2Endpoints from "./starcraft2/index.ts";
 import * as diablo3Endpoints from "./diablo3/index.ts";
 
-/** World of Warcraft endpoints bound to a client. */
-export type WowApi = Bound<typeof wowEndpoints>;
-/** World of Warcraft Classic (progression) endpoints bound to a client. */
-export type WowClassicApi = Bound<typeof wowClassicEndpoints>;
-/** World of Warcraft Classic Era endpoints bound to a client. */
-export type WowClassicEraApi = Bound<typeof wowClassicEraEndpoints>;
-/** Hearthstone endpoints bound to a client. */
-export type HearthstoneApi = Bound<typeof hearthstoneEndpoints>;
-/** StarCraft II endpoints bound to a client. */
-export type Sc2Api = Bound<typeof sc2Endpoints>;
-/** Diablo III endpoints bound to a client. */
-export type Diablo3Api = Bound<typeof diablo3Endpoints>;
+import type { WowApi } from "./generated/wow_api.ts";
+import type { WowClassicApi } from "./generated/wow_classic_api.ts";
+import type { WowClassicEraApi } from "./generated/wow_classic_era_api.ts";
+import type { HearthstoneApi } from "./generated/hearthstone_api.ts";
+import type { Sc2Api } from "./generated/sc2_api.ts";
+import type { Diablo3Api } from "./generated/diablo3_api.ts";
+
+export type { Diablo3Api, HearthstoneApi, Sc2Api, WowApi, WowClassicApi, WowClassicEraApi };
+
+// Compile-time guard: each generated interface must match the bound endpoint functions exactly.
+// If this fails, run `deno task gen:api`.
+type Exact<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
+type Assert<T extends true> = T;
+export type _GeneratedApisAreCurrent = [
+    Assert<Exact<WowApi, Bound<typeof wowEndpoints>>>,
+    Assert<Exact<WowClassicApi, Bound<typeof wowClassicEndpoints>>>,
+    Assert<Exact<WowClassicEraApi, Bound<typeof wowClassicEraEndpoints>>>,
+    Assert<Exact<HearthstoneApi, Bound<typeof hearthstoneEndpoints>>>,
+    Assert<Exact<Sc2Api, Bound<typeof sc2Endpoints>>>,
+    Assert<Exact<Diablo3Api, Bound<typeof diablo3Endpoints>>>,
+];
 
 /**
  * A Blizzard API client with its own configuration and token state.

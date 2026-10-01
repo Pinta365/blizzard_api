@@ -6,14 +6,14 @@ interface Quest {
     slug: string;
 }
 
-interface Act {
+export interface Act {
     slug: string;
     number: number;
     name: string;
     quests: Quest[];
 }
 
-interface Acts {
+export interface Acts {
     acts: Act[];
 }
 

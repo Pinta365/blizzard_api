@@ -7,7 +7,7 @@ export interface ConnectedRealms extends LinkSelfHref {
     connected_realms: { href: string }[];
 }
 
-export interface Realm {
+export interface ConnectedRealmRealm {
     id: number;
     region: KeyNameId;
     connected_realm: { href: string };
@@ -25,7 +25,7 @@ export interface ConnectedRealm extends LinkSelfHref {
     has_queue: boolean;
     status: TypeName;
     population: TypeName;
-    realms: Realm[];
+    realms: ConnectedRealmRealm[];
     mythic_leaderboards: { href: string };
     auctions: { href: string };
 }

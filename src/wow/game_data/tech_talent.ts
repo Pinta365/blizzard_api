@@ -1,7 +1,7 @@
 import type { ApiContext } from "../../shared/index.ts";
 import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
-export interface TalentTree {
+export interface TechTalentTreeRef {
     key: {
         href: string;
     };
@@ -10,7 +10,7 @@ export interface TalentTree {
 }
 
 export interface TechTalentTrees extends LinkSelfHref {
-    talent_trees: TalentTree[];
+    talent_trees: TechTalentTreeRef[];
 }
 
 export interface TechTalentTree extends LinkSelfHref {

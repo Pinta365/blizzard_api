@@ -377,10 +377,6 @@ function c(name: string, fn: () => Promise<unknown>, allow404?: string): Case {
     return { name, fn, allow404 };
 }
 
-function skipped(name: string, reason: string): Case {
-    return { name, fn: () => Promise.resolve(), skip: reason };
-}
-
 function userCase(name: string, fn: () => Promise<unknown>): Case {
     return USER_TOKEN ? { name, fn } : { name, fn: () => Promise.resolve(), skip: "needs BLIZZARD_USER_TOKEN" };
 }

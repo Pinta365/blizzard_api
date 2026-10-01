@@ -10,7 +10,7 @@ interface FollowerSkill {
     descriptionHtml: string;
 }
 
-interface Follower {
+export interface Follower {
     slug: string;
     name: string;
     realName: string;

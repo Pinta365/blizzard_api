@@ -1,7 +1,7 @@
 import type { ApiContext } from "../../shared/index.ts";
 import type { Character, Href, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
-export interface Rgba {
+export interface GuildCrestRgba {
     r: number;
     g: number;
     b: number;
@@ -12,7 +12,7 @@ export interface CrestAsset {
     media?: KeyId;
     color: {
         id: number;
-        rgba: Rgba;
+        rgba: GuildCrestRgba;
     };
 }
 

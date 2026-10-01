@@ -1,12 +1,12 @@
 import type { ApiContext } from "../../shared/index.ts";
 
-interface ItemTypes {
+export interface ItemTypes {
     id: string;
     name: string;
     path: string;
 }
 
-interface ItemType {
+export interface ItemType {
     id: string;
     slug: string;
     name: string;

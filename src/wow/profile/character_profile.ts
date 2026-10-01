@@ -1,10 +1,6 @@
-import type { ApiContext, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type { ApiContext, Href, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
-export interface Href {
-    href: string;
-}
-
-export interface Realm extends KeyNameId {
+export interface CharacterRealm extends KeyNameId {
     slug: string;
 }
 
@@ -16,12 +12,12 @@ export interface CharacterProfile extends LinkSelfHref {
     race: KeyNameId;
     character_class: KeyNameId;
     active_spec: KeyNameId;
-    realm: Realm;
+    realm: CharacterRealm;
     guild: {
         key: Href;
         name: LocalizedString;
         id: number;
-        realm: Realm;
+        realm: CharacterRealm;
         faction: TypeName;
     };
     level: number;

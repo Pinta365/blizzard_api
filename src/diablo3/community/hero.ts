@@ -9,7 +9,7 @@ interface SkillRune {
     descriptionHtml: string;
 }
 
-interface HeroSkill {
+export interface HeroSkill {
     slug: string;
     name: string;
     icon: string;
@@ -31,7 +31,7 @@ interface Skills {
     passive: HeroSkill[];
 }
 
-interface HeroClass {
+export interface HeroClass {
     slug: string;
     name: string;
     maleName: string;

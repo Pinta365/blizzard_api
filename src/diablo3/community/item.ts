@@ -14,7 +14,7 @@ interface RandomAffix {
     oneOf: Attribute[];
 }
 
-interface Item {
+export interface Item {
     id: string;
     slug: string;
     name: string;

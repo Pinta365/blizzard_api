@@ -1,17 +1,13 @@
-import type { ApiContext } from "../../shared/index.ts";
 import type {
+    ApiContext,
     Character,
-    Href as SharedHref,
+    Href,
     KeyId,
     KeyNameId,
     LinkSelfHref,
     NamedRef,
     TypeName,
 } from "../../shared/index.ts";
-
-export interface Href {
-    href: string;
-}
 
 export interface CharacterCollectionTypes extends LinkSelfHref {
     pets: Href;
@@ -23,16 +19,16 @@ export interface CharacterCollectionTypes extends LinkSelfHref {
     decors?: Href;
 }
 
-export interface Mount {
+export interface CollectedMount {
     mounts: KeyNameId;
     is_character_specific?: boolean;
     is_useable: boolean;
 }
 export interface CharacterCollectionMounts extends LinkSelfHref {
-    mounts: Mount[];
+    mounts: CollectedMount[];
 }
 
-export interface Pet {
+export interface CollectedPet {
     species: KeyNameId;
     level: number;
     quality: TypeName;
@@ -47,20 +43,20 @@ export interface Pet {
 }
 
 export interface CharacterCollectionPets extends LinkSelfHref {
-    pets: Pet[];
+    pets: CollectedPet[];
     unlocked_battle_pet_slots: number;
 }
 
-export interface Toy {
+export interface CollectedToy {
     toy: KeyNameId;
     is_favorite?: boolean;
 }
 
 export interface CharacterCollectionToys extends LinkSelfHref {
-    toys: Toy[];
+    toys: CollectedToy[];
 }
 
-export interface Heirloom {
+export interface CollectedHeirloom {
     heirloom: KeyNameId;
     upgrade: {
         level: number;
@@ -68,7 +64,7 @@ export interface Heirloom {
 }
 
 export interface CharacterCollectionHeirlooms extends LinkSelfHref {
-    heirlooms: Heirloom[];
+    heirlooms: CollectedHeirloom[];
 }
 
 export interface DecorItem {
@@ -90,7 +86,7 @@ export interface TransmogrifiedSlot {
 }
 
 export interface CharacterCollectionTransmogs {
-    "_links": { self: SharedHref };
+    "_links": { self: Href };
     appearance_sets: NamedRef[];
     slots: TransmogrifiedSlot[];
 }

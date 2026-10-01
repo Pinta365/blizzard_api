@@ -1,19 +1,29 @@
 {
     "name": "@pinta365/blizzard-api",
-    "version": "0.4.0",
-    "exports": "./mod.ts",
+    "version": "0.5.0",
+    "exports": {
+        ".": "./mod.ts",
+        "./wow": "./src/wow/types.ts",
+        "./wow-classic": "./src/wow_classic/types.ts",
+        "./hearthstone": "./src/hearthstone/types.ts",
+        "./sc2": "./src/starcraft2/types.ts",
+        "./diablo3": "./src/diablo3/types.ts"
+    },
     "publish": {
         "exclude": [".github/", "scripts/", "tests/", "fixtures/", "PLAN.md"]
     },
     "imports": {
         "@deno/dnt": "jsr:@deno/dnt@^0.43.2",
-        "@std/assert": "jsr:@std/assert@^1"
+        "@std/assert": "jsr:@std/assert@^1",
+        "@std/path": "jsr:@std/path@^1",
+        "typescript": "npm:typescript@^5.9"
     },
 
     "tasks": {
         "build_npm": "deno run -A scripts/build_npm.ts",
         "publish-dry": "deno publish --dry-run",
         "test": "deno test",
+        "gen:api": "deno run --allow-read --allow-write --allow-run --allow-env scripts/gen_api.ts",
         "smoke": "deno run --env-file=.env -A scripts/smoke.ts"
     },
     "test": {

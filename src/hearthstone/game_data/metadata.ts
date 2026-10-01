@@ -87,7 +87,7 @@ export interface Metadata {
         name: LocalizedString;
     }[];
 }
-type MetaTypes = "sets" | "setGroups" | "types" | "rarities" | "classes" | "minionTypes" | "keywords";
+export type MetaTypes = "sets" | "setGroups" | "types" | "rarities" | "classes" | "minionTypes" | "keywords";
 
 /**
  * Returns information about the categorization of cards. Metadata includes the card set, set group (for example, Standard or Year of the Dragon), rarity, class, card type, minion type, and keywords.
