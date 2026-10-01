@@ -1136,7 +1136,7 @@ function buildCases(): Case[] {
         c("wow.characterHouse", async () => {
             const ctx = await getContext();
             return await client.wow.characterHouse(ctx.realm, ctx.name, 1);
-        }, "character-dependent"),
+        }, "endpoint disabled by Blizzard (privacy), returns 404"),
         c("wow.guild", () => guildCall(client.wow.guild)),
         c("wow.guildActivity", () => guildCall(client.wow.guildActivity)),
         c("wow.guildAchievements", () => guildCall(client.wow.guildAchievements)),
