@@ -160,18 +160,26 @@ blizzardAPI.setup({ region: "eu", locale: "en_GB", clientId, clientSecret });
 const sword = await blizzardAPI.wow.item(33791);
 ```
 
-## Upgrading from 0.4
+## Upgrading
+
+### From 0.5 to 0.6
+
+- A locale is always sent: when `locale` is not set, the region's main locale is used (`us`: `en_US`, `eu`: `en_GB`,
+  `kr`: `ko_KR`, `tw`: `zh_TW`, `cn`: `zh_CN`). Localized fields (`name`, `description`, ...) are therefore always
+  strings, and the types say so. Before, omitting `locale` returned an object with every locale.
+- Response types were checked against live responses and corrected. Fields that only some characters have are now
+  optional, so you may need to handle `undefined`.
+- The Classic clients return `Classic*` types (e.g. `ClassicCharacterProfile`, from `/wow-classic`) where fields that
+  only Retail returns are optional. The Retail types keep those fields required.
+- `hearthstone.metadata(type)` is typed per type: `metadata("sets")` returns `MetadataSet[]`.
+
+### From 0.4 to 0.5
 
 - `wowClassic` now targets Classic **progression**. For Classic Era realms, use `wowClassicEra`.
 - `mythicRaidLeaderboard(raid, faction)` takes a raid slug and `"alliance"` or `"horde"`, e.g. `("uldir", "alliance")`.
 - `pvpSeasonLeaderboard(seasonId, bracket)` takes a bracket name, e.g. `"3v3"` or `"shuffle-overall"`.
 - `wow`, `hearthstone` and the other namespaces are plain objects. Import types from the game entry points (see
   [Response types](#response-types)).
-- A locale is always sent: when `locale` is not set, the region's main locale is used (`us`: `en_US`, `eu`: `en_GB`,
-  `kr`: `ko_KR`, `tw`: `zh_TW`, `cn`: `zh_CN`). Localized fields (`name`, `description`, ...) are therefore always
-  strings, and the types say so. Before, omitting `locale` returned an object with every locale.
-- Response types were checked against live responses and corrected. Fields that only some characters or flavors have are
-  now optional, so you may need to handle `undefined`.
 - Some types were renamed to remove duplicates. For example, entries of the character collections are now
   `CollectedMount`, `CollectedPet`, `CollectedToy` and `CollectedHeirloom`.
 
