@@ -26,6 +26,7 @@
         "check:types": "deno run --allow-read --allow-write --allow-run --allow-env scripts/check_types.ts",
         "check:fields": "deno run --allow-read --allow-env scripts/check_fields.ts",
         "gen:api": "deno run --allow-read --allow-write --allow-run --allow-env scripts/gen_api.ts",
+        "user-token": "deno run --env-file=.env --allow-net --allow-env --allow-read=.env --allow-write=.env scripts/user_token.ts",
         "smoke": "deno run --env-file=.env -A scripts/smoke.ts"
     },
     "test": {

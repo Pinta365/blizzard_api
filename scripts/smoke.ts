@@ -377,8 +377,10 @@ function c(name: string, fn: () => Promise<unknown>, allow404?: string): Case {
     return { name, fn, allow404 };
 }
 
-function userCase(name: string, fn: () => Promise<unknown>): Case {
-    return USER_TOKEN ? { name, fn } : { name, fn: () => Promise.resolve(), skip: "needs BLIZZARD_USER_TOKEN" };
+function userCase(name: string, fn: () => Promise<unknown>, allow404?: string): Case {
+    return USER_TOKEN
+        ? { name, fn, allow404 }
+        : { name, fn: () => Promise.resolve(), skip: "needs BLIZZARD_USER_TOKEN" };
 }
 
 // ---------------------------------------------------------------------------
@@ -1298,7 +1300,11 @@ function buildCases(): Case[] {
         userCase("wow.accountToysCollection", () => requireUserClient().wow.accountToysCollection()),
         userCase("wow.accountHeirloomsCollection", () => requireUserClient().wow.accountHeirloomsCollection()),
         userCase("wow.accountTransmogsCollection", () => requireUserClient().wow.accountTransmogsCollection()),
-        userCase("wow.accountDecorCollection", () => requireUserClient().wow.accountDecorCollection()),
+        userCase(
+            "wow.accountDecorCollection",
+            () => requireUserClient().wow.accountDecorCollection(),
+            "returns 404 server-side although the collections index links to it",
+        ),
 
         // ----- client / legacy compatibility ----------------------------------
         c("client.missingUserToken", async () => {
@@ -1323,6 +1329,9 @@ function buildCases(): Case[] {
 // Runner
 // ---------------------------------------------------------------------------
 
+/** Cases that call user-scoped endpoints (account profile). Their responses are never written to fixtures/. */
+const USER_SCOPED_CASE = /^wow\.(account|protectedCharacter)/;
+
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -1334,7 +1343,10 @@ async function runCase(testCase: Case): Promise<Result> {
     const start = performance.now();
     try {
         const value = await testCase.fn();
-        await Deno.writeTextFile(`fixtures/${testCase.name}.json`, JSON.stringify(value, null, 2));
+        // Never store responses made with a user token: they contain private account data.
+        if (!USER_SCOPED_CASE.test(testCase.name)) {
+            await Deno.writeTextFile(`fixtures/${testCase.name}.json`, JSON.stringify(value, null, 2));
+        }
         return { name: testCase.name, status: "ok", durationMs: performance.now() - start };
     } catch (error) {
         const durationMs = performance.now() - start;

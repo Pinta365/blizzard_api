@@ -221,6 +221,9 @@ export interface WowApi {
 
     /**
      * Returns the housing decor collected by an account.
+     *
+     * Note: as of 2026-10-01 this returns 404 even for accounts with decor, although the collections index links to it.
+     * characterCollectionDecor works.
      * Requires a user access token (client.forUser(token)).
      *
      * @returns A promise that resolves to an object representing the account's decor.

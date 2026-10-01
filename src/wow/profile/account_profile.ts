@@ -4,8 +4,19 @@
  */
 
 import type { ApiContext } from "../../shared/index.ts";
-import type { Href, KeyNameId, LinkSelfHref, TypeName } from "../../shared/index.ts";
+import type { Href, KeyNameId, TypeName } from "../../shared/index.ts";
 import type { CollectedHeirloom, CollectedPet, CollectedToy, DecorItem } from "./character_collections.ts";
+
+/**
+ * The links at the top of account profile responses.
+ */
+export interface AccountLinks {
+    _links: {
+        self: Href;
+        user: Href;
+        profile: Href;
+    };
+}
 
 export interface AccountCharacter {
     character: Href;
@@ -20,16 +31,18 @@ export interface AccountCharacter {
     level: number;
 }
 
-export interface AccountProfileSummary extends LinkSelfHref {
+export interface AccountProfileSummary extends AccountLinks {
     id: number;
     wow_accounts: {
         id: number;
         characters: AccountCharacter[];
     }[];
     collections: Href;
+    /** Links to the account's houses (character house endpoints). Absent when the account has no house. */
+    houses?: Href[];
 }
 
-export interface ProtectedCharacterProfile extends LinkSelfHref {
+export interface ProtectedCharacterProfile extends AccountLinks {
     id: number;
     name: string;
     money: number;
@@ -66,15 +79,17 @@ export interface ProtectedCharacterProfile extends LinkSelfHref {
         facing: number;
     };
     wow_account: number;
+    /** Links to this character's houses. Absent when the character has no house. */
+    houses?: Href[];
 }
 
-export interface AccountCollectionsIndex extends LinkSelfHref {
+export interface AccountCollectionsIndex extends AccountLinks {
     pets: Href;
     mounts: Href;
     heirlooms: Href;
     toys: Href;
     transmogs: Href;
-    decor?: Href;
+    decors?: Href;
 }
 
 export interface AccountMount {
@@ -83,24 +98,24 @@ export interface AccountMount {
     is_useable?: boolean;
 }
 
-export interface AccountMountsCollection extends LinkSelfHref {
+export interface AccountMountsCollection extends AccountLinks {
     mounts: AccountMount[];
 }
 
-export interface AccountPetsCollection extends LinkSelfHref {
+export interface AccountPetsCollection extends AccountLinks {
     pets: CollectedPet[];
     unlocked_battle_pet_slots: number;
 }
 
-export interface AccountToysCollection extends LinkSelfHref {
+export interface AccountToysCollection extends AccountLinks {
     toys: CollectedToy[];
 }
 
-export interface AccountHeirloomsCollection extends LinkSelfHref {
+export interface AccountHeirloomsCollection extends AccountLinks {
     heirlooms: CollectedHeirloom[];
 }
 
-export interface AccountTransmogsCollection extends LinkSelfHref {
+export interface AccountTransmogsCollection extends AccountLinks {
     appearance_sets: KeyNameId[];
     slots: {
         slot: TypeName;
@@ -108,7 +123,7 @@ export interface AccountTransmogsCollection extends LinkSelfHref {
     }[];
 }
 
-export interface AccountDecorCollection extends LinkSelfHref {
+export interface AccountDecorCollection extends AccountLinks {
     decor_collected: DecorItem[];
 }
 
@@ -240,6 +255,9 @@ export async function accountTransmogsCollection(ctx: ApiContext): Promise<Accou
 
 /**
  * Returns the housing decor collected by an account.
+ *
+ * Note: as of 2026-10-01 this returns 404 even for accounts with decor, although the collections index links to it.
+ * characterCollectionDecor works.
  * Requires a user access token (client.forUser(token)).
  *
  * @returns A promise that resolves to an object representing the account's decor.

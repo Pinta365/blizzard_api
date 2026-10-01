@@ -189,6 +189,7 @@ const sword = await blizzardAPI.wow.item(33791);
 deno task test        # offline unit tests
 deno task smoke       # live smoke test of every endpoint (needs .env with BLIZZARD_CLIENT_ID / BLIZZARD_CLIENT_SECRET)
 deno task gen:api     # regenerate src/generated/ after adding or changing endpoints
+deno task user-token --save # log in with Battle.net and save a user token to .env (for the account endpoints)
 deno task check:types # check the response types against the responses saved by the smoke test (fixtures/)
 deno task check:fields # list fields the API returns that the response types don't declare
 ```
