@@ -1,7 +1,7 @@
 export type { Act, Acts } from "./community/act.ts";
 export type { Artisan, Recipe } from "./community/artisan.ts";
 export type { Follower } from "./community/follower.ts";
-export type { HeroClass, HeroSkill } from "./community/hero.ts";
+export type { HeroClass, HeroSkill, HeroSkillDetail, SkillRune } from "./community/hero.ts";
 export type { Item } from "./community/item.ts";
 export type { ItemType, ItemTypes } from "./community/item_type.ts";
 export type {

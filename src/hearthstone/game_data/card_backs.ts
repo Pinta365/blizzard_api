@@ -1,13 +1,22 @@
 import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { LocalizedString } from "../../shared/index.ts";
-import type { Search, SearchParameters } from "../search.ts";
+import type { SearchParameters } from "../search.ts";
 
 export interface Cardback {
     id: number;
     sortCategory: number;
     text: LocalizedString;
     name: LocalizedString;
+    image: string;
+    slug: string;
+}
+
+export interface CardbackSearch {
+    cardBacks: Cardback[];
+    cardCount: number;
+    pageCount: number;
+    page: number;
 }
 
 /**
@@ -16,8 +25,8 @@ export interface Cardback {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing an up-to-date list of all card backs matching the search criteria.
  */
-export async function searchCardbacks(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
-    return await search(ctx, "/cardbacks", searchParameters) as Search;
+export async function searchCardbacks(ctx: ApiContext, searchParameters: SearchParameters): Promise<CardbackSearch> {
+    return await search(ctx, "/cardbacks", searchParameters) as unknown as CardbackSearch;
 }
 
 /**

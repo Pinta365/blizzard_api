@@ -12,6 +12,8 @@ export interface ValueDisplayString {
 export interface UpgradeStats {
     type: TypeName;
     value: number;
+    is_negated?: boolean;
+    is_equip_bonus?: boolean;
     display: {
         display_string: LocalizedString;
         color: {

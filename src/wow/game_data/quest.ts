@@ -16,12 +16,13 @@ export interface Quests extends LinkSelfHref {
 export interface Quest extends LinkSelfHref {
     id: number;
     title: LocalizedString;
-    area: KeyNameId;
+    category?: KeyNameId;
+    area?: KeyNameId;
     description: LocalizedString;
     requirements: {
         min_character_level: number;
         max_character_level: number;
-        faction: TypeName;
+        faction?: TypeName;
     };
     rewards: {
         experience: number;
@@ -29,7 +30,7 @@ export interface Quest extends LinkSelfHref {
             reward: KeyNameId;
             value: number;
         }[];
-        money: {
+        money?: {
             value: number;
             units: {
                 gold: number;

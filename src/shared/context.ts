@@ -12,7 +12,8 @@ import {
 /**
  * Represents the configuration of a client.
  * @property {Regions} region - The target Battle.net region for API requests.
- * @property {Locales} [locale] - The desired locale for data. When omitted, localized fields contain every locale.
+ * @property {Locales} [locale] - The locale for localized fields. Defaults to the main locale of the region
+ *     (us: en_US, eu: en_GB, kr: ko_KR, tw: zh_TW, cn: zh_CN).
  * @property {string} clientId - The OAuth client ID.
  * @property {string} clientSecret - The OAuth client secret.
  */
@@ -93,11 +94,34 @@ const TOKEN_EXPIRY_MARGIN_MS = 60_000;
 const MAX_RATE_LIMIT_RETRIES = 3;
 const RATE_LIMIT_BACKOFF_MS = 1_000;
 
+/**
+ * Server errors that are retried once, after a short delay.
+ */
+const SERVER_ERROR_STATUSES = new Set([500, 502, 503, 504]);
+const SERVER_ERROR_RETRY_DELAY_MS = 500;
+
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 function retryAfterMs(header: string | null): number | undefined {
     const seconds = header === null ? NaN : Number(header);
     return Number.isFinite(seconds) && seconds >= 0 ? Math.min(seconds, 60) * 1000 : undefined;
+}
+
+const DEFAULT_LOCALES: Record<Regions, Locales> = {
+    us: "en_US",
+    eu: "en_GB",
+    kr: "ko_KR",
+    tw: "zh_TW",
+    cn: "zh_CN",
+};
+
+/**
+ * Returns the locale used when none is configured. A locale is always sent, so localized fields are plain strings.
+ * @param {Regions} region - The target Battle.net region.
+ * @returns {Locales} The default locale of the region.
+ */
+export function defaultLocale(region: Regions): Locales {
+    return DEFAULT_LOCALES[region];
 }
 
 /**
@@ -285,7 +309,9 @@ export class ApiContext {
         const config = this.#config;
         assertConfig(config);
         const { url, namespace, qs, auth } = requestOptions;
-        const params = new URLSearchParams(toQueryParams({ locale: config.locale, ...qs }));
+        const params = new URLSearchParams(
+            toQueryParams({ locale: config.locale ?? defaultLocale(config.region), ...qs }),
+        );
         const query = params.size ? `?${params}` : "";
         const fullUrl = apiBaseUrl(config.region) + encodeURI(url) + query;
         return this.#send(
@@ -306,7 +332,11 @@ export class ApiContext {
         const config = this.#config;
         assertConfig(config);
         const url = new URL(href);
-        for (const [key, value] of Object.entries(toQueryParams({ locale: config.locale, ...qs }))) {
+        for (
+            const [key, value] of Object.entries(
+                toQueryParams({ locale: config.locale ?? defaultLocale(config.region), ...qs }),
+            )
+        ) {
             if (!url.searchParams.has(key)) url.searchParams.set(key, value);
         }
         // Hrefs from the API already carry their full namespace in the query string.
@@ -337,6 +367,12 @@ export class ApiContext {
             // The cached token may have been revoked or expired early; retry once with a fresh one.
             await response.body?.cancel();
             response = await doFetch(true);
+        }
+        if (SERVER_ERROR_STATUSES.has(response.status)) {
+            // Transient gateway/server errors: requests are GETs, so retrying once is safe.
+            await response.body?.cancel();
+            await sleep(SERVER_ERROR_RETRY_DELAY_MS);
+            response = await doFetch(false);
         }
         for (let attempt = 1; response.status === 429 && attempt <= MAX_RATE_LIMIT_RETRIES; attempt++) {
             // Rate limited: wait for Retry-After (seconds) if given, otherwise back off exponentially.

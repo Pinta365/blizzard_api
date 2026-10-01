@@ -14,9 +14,9 @@ export interface PvpSeason extends LinkSelfHref {
     rewards: {
         href: string;
     };
-    season_name: string;
+    season_name: string | null;
     season_start_timestamp: number;
-    season_end_timestamp: number;
+    season_end_timestamp?: number;
 }
 
 export interface PvpSeasonLeaderboards extends LinkSelfHref {
@@ -67,7 +67,8 @@ export interface PvpSeasonRewards extends LinkSelfHref {
         };
         achievement: KeyNameId;
         rating_cutoff: number;
-        faction: TypeName;
+        faction?: TypeName;
+        specialization?: KeyNameId;
     }[];
 }
 

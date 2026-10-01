@@ -2,8 +2,8 @@ import type { ApiContext } from "../../shared/index.ts";
 import type { KeyId, KeyName, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface TalentTrees extends LinkSelfHref {
-    spec_talent_trees: KeyNameId;
-    class_talent_trees: KeyName;
+    spec_talent_trees: KeyName[];
+    class_talent_trees: KeyName[];
     hero_talent_trees: KeyNameId[];
 }
 
@@ -13,6 +13,7 @@ export interface SpellTooltip {
     cast_time: string;
     power_cost?: string;
     range?: string;
+    cooldown?: string;
 }
 
 export interface Tooltip {
@@ -24,6 +25,7 @@ export interface Rank {
     rank: number;
     tooltip?: Tooltip;
     choice_of_tooltips?: Tooltip[];
+    default_points?: number;
 }
 
 export interface NodeType {
@@ -47,6 +49,8 @@ export interface HeroTalentTree {
     id: number;
     name: string;
     media: KeyId;
+    playable_class?: KeyNameId;
+    playable_specializations?: KeyNameId[];
     hero_talent_nodes: TalentNode[];
 }
 
@@ -84,11 +88,11 @@ export interface Talent extends LinkSelfHref {
     id: number;
     rank_descriptions: {
         rank: number;
-        description: LocalizedString;
+        description: LocalizedString | null;
     }[];
     spell: KeyNameId;
-    playable_class: KeyNameId;
-    playable_specialization: KeyNameId;
+    playable_class: KeyId;
+    playable_specialization?: KeyNameId;
 }
 
 export interface PvpTalents extends LinkSelfHref {

@@ -2,7 +2,17 @@ import type { ApiContext } from "../../shared/index.ts";
 import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, NameId } from "../../shared/index.ts";
 
 export interface MythicKeystoneLeaderboards extends LinkSelfHref {
-    current_leaderboards: KeyNameId[];
+    current_leaderboards?: KeyNameId[];
+}
+
+export interface MythicLeaderboardRating {
+    color: {
+        r: number;
+        g: number;
+        b: number;
+        a: number;
+    };
+    rating: number;
 }
 
 export interface MythicKeystoneLeaderboard extends LinkSelfHref {
@@ -18,6 +28,7 @@ export interface MythicKeystoneLeaderboard extends LinkSelfHref {
         duration: number;
         completed_timestamp: number;
         keystone_level: number;
+        mythic_rating?: MythicLeaderboardRating;
         members: {
             profile: {
                 name: string;
@@ -39,6 +50,7 @@ export interface MythicKeystoneLeaderboard extends LinkSelfHref {
     keystone_affixes: {
         keystone_affix: KeyNameId;
         starting_level: number;
+        max_level?: number;
     }[];
     map_challenge_mode_id: number;
     name: LocalizedString;

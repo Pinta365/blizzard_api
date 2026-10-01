@@ -1,6 +1,6 @@
 import type { ApiContext } from "../../shared/index.ts";
 
-interface SkillRune {
+export interface SkillRune {
     slug: string;
     type: string;
     name: string;
@@ -19,6 +19,11 @@ export interface HeroSkill {
     descriptionHtml: string;
     flavorText?: string;
     runes?: SkillRune[];
+}
+
+export interface HeroSkillDetail {
+    skill: HeroSkill;
+    runes: SkillRune[];
 }
 
 interface SkillCategories {
@@ -61,9 +66,9 @@ export async function heroClass(ctx: ApiContext, classSlug: string): Promise<Her
  * @param skillSlug - The slug of the skill to retrieve.
  * @returns A promise that resolves to an object representing the data for a single skill by slug for a specific character class.
  */
-export async function heroSkill(ctx: ApiContext, classSlug: string, skillSlug: string): Promise<HeroSkill> {
+export async function heroSkill(ctx: ApiContext, classSlug: string, skillSlug: string): Promise<HeroSkillDetail> {
     return await ctx.request({
         method: "GET",
         url: `/d3/data/hero/${classSlug}/skill/${skillSlug}`,
-    }) as HeroSkill;
+    }) as HeroSkillDetail;
 }

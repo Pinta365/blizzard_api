@@ -66,7 +66,11 @@ function collectTypeImports(node: ts.Node, imports: Map<string, string>, context
             const resolved = symbol && symbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
             const declaration = resolved?.declarations?.[0];
             // Built-ins (Promise, Record, ...) come from lib files and need no import.
-            if (declaration && !declaration.getSourceFile().isDeclarationFile) {
+            // Type parameters (e.g. the T of metadata<T>) are declared on the method itself.
+            if (
+                declaration && !ts.isTypeParameterDeclaration(declaration) &&
+                !declaration.getSourceFile().isDeclarationFile
+            ) {
                 const file = declaration.getSourceFile().fileName;
                 const isExported = ts.canHaveModifiers(declaration) &&
                     ts.getModifiers(declaration)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword);
@@ -126,10 +130,18 @@ function generate(target: Target): string {
         }).join(", ");
         collectTypeImports(declaration.type, imports, context);
 
+        const typeParams = declaration.typeParameters
+            ? `<${
+                declaration.typeParameters.map((tp) => {
+                    if (tp.constraint) collectTypeImports(tp.constraint, imports, context);
+                    return tp.getText();
+                }).join(", ")
+            }>`
+            : "";
         const doc = jsDocOf(declaration);
         methods.push(
             (doc ? indent(doc, "    ") + "\n" : "") +
-                `    ${exported.name}(${paramText}): ${declaration.type.getText()};`,
+                `    ${exported.name}${typeParams}(${paramText}): ${declaration.type.getText()};`,
         );
     }
 

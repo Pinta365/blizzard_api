@@ -13,15 +13,10 @@ export interface MythicKeystoneDungeon extends LinkSelfHref {
         slug: string;
     };
     dungeon: KeyNameId;
-    keystone_updates: {
-        upgrade_level: number;
-        qualifying_duration: number;
-    }[];
     keystone_upgrades: {
         upgrade_level: number;
         qualifying_duration: number;
     }[];
-    is_traacked: boolean;
     is_tracked: boolean;
 }
 
@@ -50,7 +45,7 @@ export interface MythicKeystoneSeason extends LinkSelfHref {
     start_timestamp: number;
     end_timestamp?: number;
     periods: KeyId[];
-    season_name: LocalizedString;
+    season_name: LocalizedString | null;
 }
 
 /**

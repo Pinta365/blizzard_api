@@ -14,7 +14,7 @@ export interface CharacterAppearanceSummary extends LinkSelfHref {
             media: KeyId;
             color: {
                 id: number;
-                rgba: {
+                rgba?: {
                     r: number;
                     g: number;
                     b: number;
@@ -27,7 +27,7 @@ export interface CharacterAppearanceSummary extends LinkSelfHref {
             media: KeyId;
             color: {
                 id: number;
-                rgba: {
+                rgba?: {
                     r: number;
                     g: number;
                     b: number;
@@ -38,7 +38,7 @@ export interface CharacterAppearanceSummary extends LinkSelfHref {
         background: {
             color: {
                 id: number;
-                rgba: {
+                rgba?: {
                     r: number;
                     g: number;
                     b: number;
@@ -51,9 +51,12 @@ export interface CharacterAppearanceSummary extends LinkSelfHref {
         id: number;
         slot: TypeName;
         enchant: number;
-        item_appearance_modifier_id: number;
+        item_appearance_modifier_id?: number;
         internal_slot_id: number;
-        subclass: number;
+        subclass?: number;
+        secondary_id?: number;
+        secondary_item_appearance_modifier_id?: number;
+        secondary_subclass?: number;
     }[];
     customizations: {
         option: {

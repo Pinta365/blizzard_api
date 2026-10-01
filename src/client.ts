@@ -24,9 +24,12 @@ import type { Diablo3Api } from "./generated/diablo3_api.ts";
 
 export type { Diablo3Api, HearthstoneApi, Sc2Api, WowApi, WowClassicApi, WowClassicEraApi };
 
-// Compile-time guard: each generated interface must match the bound endpoint functions exactly.
-// If this fails, run `deno task gen:api`.
-type Exact<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
+// Compile-time guard: each generated interface must have exactly the bound endpoint functions, with compatible
+// signatures. (One-way assignability: a mapped type can't express generic endpoints such as Hearthstone's
+// metadata<T>.) If this fails, run `deno task gen:api`. CI also runs `deno task gen:api --check`.
+type Exact<A, B> = [keyof A] extends [keyof B]
+    ? ([keyof B] extends [keyof A] ? ([A] extends [B] ? true : false) : false)
+    : false;
 type Assert<T extends true> = T;
 export type _GeneratedApisAreCurrent = [
     Assert<Exact<WowApi, Bound<typeof wowEndpoints>>>,
@@ -98,7 +101,8 @@ export function clientFromContext(ctx: ApiContext): BlizzardClient {
         wow: bindAll(ctx, wowEndpoints),
         wowClassic: bindAll(ctx.withNamespaceVariant("classic"), wowClassicEndpoints),
         wowClassicEra: bindAll(ctx.withNamespaceVariant("classic1x"), wowClassicEraEndpoints),
-        hearthstone: bindAll(ctx, hearthstoneEndpoints),
+        // bind() keeps metadata<T> generic at runtime; the mapped Bound type cannot, so use the generated interface.
+        hearthstone: bindAll(ctx, hearthstoneEndpoints) as unknown as HearthstoneApi,
         sc2: bindAll(ctx, sc2Endpoints),
         diablo3: bindAll(ctx, diablo3Endpoints),
         get config() {

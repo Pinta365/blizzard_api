@@ -1,7 +1,7 @@
 import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
 import type { LocalizedString, RequestOptions } from "../../shared/index.ts";
-import type { Search, SearchParameters } from "../search.ts";
+import type { SearchParameters } from "../search.ts";
 
 export interface Card {
     id: number;
@@ -12,9 +12,9 @@ export interface Card {
     cardTypeId: number;
     cardSetId: number;
     rarityId: number;
-    artistName: string;
-    health: number;
-    attack: number;
+    artistName: string | null;
+    health?: number;
+    attack?: number;
     manaCost: number;
     name: LocalizedString;
     text: LocalizedString;
@@ -22,7 +22,25 @@ export interface Card {
     imageGold: string;
     flavorText: LocalizedString;
     cropImage: string;
-    keywordIds: number[];
+    keywordIds?: number[];
+    childIds?: number[];
+    parentId?: number;
+    copyOfCardId?: number[];
+    spellSchoolId?: number;
+    minionTypeId?: number;
+    isZilliaxCosmeticModule?: boolean;
+    isZilliaxFunctionalModule?: boolean;
+    duels?: {
+        relevant: boolean;
+        constructed: boolean;
+    };
+}
+
+export interface CardSearch {
+    cards: Card[];
+    cardCount: number;
+    pageCount: number;
+    page: number;
 }
 
 /**
@@ -31,8 +49,8 @@ export interface Card {
  * @param SearchParameters - Object containing search parameters.
  * @returns A promise that resolves to an object representing an up-to-date list of all cards matching the search criteria.
  */
-export async function searchCards(ctx: ApiContext, searchParameters: SearchParameters): Promise<Search> {
-    return await search(ctx, "/cards", searchParameters) as Search;
+export async function searchCards(ctx: ApiContext, searchParameters: SearchParameters): Promise<CardSearch> {
+    return await search(ctx, "/cards", searchParameters) as unknown as CardSearch;
 }
 
 /**

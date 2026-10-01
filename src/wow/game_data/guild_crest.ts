@@ -3,12 +3,12 @@ import type { Asset, KeyId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface Emblem {
     id: number;
-    media: KeyId[];
+    media: KeyId;
 }
 
 export interface Border {
     id: number;
-    media: KeyId[];
+    media: KeyId;
 }
 
 export interface IdRgba {
@@ -25,9 +25,9 @@ export interface GuildCrests extends LinkSelfHref {
     emblems: Emblem[];
     borders: Border[];
     colors: {
-        emblems: IdRgba[];
-        borders: IdRgba[];
-        backgrounds: IdRgba[];
+        emblems?: IdRgba[];
+        borders?: IdRgba[];
+        backgrounds?: IdRgba[];
     };
 }
 

@@ -22,11 +22,11 @@ export interface CharacterPvpBracketStatistics extends LinkSelfHref {
 }
 
 export interface CharacterPvpSummary extends LinkSelfHref {
-    brackets: {
+    brackets?: {
         href: string;
     }[];
     honor_level: number;
-    pvp_map_statistics: {
+    pvp_map_statistics?: {
         world_map: {
             name: LocalizedString;
             id: number;
@@ -35,6 +35,7 @@ export interface CharacterPvpSummary extends LinkSelfHref {
     }[];
     honorable_kills: number;
     character: Character;
+    pvp_rank?: number;
 }
 
 /**

@@ -21,7 +21,7 @@ export interface AuctionListing {
     bid?: number;
     buyout?: number;
     quantity: number;
-    time_left: "SHORT" | "MEDIUM" | "LONG" | "VERY_LONG";
+    time_left: string;
 }
 
 export interface Auctions extends LinkSelfHref {
@@ -41,7 +41,7 @@ export interface commodity {
     };
     "quantity": number;
     "unit_price": number;
-    "time_left": "SHORT" | "MEDIUM" | "LONG" | "VERY_LONG";
+    "time_left": string;
 }
 
 export interface Commodities extends LinkSelfHref {

@@ -8,10 +8,43 @@ export interface Rgba {
     a: number;
 }
 
+export interface EquippedItemWeapon {
+    damage: {
+        min_value: number;
+        max_value: number;
+        display_string: LocalizedString;
+        damage_class: TypeName;
+    };
+    attack_speed: {
+        value: number;
+        display_string: LocalizedString;
+    };
+    dps: {
+        value: number;
+        display_string: LocalizedString;
+    };
+}
+
 export interface characterEquipments extends LinkSelfHref {
     character: Character;
     equipped_items: {
         item: KeyId;
+        description?: LocalizedString;
+        limit_category?: string | null;
+        modified_crafting_stat?: {
+            id: number;
+            type: string;
+            name: string;
+        }[];
+        shield_block?: {
+            value: number;
+            display: {
+                display_string: LocalizedString;
+                color: Rgba;
+            };
+        };
+        unique_equipped?: string | null;
+        weapon?: EquippedItemWeapon;
         sockets?: {
             socket_type: TypeName;
             item: KeyNameId;
@@ -19,34 +52,34 @@ export interface characterEquipments extends LinkSelfHref {
             media: KeyId;
         }[];
         enchantments?: {
-            display_string: LocalizedString;
+            display_string?: LocalizedString;
             source_item?: KeyNameId;
             enchantment_id: number;
             enchantment_slot: {
                 id: number;
-                type: string;
+                type?: string;
             };
         }[];
         slot: TypeName;
         quantity: number;
-        context: number;
-        bonus_list: number[];
+        context?: number;
+        bonus_list?: number[];
         quality: TypeName;
         name: LocalizedString;
-        modified_appearance_id: number;
+        modified_appearance_id?: number;
         media: KeyId;
         item_class: KeyNameId;
         item_subclass: KeyNameId;
         inventory_type: TypeName;
-        binding: TypeName;
-        armor: {
+        binding?: TypeName | null;
+        armor?: {
             value: number;
             display: {
                 display_string: LocalizedString;
                 color: Rgba;
             };
         };
-        stats: {
+        stats?: {
             type: TypeName;
             value: number;
             is_negated?: boolean;
@@ -59,8 +92,9 @@ export interface characterEquipments extends LinkSelfHref {
         spells?: {
             spell: KeyNameId;
             description: LocalizedString;
+            display_color?: Rgba;
         }[];
-        sell_price: {
+        sell_price?: {
             value: number;
             display_strings: {
                 header: LocalizedString;
@@ -69,17 +103,26 @@ export interface characterEquipments extends LinkSelfHref {
                 copper: string;
             };
         };
-        requirements: {
+        requirements?: {
             level: {
                 value: number;
                 display_string: LocalizedString;
             };
-            playable_classes: {
+            playable_classes?: {
                 links: KeyNameId[];
                 display_string: LocalizedString;
             };
+            faction?: {
+                value: TypeName;
+                display_string: LocalizedString;
+            };
+            reputation?: {
+                faction: KeyNameId;
+                min_reputation_level: number;
+                display_string: LocalizedString;
+            };
         };
-        set: {
+        set?: {
             item_set: KeyNameId;
             items: {
                 item: KeyNameId;
@@ -92,37 +135,39 @@ export interface characterEquipments extends LinkSelfHref {
             }[];
             display_string: LocalizedString;
         };
-        level: {
+        level?: {
             value: number;
             display_string: LocalizedString;
         };
-        transmog: {
+        transmog?: {
             item: KeyNameId;
             display_string: LocalizedString;
             item_modified_appearance_id: number;
+            second_item?: KeyNameId;
+            second_item_modified_appearance_id?: number;
         };
-        durability: {
+        durability?: {
             value: number;
             display_string: LocalizedString;
         };
         is_subclass_hidden?: boolean;
-        name_description: {
+        name_description?: {
             display_string: LocalizedString;
             color: Rgba;
         };
     }[];
-    equipped_item_sets: {
-        item_set: KeyNameId;
-        items: {
+    equipped_item_sets?: {
+        item_set?: KeyNameId;
+        items?: {
             item: KeyNameId;
             is_equipped?: boolean;
         }[];
-        effects: {
+        effects?: {
             display_string: LocalizedString;
             required_count: number;
-            is_active: boolean;
+            is_active?: boolean;
         }[];
-        display_string: LocalizedString;
+        display_string?: LocalizedString;
     }[];
 }
 /**

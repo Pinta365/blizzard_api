@@ -15,7 +15,7 @@ export interface CharacterAchievementSummary extends LinkSelfHref {
         id: number;
         achievement: KeyNameId;
         criteria?: AchievementCriteria;
-        completed_timestamp: number;
+        completed_timestamp?: number;
     }[];
     category_progress: {
         category: KeyNameId;
@@ -36,7 +36,7 @@ export interface AchievementStatistic {
     id: number;
     name: LocalizedString;
     last_updated_timestamp: number;
-    description?: string;
+    description?: LocalizedString | null;
     quantity: number;
 }
 
@@ -47,7 +47,7 @@ export interface AchievementsubCategory {
         id: number;
         name: LocalizedString;
         last_updated_timestamp: number;
-        description?: LocalizedString;
+        description?: LocalizedString | null;
         quantity: number;
     }[];
 }
@@ -69,10 +69,10 @@ export interface CharacterAchievementStatistics extends LinkSelfHref {
         };
     };
     categories: {
-        id: number;
+        id?: number;
         name: LocalizedString;
-        sub_categories: AchievementsubCategory[];
-        statistics: AchievementStatistic[];
+        sub_categories?: AchievementsubCategory[];
+        statistics?: AchievementStatistic[];
     }[];
 }
 

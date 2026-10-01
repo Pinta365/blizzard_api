@@ -17,7 +17,7 @@ export interface CharacterEncounterDungeons extends LinkSelfHref {
         instances: {
             instance: KeyNameId;
             modes: {
-                difficulty: TypeName;
+                difficulty: Partial<TypeName>;
                 status: TypeName;
                 progress: {
                     completed_count: number;

@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Character, KeyId, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
+import type { Character, Href, KeyId, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
 
 export interface MythicRating {
     color: {
@@ -11,9 +11,37 @@ export interface MythicRating {
     rating: number;
 }
 
+export interface MythicKeystoneMemberCharacter {
+    name: string;
+    id: number;
+    realm: {
+        key: Href;
+        id: number;
+        slug: string;
+    };
+}
+
+export interface MythicKeystoneBestRun {
+    completed_timestamp: number;
+    duration: number;
+    keystone_level: number;
+    keystone_affixes: KeyNameId[];
+    members: {
+        character: MythicKeystoneMemberCharacter;
+        specialization: KeyNameId;
+        race: KeyNameId;
+        equipped_item_level: number;
+    }[];
+    dungeon: KeyNameId;
+    is_completed_within_time: boolean;
+    mythic_rating: MythicRating;
+    map_rating: MythicRating;
+}
+
 export interface CharacterMythicKeystoneProfile extends LinkSelfHref {
     current_period: {
         period: KeyId;
+        best_runs?: MythicKeystoneBestRun[];
     };
     seasons: KeyId[];
     character: Character;
@@ -22,22 +50,7 @@ export interface CharacterMythicKeystoneProfile extends LinkSelfHref {
 
 export interface CharacterMythicKeystoneSeasonDetails extends LinkSelfHref {
     season: KeyId;
-    best_runs: {
-        completed_timestamp: number;
-        duration: number;
-        keystone_level: number;
-        keystone_affixes: KeyNameId[];
-        members: {
-            character: Character;
-            specialization: KeyNameId;
-            race: KeyNameId;
-            equipped_item_level: number;
-        }[];
-        dungeon: KeyNameId;
-        is_completed_within_time: boolean;
-        mythic_rating: MythicRating;
-        map_rating: MythicRating;
-    }[];
+    best_runs: MythicKeystoneBestRun[];
     character: Character;
     mythic_rating: MythicRating;
 }

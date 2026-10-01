@@ -66,17 +66,19 @@ export interface Href {
 }
 
 /**
- * Represents a self-referential link structure commonly found in API responses.
+ * Represents the self link found at the top of most API responses.
  */
 export interface LinkSelfHref {
-    self: Href;
+    _links: {
+        self: Href;
+    };
 }
+
 /**
- * Represents localized text. It can be either a string (if no locale was used) or a key-value object for multiple locales.
+ * Represents localized text. The client always sends a locale (the configured one, or the region's default), so
+ * localized fields are plain strings.
  */
-export interface LocalizedString {
-    name: string | Record<Locales, string>;
-}
+export type LocalizedString = string;
 
 /**
  * Represents an object with a key (link), ID and LocalizedString name.
@@ -91,7 +93,6 @@ export interface KeyNameId {
 
 /**
  * Represents a reference to another resource: a key (link), a name and an ID.
- * The name is a string when a locale is configured.
  */
 export interface NamedRef {
     key: Href;

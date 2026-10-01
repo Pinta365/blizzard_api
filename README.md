@@ -53,7 +53,7 @@ import { createClient } from "@pinta365/blizzard-api";
 
 const client = createClient({
     region: "eu", // "us" | "eu" | "kr" | "tw" | "cn"
-    locale: "en_GB", // optional: without it, localized fields contain every locale
+    locale: "en_GB", // optional: defaults to the main locale of the region (us: en_US, eu: en_GB, ...)
     clientId: "<YOUR CLIENT ID>",
     clientSecret: "<YOUR SECRET>",
 });
@@ -97,7 +97,8 @@ import type { Card } from "@pinta365/blizzard-api/hearthstone";
 ```
 
 Entry points: `/wow`, `/wow-classic`, `/hearthstone`, `/sc2` and `/diablo3`. The Classic clients mostly return the same
-types as Retail (import those from `/wow`); `/wow-classic` holds the Classic-only ones.
+types as Retail (import those from `/wow`). `/wow-classic` holds the Classic-only ones, such as
+`ClassicCharacterProfile`, where fields that only Retail returns are optional.
 
 ## Following links
 
@@ -134,6 +135,7 @@ The redirect URI must be registered on your API client. Calling a user-scoped en
 - Failed requests throw `errors.APIError`, with `statusCode` and the response body.
 - A `401` is retried once with a fresh token.
 - A `429 Too Many Requests` is retried up to three times, honouring `Retry-After`.
+- A server error (`500`, `502`, `503`, `504`) is retried once.
 
 ```ts
 import { errors } from "@pinta365/blizzard-api";
@@ -165,6 +167,11 @@ const sword = await blizzardAPI.wow.item(33791);
 - `pvpSeasonLeaderboard(seasonId, bracket)` takes a bracket name, e.g. `"3v3"` or `"shuffle-overall"`.
 - `wow`, `hearthstone` and the other namespaces are plain objects. Import types from the game entry points (see
   [Response types](#response-types)).
+- A locale is always sent: when `locale` is not set, the region's main locale is used (`us`: `en_US`, `eu`: `en_GB`,
+  `kr`: `ko_KR`, `tw`: `zh_TW`, `cn`: `zh_CN`). Localized fields (`name`, `description`, ...) are therefore always
+  strings, and the types say so. Before, omitting `locale` returned an object with every locale.
+- Response types were checked against live responses and corrected. Fields that only some characters or flavors have are
+  now optional, so you may need to handle `undefined`.
 - Some types were renamed to remove duplicates. For example, entries of the character collections are now
   `CollectedMount`, `CollectedPet`, `CollectedToy` and `CollectedHeirloom`.
 
@@ -174,6 +181,8 @@ const sword = await blizzardAPI.wow.item(33791);
 deno task test        # offline unit tests
 deno task smoke       # live smoke test of every endpoint (needs .env with BLIZZARD_CLIENT_ID / BLIZZARD_CLIENT_SECRET)
 deno task gen:api     # regenerate src/generated/ after adding or changing endpoints
+deno task check:types # check the response types against the responses saved by the smoke test (fixtures/)
+deno task check:fields # list fields the API returns that the response types don't declare
 ```
 
 ## Issues

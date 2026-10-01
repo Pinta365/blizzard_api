@@ -28,6 +28,11 @@ export interface ConnectedRealm extends LinkSelfHref {
     realms: ConnectedRealmRealm[];
     mythic_leaderboards: { href: string };
     auctions: { href: string };
+    pvp_season?: { href: string };
+    realm_locked_status?: {
+        is_locked_for_pct: boolean;
+        is_locked_for_new_characters: boolean;
+    };
 }
 
 /**

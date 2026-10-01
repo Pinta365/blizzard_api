@@ -18,9 +18,9 @@ export interface CovenantAbilitySpellTooltip {
     spell: KeyNameId;
     description: LocalizedString;
     cast_time: string;
-    power_cost: number | null;
-    range: string;
-    cooldown: string;
+    power_cost?: string | number | null;
+    range?: string;
+    cooldown?: string;
 }
 
 export interface SignatureAbility {
@@ -44,6 +44,7 @@ export interface Covenant extends LinkSelfHref {
         level: number;
         reward: NamedRef;
     }[];
+    soulbinds?: NamedRef[];
     media: KeyId;
 }
 
@@ -52,7 +53,7 @@ export interface CovenantMedia extends LinkSelfHref {
 }
 
 export interface CovenantSoulbinds extends LinkSelfHref {
-    soulbinds: KeyNameId;
+    soulbinds: KeyNameId[];
 }
 
 export interface CovenantSoulbind extends LinkSelfHref {
@@ -65,7 +66,7 @@ export interface CovenantSoulbind extends LinkSelfHref {
 }
 
 export interface CovenantConduits extends LinkSelfHref {
-    conduits: KeyNameId;
+    conduits: KeyNameId[];
 }
 
 export interface CovenantConduitSpellTooltip {

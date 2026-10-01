@@ -7,13 +7,16 @@ export interface CharacterRealm extends KeyNameId {
 export interface CharacterProfile extends LinkSelfHref {
     id: number;
     name: LocalizedString;
+    active_title?: {
+        name: string;
+    };
     gender: TypeName;
     faction: TypeName;
     race: KeyNameId;
     character_class: KeyNameId;
     active_spec: KeyNameId;
     realm: CharacterRealm;
-    guild: {
+    guild?: {
         key: Href;
         name: LocalizedString;
         id: number;
@@ -41,7 +44,7 @@ export interface CharacterProfile extends LinkSelfHref {
     quests: Href;
     achievements_statistics: Href;
     professions: Href;
-    covenant_progress: {
+    covenant_progress?: {
         chosen_covenant: KeyNameId;
         renown_level: number;
         soulbinds: Href;

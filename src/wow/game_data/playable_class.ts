@@ -13,13 +13,13 @@ export interface PlayableClass extends LinkSelfHref {
         female: LocalizedString;
     };
     power_type: KeyNameId;
-    specializations: KeyNameId[];
+    specializations?: KeyNameId[];
     media: KeyId;
     pvp_talent_slots: {
         href: string;
     };
     playable_races: KeyNameId[];
-    additional_power_types: KeyNameId[];
+    additional_power_types?: KeyNameId[];
 }
 
 export interface PlayableClassMedia extends LinkSelfHref {

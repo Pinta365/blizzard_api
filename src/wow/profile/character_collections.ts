@@ -20,9 +20,10 @@ export interface CharacterCollectionTypes extends LinkSelfHref {
 }
 
 export interface CollectedMount {
-    mounts: KeyNameId;
+    mount: KeyNameId;
     is_character_specific?: boolean;
     is_useable: boolean;
+    is_favorite?: boolean;
 }
 export interface CharacterCollectionMounts extends LinkSelfHref {
     mounts: CollectedMount[];
@@ -38,8 +39,10 @@ export interface CollectedPet {
         power: number;
         speed: number;
     };
-    creature_display: KeyId;
+    creature_display?: KeyId;
     id: number;
+    is_active?: boolean;
+    active_slot?: number;
 }
 
 export interface CharacterCollectionPets extends LinkSelfHref {

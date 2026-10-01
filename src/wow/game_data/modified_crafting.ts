@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { Href, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface ModifiedCraftingParents extends LinkSelfHref {
     categories: {
@@ -11,7 +11,11 @@ export interface ModifiedCraftingParents extends LinkSelfHref {
 }
 
 export interface ModifiedCraftingCategories extends LinkSelfHref {
-    categories: KeyNameId;
+    categories: {
+        key: Href;
+        name?: string;
+        id: number;
+    }[];
 }
 
 export interface ModifiedCraftingCategory extends LinkSelfHref {
@@ -20,7 +24,11 @@ export interface ModifiedCraftingCategory extends LinkSelfHref {
 }
 
 export interface ModifiedCraftingSlotTypes extends LinkSelfHref {
-    slot_types: KeyNameId[];
+    slot_types: {
+        key: Href;
+        name?: string;
+        id: number;
+    }[];
 }
 
 export interface ModifiedCraftingSlotType extends LinkSelfHref {

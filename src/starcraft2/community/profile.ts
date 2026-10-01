@@ -50,6 +50,7 @@ export interface Sc2StaticReward {
     unlockableType: string;
     isSkin: boolean;
     uiOrderHint: number;
+    command?: string;
 }
 
 export interface Sc2StaticProfile {
@@ -128,6 +129,8 @@ export interface Sc2CategoryPointProgress {
 export interface Sc2EarnedReward {
     rewardId: string;
     selected: boolean;
+    achievementId?: string;
+    category?: string;
 }
 
 export interface Sc2EarnedAchievement {
@@ -138,6 +141,8 @@ export interface Sc2EarnedAchievement {
     isComplete: boolean;
     inProgress: boolean;
     criteria: unknown[];
+    nextProgressEarnedQuantity?: number;
+    nextProgressRequiredQuantity?: number;
 }
 
 export interface Sc2PlayerProfile {
@@ -160,7 +165,7 @@ export interface Sc2LadderTeamMember {
     realm: number;
     region: number;
     displayName: string;
-    clanTag: string;
+    clanTag?: string;
     favoriteRace: string;
 }
 

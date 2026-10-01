@@ -1,6 +1,6 @@
 import type { ApiContext } from "../../shared/index.ts";
 import { search } from "../search.ts";
-import type { KeyName, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type { KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
 
 export interface RealmList extends KeyNameId {
@@ -12,7 +12,7 @@ export interface Realms extends LinkSelfHref {
 
 export interface Realm extends LinkSelfHref {
     id: number;
-    region: KeyName;
+    region: KeyNameId;
     connected_realm: {
         href: string;
     };

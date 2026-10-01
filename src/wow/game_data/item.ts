@@ -8,7 +8,7 @@ export interface ItemClasses extends LinkSelfHref {
 }
 
 export interface ItemClass extends LinkSelfHref {
-    class_id: number;
+    id: number;
     name: LocalizedString;
     item_subclasses: KeyNameId[];
 }
@@ -24,17 +24,14 @@ export interface ItemSet extends LinkSelfHref {
     effects: {
         display_string: LocalizedString;
         required_count: number;
-    };
-    is_effect_active: boolean;
+    }[];
 }
 
 export interface ItemSubclass extends LinkSelfHref {
     id: number;
-    class_id: number;
-    subclass_id: number;
     item_class: NamedRef;
     display_name: LocalizedString;
-    verbose_name: string;
+    verbose_name?: string;
     hide_subclass_in_tooltips?: boolean;
 }
 
@@ -55,8 +52,8 @@ export interface Item extends LinkSelfHref {
     is_stackable: boolean;
     preview_item: {
         item: KeyId;
-        context: number;
-        bonus_list: number[];
+        context?: number;
+        bonus_list?: number[];
         quality: TypeName;
         name: LocalizedString;
         media: KeyId;
@@ -72,6 +69,12 @@ export interface Item extends LinkSelfHref {
                 display_string: LocalizedString;
                 damage_class: TypeName;
             };
+            additional_damage?: {
+                min_value: number;
+                max_value: number;
+                display_string: LocalizedString;
+                damage_class: TypeName;
+            }[];
             attack_speed: {
                 value: number;
                 display_string: LocalizedString;
@@ -84,7 +87,7 @@ export interface Item extends LinkSelfHref {
         stats: {
             type: TypeName;
             value: number;
-            is_negated: boolean;
+            is_negated?: boolean;
             display: {
                 display_string: LocalizedString;
                 color: {
@@ -105,7 +108,7 @@ export interface Item extends LinkSelfHref {
                 display_string: LocalizedString;
             };
         };
-        level: {
+        level?: {
             value: number;
             display_string: LocalizedString;
         };
@@ -113,9 +116,18 @@ export interface Item extends LinkSelfHref {
             value: number;
             display_string: LocalizedString;
         };
+        sell_price?: {
+            value: number;
+            display_strings: {
+                header: LocalizedString;
+                gold: string;
+                silver: string;
+                copper: string;
+            };
+        };
     };
     purchase_quantity: number;
-    appearances: KeyId[];
+    appearances?: KeyId[];
 }
 
 export interface ItemMedia extends LinkSelfHref {

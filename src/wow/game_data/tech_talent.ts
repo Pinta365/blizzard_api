@@ -26,17 +26,17 @@ export interface TechTalents extends LinkSelfHref {
 
 export interface TechTalent extends LinkSelfHref {
     id: number;
-    talent_tree: KeyNameId;
+    talent_tree: KeyId;
     name: LocalizedString;
-    description: LocalizedString;
-    spell_tooltip: {
+    description?: LocalizedString;
+    spell_tooltip?: {
         spell: KeyNameId;
         description: LocalizedString;
         cast_time: LocalizedString;
     };
     tier: number;
     display_order: number;
-    prerequisite_talent: KeyNameId;
+    prerequisite_talent?: KeyNameId;
     media: KeyId;
 }
 

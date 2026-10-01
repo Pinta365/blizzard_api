@@ -143,7 +143,7 @@ export interface Sc2LegacyAchievementCategory {
     title: string;
     categoryId: string;
     featuredAchievementId: string;
-    children: {
+    children?: {
         title: string;
         categoryId: string;
         featuredAchievementId: string;

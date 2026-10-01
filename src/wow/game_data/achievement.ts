@@ -28,8 +28,8 @@ export interface AggregatesByFaction {
 export interface AchievementCategory extends LinkSelfHref {
     id: number;
     name: LocalizedString;
-    achievements: KeyNameId[];
-    parent_category: KeyNameId;
+    achievements?: KeyNameId[];
+    parent_category?: KeyNameId;
     is_guild_category: boolean;
     aggregates_by_faction: AggregatesByFaction;
     display_order: number;
@@ -46,12 +46,12 @@ export interface Achievement extends LinkSelfHref {
     description: LocalizedString;
     points: number;
     is_account_wide: boolean;
-    criteria: {
+    criteria?: {
         id: number;
         description: LocalizedString;
         amount: number;
     };
-    next_achievement: KeyNameId;
+    next_achievement?: KeyNameId;
     media: KeyId;
     display_order: number;
 }

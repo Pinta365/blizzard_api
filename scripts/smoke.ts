@@ -300,7 +300,7 @@ async function discoverContext(): Promise<SmokeContext> {
     const periods = await client.wow.mythicKeystonePeriods();
     const period = periods.current_period.id;
     const leaderboards = await client.wow.mythicKeystoneLeaderboards(realmId);
-    const dungeon = leaderboards.current_leaderboards[0];
+    const dungeon = leaderboards.current_leaderboards?.[0];
     if (!dungeon) throw new Error("no current mythic keystone leaderboards available");
     const leaderboard = await client.wow.mythicKeystoneLeaderboard(realmId, dungeon.id, period);
 
@@ -929,7 +929,7 @@ function buildCases(): Case[] {
         c("wow.mythicKeystoneLeaderboard", async () => {
             const realmId = await connectedRealmId();
             const leaderboards = await client.wow.mythicKeystoneLeaderboards(realmId);
-            const dungeon = leaderboards.current_leaderboards[0];
+            const dungeon = leaderboards.current_leaderboards?.[0];
             if (!dungeon) throw new Error("no current mythic keystone leaderboards available");
             const periods = await client.wow.mythicKeystonePeriods();
             return await client.wow.mythicKeystoneLeaderboard(realmId, dungeon.id, periods.current_period.id);

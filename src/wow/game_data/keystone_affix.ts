@@ -1,8 +1,12 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Asset, KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { Asset, Href, KeyId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
 
 export interface KeystoneAffixes extends LinkSelfHref {
-    affixes: KeyNameId[];
+    affixes: {
+        key: Href;
+        name: string | null;
+        id: number;
+    }[];
 }
 
 export interface KeystoneAffix extends LinkSelfHref {

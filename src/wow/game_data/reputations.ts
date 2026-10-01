@@ -14,7 +14,13 @@ export interface ReputationFaction extends LinkSelfHref {
 }
 
 export interface ReputationTiers extends LinkSelfHref {
-    reputation_tiers: KeyNameId[];
+    reputation_tiers: {
+        key: {
+            href: string;
+        };
+        name?: LocalizedString;
+        id: number;
+    }[];
 }
 
 export interface ReputationTier extends LinkSelfHref {
@@ -25,7 +31,7 @@ export interface ReputationTier extends LinkSelfHref {
         max_value: number;
         id: number;
     }[];
-    faction: KeyNameId;
+    faction?: KeyNameId;
 }
 /**
  * Returns an index of reputation factions.

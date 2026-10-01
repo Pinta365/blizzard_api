@@ -89,7 +89,11 @@ export type {
     MythicKeystoneSeason,
     MythicKeystoneSeasons,
 } from "./game_data/mythic_keystone_dungeon.ts";
-export type { MythicKeystoneLeaderboard, MythicKeystoneLeaderboards } from "./game_data/mythic_keystone_leaderboard.ts";
+export type {
+    MythicKeystoneLeaderboard,
+    MythicKeystoneLeaderboards,
+    MythicLeaderboardRating,
+} from "./game_data/mythic_keystone_leaderboard.ts";
 export type { MythicRaidLeaderboard } from "./game_data/mythic_raid_leaderboard.ts";
 export type { Neighborhood, NeighborhoodMap, NeighborhoodMaps } from "./game_data/neighborhood.ts";
 export type { Pet, PetAbilities, PetAbility, PetAbilityMedia, PetMedia, Pets } from "./game_data/pet.ts";
@@ -208,13 +212,15 @@ export type {
     CharacterEncounterRaids,
     CharacterEncounters,
 } from "./profile/character_encounters.ts";
-export type { characterEquipments, Rgba } from "./profile/character_equipment.ts";
+export type { characterEquipments, EquippedItemWeapon, Rgba } from "./profile/character_equipment.ts";
 export type { CharacterHouse } from "./profile/character_house.ts";
 export type { CharacterHunterPets } from "./profile/character_hunter_pets.ts";
 export type { CharacterMedia } from "./profile/character_media.ts";
 export type {
     CharacterMythicKeystoneProfile,
     CharacterMythicKeystoneSeasonDetails,
+    MythicKeystoneBestRun,
+    MythicKeystoneMemberCharacter,
     MythicRating,
 } from "./profile/character_mythic_keystone_profile.ts";
 export type { CharacterProfession, CharacterProfessions, Tier } from "./profile/character_professions.ts";
@@ -226,9 +232,10 @@ export type { CharacterSoulbinds } from "./profile/character_soulbinds.ts";
 export type {
     CharacterSpecializations,
     CharacterSpecializationTalent,
+    ClassicSpecializationTalent,
     Detail,
 } from "./profile/character_specializations.ts";
-export type { CharacterStatistics } from "./profile/character_statistics.ts";
+export type { CharacterStatistics, StatRating, StatRatingBonus } from "./profile/character_statistics.ts";
 export type { CharacterTitles } from "./profile/character_titles.ts";
 export type {
     CrestAsset,
@@ -237,6 +244,8 @@ export type {
     GuildAchievements,
     GuildActivity,
     GuildCrestRgba,
+    GuildReference,
     GuildRoster,
+    GuildRosterMemberCharacter,
 } from "./profile/guild.ts";
 export type { Search, SearchParameters } from "./search.ts";

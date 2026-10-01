@@ -11,7 +11,7 @@ export interface D3ItemType {
 
 export interface D3Attributes {
     primary: string[];
-    secondary: string[];
+    secondary?: string[];
 }
 
 export interface D3ItemColor {
@@ -37,8 +37,8 @@ export interface D3Gem {
         icon: string;
         path: string;
     };
-    jewelRank: number;
-    jewelSecondaryUnlockRank: number;
+    jewelRank?: number;
+    jewelSecondaryUnlockRank?: number;
     attributes: string[];
     isGem: boolean;
     isJewel: boolean;
@@ -101,6 +101,8 @@ export interface D3HeroItem {
     set?: D3ItemSet;
     dye?: D3ItemColor;
     transmog?: D3ItemRef;
+    dyeColor?: D3ItemColor;
+    transmogItem?: D3ItemRef;
     craftedBy?: D3CraftedBy;
     seasonRequiredToDrop?: number;
     isSeasonRequiredToDrop?: boolean;

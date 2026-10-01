@@ -5,7 +5,7 @@ export interface Tier {
     skill_points: number;
     max_skill_points: number;
     tier: NameId;
-    known_recipes: KeyNameId[];
+    known_recipes?: KeyNameId[];
 }
 
 export interface CharacterProfession {
@@ -17,8 +17,10 @@ export interface CharacterProfession {
 
 export interface CharacterProfessions extends LinkSelfHref {
     character: Character;
-    primaries: CharacterProfession[];
-    secondaries: CharacterProfession[];
+    /** Absent when the character has no primary professions. */
+    primaries?: CharacterProfession[];
+    /** Absent when the character has no secondary professions. */
+    secondaries?: CharacterProfession[];
 }
 
 /**

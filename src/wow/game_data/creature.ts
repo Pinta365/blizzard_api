@@ -10,7 +10,7 @@ export interface CreatureFamilies extends LinkSelfHref {
 export interface CreatureFamily extends LinkSelfHref {
     id: number;
     name: LocalizedString;
-    specialization: KeyNameId;
+    specialization?: KeyNameId;
     media: KeyId;
 }
 
@@ -27,7 +27,7 @@ export interface Creature extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     type: KeyNameId;
-    family: KeyNameId;
+    family?: KeyNameId;
     creature_displays: KeyId[];
     is_tameable: boolean;
 }

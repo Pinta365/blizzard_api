@@ -225,3 +225,43 @@ Deno.test("classic clients add the namespace variant", async () => {
         assertEquals(calls.filter(isToken).length, 1);
     });
 });
+
+Deno.test("sends the region's default locale when none is configured", async () => {
+    await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
+        const { locale: _, ...withoutLocale } = config;
+        await createClient({ ...withoutLocale, region: "us" }).wow.mount(6);
+        await createClient({ ...withoutLocale, region: "kr" }).wow.mount(6);
+        await createClient({ ...withoutLocale, region: "us", locale: "de_DE" }).wow.mount(6);
+        const locales = calls.filter((call) => !isToken(call)).map((call) =>
+            new URL(call.url).searchParams.get("locale")
+        );
+        assertEquals(locales, ["en_US", "ko_KR", "de_DE"]);
+    });
+});
+
+Deno.test("retries a server error once", async () => {
+    let apiCalls = 0;
+    await withFetch(
+        (call) => {
+            if (isToken(call)) return tokenResponse("t1");
+            return ++apiCalls === 1 ? new Response("", { status: 503 }) : json({ ok: true });
+        },
+        async () => {
+            const client = createClient(config);
+            assertEquals(await client.wow.mount(6), { ok: true } as unknown);
+            assertEquals(apiCalls, 2);
+        },
+    );
+});
+
+Deno.test("does not retry a server error twice", async () => {
+    await withFetch(
+        (call) => isToken(call) ? tokenResponse("t1") : new Response("", { status: 500 }),
+        async (calls) => {
+            const client = createClient(config);
+            const error = await assertRejects(() => client.wow.mount(6), errors.APIError);
+            assertEquals(error.statusCode, 500);
+            assertEquals(calls.filter((call) => !isToken(call)).length, 2);
+        },
+    );
+});

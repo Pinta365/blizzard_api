@@ -9,8 +9,15 @@ export interface CharacterReputations extends LinkSelfHref {
             raw: number;
             value: number;
             max: number;
-            tier: number;
+            tier?: number;
+            renown_level?: number;
             name: LocalizedString;
+        };
+        /** Paragon progress, for factions at maximum standing that have a paragon track. */
+        paragon?: {
+            raw: number;
+            value: number;
+            max: number;
         };
     }[];
 }

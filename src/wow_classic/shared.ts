@@ -5,14 +5,8 @@
  */
 
 // Game Data APIs
-export {
-    achievement,
-    achievementCategories,
-    achievementCategory,
-    achievementMedia,
-    achievements,
-} from "../wow/game_data/achievement.ts";
-export { connectedRealm, connectedRealms, searchConnectedRealm } from "../wow/game_data/connected_realm.ts";
+export { achievement, achievementCategory, achievementMedia, achievements } from "../wow/game_data/achievement.ts";
+export { connectedRealms, searchConnectedRealm } from "../wow/game_data/connected_realm.ts";
 export {
     creature,
     creatureDisplayMedia,
@@ -33,12 +27,20 @@ export { realm, realms, searchRealm } from "../wow/game_data/realm.ts";
 export { region, regions } from "../wow/game_data/region.ts";
 
 // Profile APIs
-export { characterAppearanceSummary } from "../wow/profile/character_appearance.ts";
 export { characterEquipments } from "../wow/profile/character_equipment.ts";
 export { characterHunterPets } from "../wow/profile/character_hunter_pets.ts";
 export { characterMedia } from "../wow/profile/character_media.ts";
-export { characterProfile, characterProfileStatus } from "../wow/profile/character_profile.ts";
-export { characterPvpSummary } from "../wow/profile/character_pvp.ts";
+export { characterProfileStatus } from "../wow/profile/character_profile.ts";
 export { characterReputations } from "../wow/profile/character_reputations.ts";
-export { characterStatistics } from "../wow/profile/character_statistics.ts";
-export { guild, guildAchievements, guildActivity, guildRoster } from "../wow/profile/guild.ts";
+export { guild, guildActivity, guildRoster } from "../wow/profile/guild.ts";
+
+// Classic-typed versions of Retail endpoints (fields Retail always returns are optional here)
+export {
+    achievementCategories,
+    characterAppearanceSummary,
+    characterProfile,
+    characterPvpSummary,
+    characterStatistics,
+    connectedRealm,
+    guildAchievements,
+} from "./profile_overrides.ts";

@@ -73,8 +73,8 @@ export interface JournalInstance extends LinkSelfHref {
     location?: NameId;
     modes: {
         mode: TypeName;
-        players: 5;
-        is_tracked: true;
+        players: number;
+        is_tracked: boolean;
     }[];
     media: KeyId;
     minimum_level: number;

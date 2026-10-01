@@ -32,9 +32,9 @@ export async function itemTypes(ctx: ApiContext): Promise<ItemTypes[]> {
  * @param itemTypeSlug - The slug of the item type to retrieve.
  * @returns A promise that resolves to an object representing the data for a single item type by slug.
  */
-export async function itemType(ctx: ApiContext, itemTypeSlug: string): Promise<ItemType> {
+export async function itemType(ctx: ApiContext, itemTypeSlug: string): Promise<ItemType[]> {
     return await ctx.request({
         method: "GET",
         url: `/d3/data/item-type/${itemTypeSlug}`,
-    }) as ItemType;
+    }) as ItemType[];
 }

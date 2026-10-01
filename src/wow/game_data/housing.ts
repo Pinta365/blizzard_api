@@ -5,7 +5,7 @@
 import type { ApiContext } from "../../shared/index.ts";
 
 import { search } from "../search.ts";
-import type { LinkSelfHref, NamedRef } from "../../shared/index.ts";
+import type { Href, LinkSelfHref, NamedRef } from "../../shared/index.ts";
 import type { Search, SearchParameters } from "../search.ts";
 
 // Decor
@@ -24,7 +24,11 @@ export interface Decor extends LinkSelfHref {
 
 // Fixture
 export interface Fixtures extends LinkSelfHref {
-    fixtures: NamedRef[];
+    fixtures: {
+        key: Href;
+        name: string | null;
+        id: number;
+    }[];
 }
 
 export interface Fixture extends LinkSelfHref {

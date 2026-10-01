@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { KeyNameId, LinkSelfHref } from "../../shared/index.ts";
+import type { Href, LinkSelfHref } from "../../shared/index.ts";
 
 export interface MythicRaidLeaderboard extends LinkSelfHref {
     slug: string;
@@ -21,7 +21,11 @@ export interface MythicRaidLeaderboard extends LinkSelfHref {
         region: string;
         rank: number;
     }[];
-    journal_instance: KeyNameId;
+    journal_instance: {
+        key: Href;
+        name: string | null;
+        id: number;
+    };
 }
 /**
  * Returns the leaderboard for a given raid and faction.

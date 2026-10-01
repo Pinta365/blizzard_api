@@ -1,5 +1,6 @@
 import type { ApiContext } from "../../shared/index.ts";
 import type { LocalizedString } from "../../shared/index.ts";
+import type { Card } from "./cards.ts";
 
 export interface Options {
     code?: string;
@@ -11,75 +12,14 @@ export interface Deck {
     deckCode: string;
     version: number;
     format: string;
-    hero: {
-        id: number;
-        collectible: number;
-        slug: string;
-        classId: number;
-        multiClassIds: number[];
-        cardTypeId: number;
-        cardSetId: number;
-        rarityId: number;
-        artistName: string;
-        health: number;
-        manaCost: number;
-        name: LocalizedString;
-        text: LocalizedString;
-        image: string;
-        imageGold: string;
-        flavorText: LocalizedString;
-        cropImage: string;
-        childIds: number[];
-    };
-    heroPower: {
-        id: number;
-        collectible: number;
-        slug: string;
-        classId: number;
-        multiClassIds: number[];
-        cardTypeId: number;
-        cardSetId: number;
-        rarityId: number;
-        artistName: null;
-        manaCost: number;
-        name: LocalizedString;
-        text: LocalizedString;
-        image: string;
-        imageGold: string;
-        flavorText: LocalizedString;
-        cropImage: string;
-        parentId: number;
-    };
+    hero: Card;
+    heroPower: Card;
     class: {
         slug: string;
         id: number;
         name: LocalizedString;
     };
-    cards: {
-        id: number;
-        collectible: number;
-        slug: string;
-        classId: number;
-        multiClassIds: number[];
-        cardTypeId: number;
-        cardSetId: number;
-        rarityId: number;
-        artistName: string;
-        health: number;
-        attack: number;
-        manaCost: number;
-        name: LocalizedString;
-        text: LocalizedString;
-        image: string;
-        imageGold: string;
-        flavorText: LocalizedString;
-        cropImage: string;
-        copyOfCardId: number;
-        duels: {
-            relevant: boolean;
-            constructed: boolean;
-        };
-    }[];
+    cards: Card[];
     cardCount: number;
 }
 

@@ -40,7 +40,7 @@ export interface LeaderboardBase extends LinkSelfHref {
             accountId: number;
             data: LeaderboardData[];
         }[];
-        order: 1;
+        order: number;
         data: LeaderboardData[];
     }[];
     key: string;
@@ -48,12 +48,13 @@ export interface LeaderboardBase extends LinkSelfHref {
     column: {
         id: string;
         hidden: boolean;
-        order: number;
-        label: LocalizedString;
+        order?: number;
+        label: LocalizedString | null;
         type: string;
     }[];
     last_update_time: string;
     generated_by: string;
+    hardcore?: boolean;
 }
 
 export interface SeasonLeaderboard extends LeaderboardBase {

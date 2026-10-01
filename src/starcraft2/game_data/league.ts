@@ -10,6 +10,8 @@ export interface League extends LinkSelfHref {
     };
     tier: {
         id: number;
+        min_rating?: number;
+        max_rating?: number;
         division: {
             id: number;
             ladder_id: number;

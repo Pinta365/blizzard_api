@@ -12,7 +12,7 @@ export interface ClassicEraTalent {
         spell: { name: string; id: number };
         description: string;
         cast_time: string;
-        power_cost: string | null;
+        power_cost?: string | null;
         range?: string;
         cooldown?: string;
     };

@@ -12,8 +12,21 @@ export interface CrestAsset {
     media?: KeyId;
     color: {
         id: number;
-        rgba: GuildCrestRgba;
+        rgba?: GuildCrestRgba;
     };
+}
+
+export interface GuildReference {
+    key: Href;
+    name: string;
+    id: number;
+    realm: {
+        key: Href;
+        name: LocalizedString;
+        id: number;
+        slug: string;
+    };
+    faction: TypeName;
 }
 
 export interface Guild extends LinkSelfHref {
@@ -42,11 +55,15 @@ export interface Guild extends LinkSelfHref {
 }
 
 export interface GuildActivity extends LinkSelfHref {
-    guild: Guild;
-    activities: {
-        character_achievement: {
+    guild: GuildReference;
+    activities?: {
+        character_achievement?: {
             character: Character;
             achievement: KeyNameId;
+        };
+        encounter_completed?: {
+            encounter: KeyNameId;
+            mode: TypeName;
         };
         activity: {
             type: string;
@@ -63,30 +80,47 @@ export interface Critiera {
 }
 
 export interface GuildAchievements extends LinkSelfHref {
-    guild: Guild;
+    guild: GuildReference;
     total_quantity: number;
     total_points: number;
     achievements: {
         id: number;
         achievement: KeyNameId;
-        criteria: Critiera;
-        completed_timestamp: number;
+        criteria?: Critiera;
+        completed_timestamp?: number;
     }[];
-    category_progress: {
+    category_progress?: {
         category: KeyNameId;
         quantity: number;
         points: number;
     }[];
-    recent_events: {
+    recent_events?: {
         achievement: KeyNameId;
         timestamp: number;
     }[];
 }
 
+export interface GuildRosterMemberCharacter {
+    key: Href;
+    name: string;
+    id: number;
+    realm: {
+        key: Href;
+        id: number;
+        slug: string;
+    };
+    level: number;
+    playable_class: KeyId;
+    playable_race: KeyId;
+    faction: {
+        type: string;
+    };
+}
+
 export interface GuildRoster extends LinkSelfHref {
-    guild: Guild;
+    guild: GuildReference;
     members: {
-        character: Character;
+        character: GuildRosterMemberCharacter;
         rank: number;
     }[];
 }

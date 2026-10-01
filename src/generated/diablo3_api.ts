@@ -5,7 +5,7 @@ import type { Artisan, Recipe } from "../diablo3/community/artisan.ts";
 import type { D3Account, D3Hero, D3HeroFollowerItems, D3HeroItems } from "../diablo3/community/profile.ts";
 import type { Era, EraLeaderboard, Eras, Season, SeasonLeaderboard, Seasons } from "../diablo3/game_data/d3.ts";
 import type { Follower } from "../diablo3/community/follower.ts";
-import type { HeroClass, HeroSkill } from "../diablo3/community/hero.ts";
+import type { HeroClass, HeroSkillDetail } from "../diablo3/community/hero.ts";
 import type { Item } from "../diablo3/community/item.ts";
 import type { ItemType, ItemTypes } from "../diablo3/community/item_type.ts";
 
@@ -127,7 +127,7 @@ export interface Diablo3Api {
      * @param skillSlug - The slug of the skill to retrieve.
      * @returns A promise that resolves to an object representing the data for a single skill by slug for a specific character class.
      */
-    heroSkill(classSlug: string, skillSlug: string): Promise<HeroSkill>;
+    heroSkill(classSlug: string, skillSlug: string): Promise<HeroSkillDetail>;
 
     /**
      * Returns a single item by item slug and ID.
@@ -143,7 +143,7 @@ export interface Diablo3Api {
      * @param itemTypeSlug - The slug of the item type to retrieve.
      * @returns A promise that resolves to an object representing the data for a single item type by slug.
      */
-    itemType(itemTypeSlug: string): Promise<ItemType>;
+    itemType(itemTypeSlug: string): Promise<ItemType[]>;
 
     /**
      * Returns an index of item types.

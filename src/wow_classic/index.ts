@@ -7,7 +7,7 @@
 export * from "./shared.ts";
 
 // Game Data APIs
-export { auctions, commodities } from "../wow/game_data/auction_house.ts";
+export { auctions } from "../wow/game_data/auction_house.ts";
 export {
     mythicKeystonePeriod,
     mythicKeystonePeriods,
@@ -30,6 +30,6 @@ export {
 export { token } from "../wow/game_data/token.ts";
 
 // Profile APIs
-export { characterAchievementStatistics, characterAchievementSummary } from "../wow/profile/character_achievements.ts";
+export { characterAchievementStatistics } from "../wow/profile/character_achievements.ts";
 export { characterPvpBracketStatistics } from "../wow/profile/character_pvp.ts";
-export { characterSpecializations } from "../wow/profile/character_specializations.ts";
+export { characterAchievementSummary, characterSpecializations, commodities } from "./profile_overrides.ts";

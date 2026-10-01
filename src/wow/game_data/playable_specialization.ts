@@ -15,7 +15,7 @@ export interface PlayableSpecializations extends LinkSelfHref {
     pet_specializations: NamedRef[];
 }
 
-export interface PlayableSpecialization {
+export interface PlayableSpecialization extends LinkSelfHref {
     id: number;
     playable_class: KeyNameId;
     /** Hero talent trees available to this specialization (Retail). */
@@ -27,7 +27,7 @@ export interface PlayableSpecialization {
     };
     media: KeyId;
     role: TypeName;
-    pvp_talents: {
+    pvp_talents?: {
         talent: KeyNameId;
         spell_tooltip: {
             description: LocalizedString;
@@ -37,7 +37,14 @@ export interface PlayableSpecialization {
             power_cost?: LocalizedString;
         };
     }[];
-    spec_talent_tree: KeyName;
+    spec_talent_tree?: KeyName;
+    /** Talent tiers (Classic). */
+    talent_tiers?: {
+        level: number;
+        talents?: {
+            talent: KeyNameId;
+        }[];
+    }[];
     power_type: KeyNameId;
     primary_stat_type: TypeName;
 }
