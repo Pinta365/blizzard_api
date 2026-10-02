@@ -16,7 +16,8 @@ export interface Detail {
         spell: KeyId & { name?: string };
         description?: LocalizedString | null;
         cast_time?: LocalizedString;
-        power_cost?: LocalizedString;
+        /** null for abilities without a cost. */
+        power_cost?: LocalizedString | null;
         cooldown?: LocalizedString;
         range?: LocalizedString;
     };

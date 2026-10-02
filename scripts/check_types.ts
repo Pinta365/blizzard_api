@@ -76,10 +76,16 @@ for (const block of output.split(/\n(?=TS\d+ \[ERROR\])/)) {
     problems.set(name, [...(problems.get(name) ?? []), message]);
 }
 
+/** Keeps the start and the end of long diagnostics: the root cause of a mismatch is in the last lines. */
+function shorten(message: string): string {
+    const lines = message.split("\n").map((line) => line.length > 300 ? line.slice(0, 300) + "…" : line);
+    return lines.length > 12 ? [...lines.slice(0, 4), "    …", ...lines.slice(-8)].join("\n") : lines.join("\n");
+}
+
 const checked = caseByLine.size;
 for (const [name, messages] of [...problems].sort()) {
     console.log(`\n=== ${name}`);
-    for (const message of messages) console.log(message.slice(0, 1500));
+    for (const message of messages) console.log(shorten(message));
 }
 console.log(`\nChecked ${checked} fixtures: ${checked - problems.size} match, ${problems.size} with type errors.`);
 if (problems.size) Deno.exit(1);

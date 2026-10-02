@@ -43,6 +43,9 @@ export interface CollectedPet {
     id: number;
     is_active?: boolean;
     active_slot?: number;
+    is_favorite?: boolean;
+    /** The custom name, if the player renamed the pet. */
+    name?: string;
 }
 
 export interface CharacterCollectionPets extends LinkSelfHref {

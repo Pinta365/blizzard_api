@@ -1,8 +1,20 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Character, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
+import type { Character, Href, KeyNameId, LinkSelfHref } from "../../shared/index.ts";
+
+/**
+ * A character's active title. `display_string` has a `{name}` placeholder for the character name.
+ */
+export interface CharacterActiveTitle {
+    key: Href;
+    name: string;
+    id: number;
+    display_string: string;
+}
 
 export interface CharacterTitles extends LinkSelfHref {
     character: Character;
+    /** Absent when the character has no active title. */
+    active_title?: CharacterActiveTitle;
     titles: KeyNameId[];
 }
 

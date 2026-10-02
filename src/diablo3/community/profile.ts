@@ -86,6 +86,8 @@ export interface D3HeroItem {
     typeName?: string;
     type?: D3ItemType;
     armor?: number;
+    /** Display text for shields, e.g. "+16.0% Chance to Block\n7-12 Block Amount". */
+    blockChance?: string;
     attacksPerSecond?: number;
     minDamage?: number;
     maxDamage?: number;
@@ -329,7 +331,8 @@ export interface D3Account {
         act4: boolean;
         act5: boolean;
     };
-    fallenHeroes: D3FallenHero[];
+    /** Absent when the account has no fallen hardcore heroes. */
+    fallenHeroes?: D3FallenHero[];
     seasonalProfiles: Record<string, D3SeasonalProfile>;
     blacksmith: D3Artisan;
     jeweler: D3Artisan;

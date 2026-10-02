@@ -236,7 +236,7 @@ export type {
     Detail,
 } from "./profile/character_specializations.ts";
 export type { CharacterStatistics, StatRating, StatRatingBonus } from "./profile/character_statistics.ts";
-export type { CharacterTitles } from "./profile/character_titles.ts";
+export type { CharacterActiveTitle, CharacterTitles } from "./profile/character_titles.ts";
 export type {
     CrestAsset,
     Critiera,

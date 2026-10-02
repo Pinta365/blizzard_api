@@ -30,6 +30,9 @@ jobs:
               with:
                   deno-version: v2.x
 
+            - name: Cache dependencies
+              run: deno cache mod.ts scripts/smoke.ts scripts/check_types.ts scripts/check_fields.ts
+
             - name: Write .env
               env:
                   BLIZZARD_CLIENT_ID: ${{ secrets.BLIZZARD_CLIENT_ID }}
@@ -89,11 +92,11 @@ jobs:
                       echo '```'
                       echo "### Types (\`deno task check:types\`)"
                       echo '```'
-                      head -c 20000 types.log | grep -v "^Task "
+                      grep -vE "^(Task|Download) " types.log | head -c 20000
                       echo '```'
                       echo "### Undeclared fields (\`deno task check:fields\`)"
                       echo '```'
-                      head -c 20000 fields.log | grep -v "^Task "
+                      grep -vE "^(Task|Download) " fields.log | head -c 20000
                       echo '```'
                   } > report.md
 

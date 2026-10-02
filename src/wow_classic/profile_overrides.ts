@@ -32,20 +32,26 @@ type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 /** Character profile as returned for Classic: Retail-only links and fields are optional. */
 export interface ClassicCharacterProfile extends
-    WithOptional<
-        CharacterProfile,
-        | "active_spec"
-        | "achievement_points"
-        | "achievements"
-        | "encounters"
-        | "mythic_keystone_profile"
-        | "collections"
-        | "quests"
-        | "achievements_statistics"
-        | "professions"
-        | "name_search"
-        | "is_remix"
-    > {}
+    Omit<
+        WithOptional<
+            CharacterProfile,
+            | "active_spec"
+            | "achievement_points"
+            | "achievements"
+            | "encounters"
+            | "mythic_keystone_profile"
+            | "collections"
+            | "quests"
+            | "achievements_statistics"
+            | "professions"
+            | "name_search"
+            | "is_remix"
+        >,
+        "active_title"
+    > {
+    /** Classic only returns the title name. Absent when the character has no active title. */
+    active_title?: { name: string };
+}
 
 /** Character appearance as returned for Classic (no active specialization on Era). */
 export interface ClassicCharacterAppearanceSummary extends WithOptional<CharacterAppearanceSummary, "active_spec"> {}

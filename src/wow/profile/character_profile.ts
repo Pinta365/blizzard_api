@@ -1,4 +1,5 @@
 import type { ApiContext, Href, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
+import type { CharacterActiveTitle } from "./character_titles.ts";
 
 export interface CharacterRealm extends KeyNameId {
     slug: string;
@@ -7,9 +8,8 @@ export interface CharacterRealm extends KeyNameId {
 export interface CharacterProfile extends LinkSelfHref {
     id: number;
     name: LocalizedString;
-    active_title?: {
-        name: string;
-    };
+    /** Absent when the character has no active title. */
+    active_title?: CharacterActiveTitle;
     gender: TypeName;
     faction: TypeName;
     race: KeyNameId;
