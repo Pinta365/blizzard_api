@@ -1,0 +1,47 @@
+# .github/workflows/npm-publish.yml
+#
+# Publishes the npm package (@pinta365/blizzard_api) when a GitHub release is published, like publish.yml does
+# for JSR. Uses npm trusted publishing (OIDC): no NPM_TOKEN secret, but the package must list this repository and
+# workflow file (npm-publish.yml) as a trusted publisher on npmjs.com. npm then also adds provenance.
+name: Publish to npm
+on:
+    release:
+        types: [released]
+    workflow_dispatch:
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            id-token: write
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: denoland/setup-deno@v2
+              with:
+                  deno-version: v2.x
+
+            - name: Check the release tag matches deno.jsonc
+              if: github.event_name == 'release'
+              env:
+                  TAG: ${{ github.event.release.tag_name }}
+              run: |
+                  version=$(deno eval 'import { parse } from "jsr:@std/jsonc@^1"; console.log((parse(Deno.readTextFileSync("deno.jsonc")) as { version: string }).version)')
+                  if [ "${TAG#v}" != "$version" ]; then
+                      echo "::error::Release tag $TAG does not match version $version in deno.jsonc."
+                      exit 1
+                  fi
+
+            - name: Build npm package
+              run: deno task build_npm
+
+            # Trusted publishing needs npm 11.5.1 or newer (Node 24 ships with it).
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "24"
+                  registry-url: "https://registry.npmjs.org"
+
+            - name: Publish
+              working-directory: ./npm
+              run: npm publish --access public

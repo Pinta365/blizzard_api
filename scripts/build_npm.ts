@@ -1,5 +1,12 @@
-// ex. scripts/build_npm.ts
+// scripts/build_npm.ts
+//
+// Builds the npm package (ESM + CommonJS) into ./npm.
+// Usage: deno task build_npm [version]   (defaults to the version in deno.jsonc)
 import { build, emptyDir } from "@deno/dnt";
+import { parse } from "@std/jsonc";
+
+const config = parse(await Deno.readTextFile("./deno.jsonc")) as { version: string };
+const version = Deno.args[0] ?? config.version;
 
 await emptyDir("./npm");
 
@@ -21,7 +28,7 @@ await build({
     package: {
         // package.json properties
         name: "@pinta365/blizzard_api",
-        version: Deno.args[0],
+        version,
         description:
             "TS library to interact with the Blizzard Battle.net API. World of Warcraft, World of Warcraft Classic, StarCraft 2, Diablo 3, Hearthstone.",
         license: "MIT",
