@@ -1,0 +1,107 @@
+# .github/workflows/drift.yml
+#
+# Weekly check that the library still matches the live Blizzard API: runs the smoke test against every endpoint,
+# then compares the saved responses with the declared types (check:types) and lists undeclared fields
+# (check:fields). If anything fails, it opens an issue labelled "api-drift", or comments on the open one.
+#
+# Needs repository secrets BLIZZARD_CLIENT_ID and BLIZZARD_CLIENT_SECRET (an API client from
+# https://develop.battle.net/access/clients). Only app-token endpoints are tested; no user token is used.
+name: API drift check
+on:
+    schedule:
+        - cron: "0 6 * * 1" # Mondays 06:00 UTC
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    issues: write
+
+concurrency:
+    group: api-drift
+    cancel-in-progress: false
+
+jobs:
+    drift:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            - uses: actions/checkout@v4
+            - uses: denoland/setup-deno@v2
+              with:
+                  deno-version: v2.x
+
+            - name: Write .env
+              env:
+                  BLIZZARD_CLIENT_ID: ${{ secrets.BLIZZARD_CLIENT_ID }}
+                  BLIZZARD_CLIENT_SECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
+              run: |
+                  if [ -z "$BLIZZARD_CLIENT_ID" ] || [ -z "$BLIZZARD_CLIENT_SECRET" ]; then
+                      echo "::error::Set the BLIZZARD_CLIENT_ID and BLIZZARD_CLIENT_SECRET repository secrets."
+                      exit 1
+                  fi
+                  umask 077
+                  printf 'BLIZZARD_CLIENT_ID=%s\nBLIZZARD_CLIENT_SECRET=%s\n' "$BLIZZARD_CLIENT_ID" "$BLIZZARD_CLIENT_SECRET" > .env
+
+            - name: Smoke test, type check, field check
+              id: checks
+              run: |
+                  set +e
+                  NO_COLOR=1 deno task smoke > smoke.log 2>&1; smoke=$?
+                  NO_COLOR=1 deno task check:types > types.log 2>&1; types=$?
+                  NO_COLOR=1 deno task check:fields > fields.log 2>&1; fields=$?
+                  rm -f .env
+                  echo "smoke=$smoke" >> "$GITHUB_OUTPUT"
+                  echo "types=$types" >> "$GITHUB_OUTPUT"
+                  echo "fields=$fields" >> "$GITHUB_OUTPUT"
+                  {
+                      echo "## API drift check"
+                      echo
+                      echo "- Smoke test: $(tail -n 1 smoke.log)"
+                      echo "- Types: $(tail -n 1 types.log)"
+                      echo "- Fields: $(tail -n 1 fields.log)"
+                  } >> "$GITHUB_STEP_SUMMARY"
+
+            - name: Upload logs and responses
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: api-drift
+                  path: |
+                      smoke.log
+                      types.log
+                      fields.log
+                      fixtures/
+                  retention-days: 14
+
+            - name: Report drift
+              if: steps.checks.outputs.smoke != '0' || steps.checks.outputs.types != '0' || steps.checks.outputs.fields != '0'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+              run: |
+                  {
+                      echo "The weekly API drift check found problems ([run]($RUN_URL), logs and responses in the \`api-drift\` artifact)."
+                      echo
+                      echo "### Smoke test"
+                      echo '```'
+                      grep -E " FAIL " smoke.log | head -n 50
+                      tail -n 1 smoke.log
+                      echo '```'
+                      echo "### Types (\`deno task check:types\`)"
+                      echo '```'
+                      head -c 20000 types.log | grep -v "^Task "
+                      echo '```'
+                      echo "### Undeclared fields (\`deno task check:fields\`)"
+                      echo '```'
+                      head -c 20000 fields.log | grep -v "^Task "
+                      echo '```'
+                  } > report.md
+
+                  gh label create api-drift --color d93f0b --description "Library out of sync with the live API" 2>/dev/null || true
+                  open_issue=$(gh issue list --label api-drift --state open --json number --jq '.[0].number')
+                  if [ -n "$open_issue" ]; then
+                      gh issue comment "$open_issue" --body-file report.md
+                  else
+                      gh issue create --title "API drift detected" --label api-drift --body-file report.md
+                  fi
+                  exit 1

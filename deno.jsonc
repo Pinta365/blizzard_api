@@ -1,6 +1,6 @@
 {
     "name": "@pinta365/blizzard-api",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "exports": {
         ".": "./mod.ts",
         "./wow": "./src/wow/types.ts",
