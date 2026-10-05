@@ -104,7 +104,7 @@ export interface characterEquipments extends LinkSelfHref {
             };
         };
         requirements?: {
-            level: {
+            level?: {
                 value: number;
                 display_string: LocalizedString;
             };
