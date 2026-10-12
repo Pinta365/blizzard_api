@@ -1194,7 +1194,9 @@ function buildCases(): Case[] {
         }),
         c("sc2.grandmasterLeaderboard", () => client.sc2.grandmasterLeaderboard(2)),
         c("sc2.season", () => client.sc2.season(2)),
-        c("sc2.player", () => client.sc2.player(12345)),
+        c("sc2.player", async () => {
+            throw new SkipError("a valid StarCraft II account ID is required");
+        }),
         c("sc2.legacyProfile", async () => {
             const ids = await getSc2Ids();
             return await client.sc2.legacyProfile(ids.regionId, ids.realmId, ids.profileId);

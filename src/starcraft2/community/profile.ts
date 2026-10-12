@@ -222,6 +222,7 @@ export interface Sc2LadderSummary {
 export interface Sc2Ladder {
     ladderTeams: Sc2LadderTeam[];
     allLadderMemberships: Sc2LadderMembership[];
+    localizedDivision: string;
     league: string;
     currentLadderMembership: {
         ladderId: string;
@@ -230,6 +231,7 @@ export interface Sc2Ladder {
     ranksAndPools: {
         rank: number;
         mmr: number;
+        bonusPool: number;
     }[];
 }
 
