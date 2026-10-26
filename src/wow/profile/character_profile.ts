@@ -44,6 +44,8 @@ export interface CharacterProfile extends LinkSelfHref {
     quests: Href;
     achievements_statistics: Href;
     professions: Href;
+    /** Only present for hunters. */
+    hunter_pets?: Href;
     covenant_progress?: {
         chosen_covenant: KeyNameId;
         renown_level: number;

@@ -60,7 +60,8 @@ export interface CharacterAppearanceSummary extends LinkSelfHref {
     }[];
     customizations: {
         option: {
-            name: LocalizedString;
+            /** Absent for some options that have no localized name. */
+            name?: LocalizedString;
             id: number;
         };
         choice: {
