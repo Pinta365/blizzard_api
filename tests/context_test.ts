@@ -226,6 +226,29 @@ Deno.test("classic clients add the namespace variant", async () => {
     });
 });
 
+Deno.test("forever client uses the forever variant and an optional static version", async () => {
+    await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
+        const plain = createClient(config);
+        await plain.wowForever.item(19019);
+        await plain.wowForever.realms();
+        const versioned = createClient({ ...config, foreverStaticVersion: "1.60.1_70399" });
+        await versioned.wowForever.item(19019);
+        await versioned.wowForever.realms();
+        await versioned.forUser("user-token").wowForever.accountProfileSummary();
+        await versioned.wowClassic.item(19019);
+        const namespaces = calls.filter((call) => !isToken(call)).map((call) => header(call, "Battlenet-Namespace"));
+        assertEquals(namespaces, [
+            "static-forever-eu",
+            "dynamic-forever-eu",
+            // The version only applies to Forever's static namespace.
+            "static-1.60.1_70399-forever-eu",
+            "dynamic-forever-eu",
+            "profile-forever-eu",
+            "static-classic-eu",
+        ]);
+    });
+});
+
 Deno.test("sends the region's default locale when none is configured", async () => {
     await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
         const { locale: _, ...withoutLocale } = config;

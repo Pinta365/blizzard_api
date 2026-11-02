@@ -7,9 +7,10 @@
 //
 // Reads BLIZZARD_CLIENT_ID / BLIZZARD_CLIENT_SECRET from the environment plus
 // the optional BLIZZARD_REGION (default "eu"), BLIZZARD_LOCALE (default
-// "en_GB") and BLIZZARD_USER_TOKEN (for the account profile cases, which are
-// skipped when it is unset). Successful raw responses are written to
-// fixtures/<case>.json.
+// "en_GB"), BLIZZARD_FOREVER_STATIC_VERSION (the versioned static namespace
+// for WoW: Forever, e.g. "1.60.1_70399") and BLIZZARD_USER_TOKEN (for the
+// account profile cases, which are skipped when it is unset). Successful raw
+// responses are written to fixtures/<case>.json.
 
 import { createClient, errors, setup, wow as legacyWow } from "../mod.ts";
 import type { BlizzardClient } from "../mod.ts";
@@ -242,6 +243,27 @@ function detailStr(
     };
 }
 
+/**
+ * Like detail(), but treats an index with no entries as a skip. Forever ships some indexes (heirlooms, the
+ * journal and pet abilities) empty, so there is no id to derive; that is missing content, not a client failure.
+ */
+function detailOrSkip(
+    key: string,
+    indexFn: () => Promise<unknown>,
+    fn: (id: number) => Promise<unknown>,
+    arrayKey?: string,
+): () => Promise<unknown> {
+    return async () => {
+        const source = await once(key, indexFn);
+        try {
+            firstEntry(source, arrayKey);
+        } catch {
+            throw new SkipError(`${key} index is empty (Forever has no content for this endpoint)`);
+        }
+        return await fn(indexId(source, arrayKey));
+    };
+}
+
 function connectedRealmId(): Promise<number> {
     return once("wow.connectedRealms", () => client.wow.connectedRealms()).then((source) => indexId(source));
 }
@@ -273,6 +295,55 @@ function newestPvpSeasonId(): Promise<number> {
         const id = seasons.current_season?.id ?? last?.id;
         if (id === undefined) throw new Error("pvp season index contained no seasons");
         return id;
+    });
+}
+
+// ---------------------------------------------------------------------------
+// WoW: Forever index lookups (Forever content differs, so ids/slugs must be
+// derived from the Forever indexes rather than Retail constants)
+// ---------------------------------------------------------------------------
+
+function foreverRealmId(): Promise<number> {
+    return once("wowForever.realms", () => client.wowForever.realms()).then((source) => indexId(source));
+}
+
+function foreverSearchedCreatureId(): Promise<number> {
+    return once("wowForever.searchCreature", () => client.wowForever.searchCreature({ pageSize: 1 })).then((result) =>
+        searchFirstId(result)
+    );
+}
+
+function foreverSearchedItemId(): Promise<number> {
+    return once("wowForever.searchItem", () => client.wowForever.searchItem({ pageSize: 1 })).then((result) =>
+        searchFirstId(result)
+    );
+}
+
+function foreverSearchedSpellId(): Promise<number> {
+    return once("wowForever.searchSpell", () => client.wowForever.searchSpell({ pageSize: 1 })).then((result) =>
+        searchFirstId(result)
+    );
+}
+
+function foreverAppearanceSlotType(): Promise<string> {
+    return once("wowForever.itemAppearanceSlots", () => client.wowForever.itemAppearanceSlots()).then((source) => {
+        const href = source.slots[0]?.key.href;
+        if (!href) throw new Error("item appearance slot index has no slots");
+        return lastSegment(href);
+    });
+}
+
+function foreverFirstRecipeId(): Promise<number> {
+    return once("wowForever.firstRecipe", async () => {
+        const professions = await client.wowForever.professions();
+        const professionId = indexId(professions);
+        const profession = await client.wowForever.profession(professionId);
+        const tierId = profession.skill_tiers[0]?.id;
+        if (tierId === undefined) throw new Error("profession has no skill tiers");
+        const tier = await client.wowForever.professionSkillTier(professionId, tierId);
+        const recipe = tier.categories[0]?.recipes[0];
+        if (!recipe) throw new Error("skill tier has no recipes");
+        return recipe.id;
     });
 }
 
@@ -1150,6 +1221,351 @@ function buildCases(): Case[] {
         ...buildSharedClassicCases("wowClassicEra", client.wowClassicEra, getEraContext),
         ...buildEraCases(),
 
+        // ----- wow: forever --------------------------------------------------
+        c("wowForever.achievementCategories", () => client.wowForever.achievementCategories()),
+        c(
+            "wowForever.achievementCategory",
+            detail(
+                "wowForever.achievementCategories",
+                () => client.wowForever.achievementCategories(),
+                client.wowForever.achievementCategory,
+            ),
+        ),
+        c("wowForever.achievements", () => client.wowForever.achievements()),
+        c(
+            "wowForever.achievement",
+            detail("wowForever.achievements", () => client.wowForever.achievements(), client.wowForever.achievement),
+        ),
+        c(
+            "wowForever.achievementMedia",
+            detail(
+                "wowForever.achievements",
+                () => client.wowForever.achievements(),
+                client.wowForever.achievementMedia,
+            ),
+        ),
+        c("wowForever.creatureFamilies", () => client.wowForever.creatureFamilies()),
+        c(
+            "wowForever.creatureFamily",
+            detail(
+                "wowForever.creatureFamilies",
+                () => client.wowForever.creatureFamilies(),
+                client.wowForever.creatureFamily,
+            ),
+        ),
+        c(
+            "wowForever.creatureFamilyMedia",
+            detail(
+                "wowForever.creatureFamilies",
+                () => client.wowForever.creatureFamilies(),
+                client.wowForever.creatureFamilyMedia,
+            ),
+        ),
+        c("wowForever.creatureTypes", () => client.wowForever.creatureTypes()),
+        c(
+            "wowForever.creatureType",
+            detail("wowForever.creatureTypes", () => client.wowForever.creatureTypes(), client.wowForever.creatureType),
+        ),
+        c("wowForever.creature", async () => await client.wowForever.creature(await foreverSearchedCreatureId())),
+        c("wowForever.searchCreature", () => client.wowForever.searchCreature({ pageSize: 1 })),
+        c("wowForever.creatureDisplayMedia", async () => {
+            const creature = await client.wowForever.creature(await foreverSearchedCreatureId());
+            const display = creature.creature_displays[0];
+            if (!display) throw new Error("creature has no displays");
+            return await client.wowForever.creatureDisplayMedia(display.id);
+        }),
+        c("wowForever.guildCrests", () => client.wowForever.guildCrests()),
+        c(
+            "wowForever.guildCrestBorder",
+            detail(
+                "wowForever.guildCrests",
+                () => client.wowForever.guildCrests(),
+                client.wowForever.guildCrestBorder,
+                "borders",
+            ),
+        ),
+        c(
+            "wowForever.guildCrestEmblem",
+            detail(
+                "wowForever.guildCrests",
+                () => client.wowForever.guildCrests(),
+                client.wowForever.guildCrestEmblem,
+                "emblems",
+            ),
+        ),
+        c("wowForever.heirlooms", () => client.wowForever.heirlooms()),
+        c(
+            "wowForever.heirloom",
+            detailOrSkip("wowForever.heirlooms", () => client.wowForever.heirlooms(), client.wowForever.heirloom),
+        ),
+        c("wowForever.itemClasses", () => client.wowForever.itemClasses()),
+        c(
+            "wowForever.itemClass",
+            detail("wowForever.itemClasses", () => client.wowForever.itemClasses(), client.wowForever.itemClass),
+        ),
+        c("wowForever.itemSets", () => client.wowForever.itemSets()),
+        c(
+            "wowForever.itemSet",
+            detail("wowForever.itemSets", () => client.wowForever.itemSets(), client.wowForever.itemSet),
+        ),
+        c("wowForever.itemSubclass", async () => {
+            const classes = await client.wowForever.itemClasses();
+            const classId = indexId(classes);
+            const cls = await client.wowForever.itemClass(classId);
+            // Forever lists a placeholder subclass (id 4294967295 = uint32 max) that the API 404s on.
+            const subclass = cls.item_subclasses.find((entry) => entry.id !== 4294967295);
+            if (!subclass) throw new Error("item class has no subclasses");
+            return await client.wowForever.itemSubclass(classId, subclass.id);
+        }),
+        c("wowForever.item", async () => await client.wowForever.item(await foreverSearchedItemId())),
+        c("wowForever.itemMedia", async () => await client.wowForever.itemMedia(await foreverSearchedItemId())),
+        c("wowForever.itemAppearanceSets", () => client.wowForever.itemAppearanceSets()),
+        c(
+            "wowForever.itemAppearanceSet",
+            detail(
+                "wowForever.itemAppearanceSets",
+                () => client.wowForever.itemAppearanceSets(),
+                client.wowForever.itemAppearanceSet,
+            ),
+        ),
+        c("wowForever.itemAppearanceSlots", () => client.wowForever.itemAppearanceSlots()),
+        c(
+            "wowForever.itemAppearanceSlot",
+            async () => await client.wowForever.itemAppearanceSlot(await foreverAppearanceSlotType()),
+        ),
+        c("wowForever.itemAppearance", async () => {
+            const slot = await client.wowForever.itemAppearanceSlot(await foreverAppearanceSlotType());
+            const appearance = slot.appearances[0];
+            if (!appearance) throw new Error("item appearance slot has no appearances");
+            return await client.wowForever.itemAppearance(appearance.id);
+        }),
+        c("wowForever.searchItem", () => client.wowForever.searchItem({ pageSize: 1 })),
+        c("wowForever.searchItemAppearance", () => client.wowForever.searchItemAppearance({ pageSize: 1 })),
+        c("wowForever.searchMedia", () => client.wowForever.searchMedia({ pageSize: 1 })),
+        c("wowForever.journalExpansions", () => client.wowForever.journalExpansions()),
+        c(
+            "wowForever.journalExpansion",
+            detailOrSkip(
+                "wowForever.journalExpansions",
+                () => client.wowForever.journalExpansions(),
+                client.wowForever.journalExpansion,
+            ),
+        ),
+        c("wowForever.journalEncounters", () => client.wowForever.journalEncounters()),
+        c(
+            "wowForever.journalEncounter",
+            detailOrSkip(
+                "wowForever.journalEncounters",
+                () => client.wowForever.journalEncounters(),
+                client.wowForever.journalEncounter,
+            ),
+        ),
+        c("wowForever.searchJournalEncounter", () => client.wowForever.searchJournalEncounter({ pageSize: 1 })),
+        c("wowForever.journalInstances", () => client.wowForever.journalInstances()),
+        c(
+            "wowForever.journalInstance",
+            detailOrSkip(
+                "wowForever.journalInstances",
+                () => client.wowForever.journalInstances(),
+                client.wowForever.journalInstance,
+            ),
+        ),
+        c(
+            "wowForever.journalInstanceMedia",
+            detailOrSkip(
+                "wowForever.journalInstances",
+                () => client.wowForever.journalInstances(),
+                client.wowForever.journalInstanceMedia,
+            ),
+        ),
+        c("wowForever.mounts", () => client.wowForever.mounts()),
+        c(
+            "wowForever.mount",
+            detail("wowForever.mounts", () => client.wowForever.mounts(), client.wowForever.mount),
+        ),
+        c("wowForever.searchMount", () => client.wowForever.searchMount({ pageSize: 1 })),
+        c("wowForever.pets", () => client.wowForever.pets()),
+        c("wowForever.pet", detail("wowForever.pets", () => client.wowForever.pets(), client.wowForever.pet)),
+        c("wowForever.petMedia", detail("wowForever.pets", () => client.wowForever.pets(), client.wowForever.petMedia)),
+        c("wowForever.petAbilities", () => client.wowForever.petAbilities()),
+        c(
+            "wowForever.petAbility",
+            detailOrSkip(
+                "wowForever.petAbilities",
+                () => client.wowForever.petAbilities(),
+                client.wowForever.petAbility,
+            ),
+        ),
+        c(
+            "wowForever.petAbilityMedia",
+            detailOrSkip(
+                "wowForever.petAbilities",
+                () => client.wowForever.petAbilities(),
+                client.wowForever.petAbilityMedia,
+            ),
+        ),
+        c("wowForever.playableClasses", () => client.wowForever.playableClasses()),
+        c(
+            "wowForever.playableClass",
+            detail(
+                "wowForever.playableClasses",
+                () => client.wowForever.playableClasses(),
+                client.wowForever.playableClass,
+            ),
+        ),
+        c(
+            "wowForever.playableClassMedia",
+            detail(
+                "wowForever.playableClasses",
+                () => client.wowForever.playableClasses(),
+                client.wowForever.playableClassMedia,
+            ),
+        ),
+        c("wowForever.playableSpecializations", () => client.wowForever.playableSpecializations()),
+        c("wowForever.playableSpecialization", async () => {
+            const index = await client.wowForever.playableSpecializations();
+            const spec = index.character_specializations[0];
+            if (!spec) throw new Error("playable specialization index has no entries");
+            return await client.wowForever.playableSpecialization(spec.id);
+        }),
+        c("wowForever.playableSpecializationMedia", async () => {
+            const index = await client.wowForever.playableSpecializations();
+            const spec = index.character_specializations[0];
+            if (!spec) throw new Error("playable specialization index has no entries");
+            return await client.wowForever.playableSpecializationMedia(spec.id);
+        }),
+        c("wowForever.playableRaces", () => client.wowForever.playableRaces()),
+        c(
+            "wowForever.playableRace",
+            detail("wowForever.playableRaces", () => client.wowForever.playableRaces(), client.wowForever.playableRace),
+        ),
+        c("wowForever.powerTypes", () => client.wowForever.powerTypes()),
+        c(
+            "wowForever.powerType",
+            detail("wowForever.powerTypes", () => client.wowForever.powerTypes(), client.wowForever.powerType),
+        ),
+        c("wowForever.professions", () => client.wowForever.professions()),
+        c(
+            "wowForever.profession",
+            detail("wowForever.professions", () => client.wowForever.professions(), client.wowForever.profession),
+        ),
+        c(
+            "wowForever.professionMedia",
+            detail("wowForever.professions", () => client.wowForever.professions(), client.wowForever.professionMedia),
+        ),
+        c("wowForever.professionSkillTier", async () => {
+            const professions = await client.wowForever.professions();
+            const professionId = indexId(professions);
+            const profession = await client.wowForever.profession(professionId);
+            const tierId = profession.skill_tiers[0]?.id;
+            if (tierId === undefined) throw new Error("profession has no skill tiers");
+            return await client.wowForever.professionSkillTier(professionId, tierId);
+        }),
+        c(
+            "wowForever.professionRecipie",
+            async () => await client.wowForever.professionRecipie(await foreverFirstRecipeId()),
+        ),
+        c(
+            "wowForever.professionRecipieMedia",
+            async () => await client.wowForever.professionRecipieMedia(await foreverFirstRecipeId()),
+        ),
+        c("wowForever.quests", () => client.wowForever.quests()),
+        c("wowForever.questCategories", () => client.wowForever.questCategories()),
+        c(
+            "wowForever.questCategory",
+            detail(
+                "wowForever.questCategories",
+                () => client.wowForever.questCategories(),
+                client.wowForever.questCategory,
+            ),
+        ),
+        c("wowForever.quest", async () => {
+            const categories = await client.wowForever.questCategories();
+            const category = await client.wowForever.questCategory(indexId(categories));
+            const quest = category.quests[0];
+            if (!quest) throw new Error("quest category has no quests");
+            return await client.wowForever.quest(quest.id);
+        }),
+        c("wowForever.questAreas", () => client.wowForever.questAreas()),
+        c(
+            "wowForever.questArea",
+            detail("wowForever.questAreas", () => client.wowForever.questAreas(), client.wowForever.questArea),
+        ),
+        c("wowForever.questTypes", () => client.wowForever.questTypes()),
+        c(
+            "wowForever.questType",
+            detail("wowForever.questTypes", () => client.wowForever.questTypes(), client.wowForever.questType),
+        ),
+        c("wowForever.realms", () => client.wowForever.realms()),
+        c("wowForever.realm", async () => await client.wowForever.realm(await foreverRealmId())),
+        c("wowForever.searchRealm", () => client.wowForever.searchRealm({ pageSize: 1 })),
+        c("wowForever.regions", () => client.wowForever.regions()),
+        c(
+            "wowForever.region",
+            detail("wowForever.regions", () => client.wowForever.regions(), client.wowForever.region),
+        ),
+        c("wowForever.reputationFactions", () => client.wowForever.reputationFactions()),
+        c(
+            "wowForever.reputationFaction",
+            detailStr(
+                "wowForever.reputationFactions",
+                () => client.wowForever.reputationFactions(),
+                client.wowForever.reputationFaction,
+            ),
+        ),
+        c("wowForever.reputationTiers", () => client.wowForever.reputationTiers()),
+        c(
+            "wowForever.reputationTier",
+            detailStr(
+                "wowForever.reputationTiers",
+                () => client.wowForever.reputationTiers(),
+                client.wowForever.reputationTier,
+            ),
+        ),
+        c("wowForever.spell", async () => await client.wowForever.spell(await foreverSearchedSpellId())),
+        c("wowForever.spellMedia", async () => await client.wowForever.spellMedia(await foreverSearchedSpellId())),
+        c("wowForever.searchSpell", () => client.wowForever.searchSpell({ pageSize: 1 })),
+        c("wowForever.titles", () => client.wowForever.titles()),
+        c("wowForever.title", detail("wowForever.titles", () => client.wowForever.titles(), client.wowForever.title)),
+        c("wowForever.toys", () => client.wowForever.toys()),
+        c("wowForever.toy", detail("wowForever.toys", () => client.wowForever.toys(), client.wowForever.toy)),
+        c("wowForever.talents", () => client.wowForever.talents()),
+        c(
+            "wowForever.talent",
+            detail("wowForever.talents", () => client.wowForever.talents(), client.wowForever.talent),
+        ),
+        c("wowForever.talentTrees", () => client.wowForever.talentTrees()),
+        c("wowForever.talentTree", async () => {
+            const trees = await once("wowForever.talentTrees", () => client.wowForever.talentTrees());
+            const link = talentTreeLinks(trees, "spec_talent_trees")[0];
+            const href = link?.key?.href;
+            if (!href) throw new Error("no spec talent trees available");
+            const { treeId, specId } = talentTreeIds(href);
+            return await client.wowForever.talentTree(treeId, specId);
+        }),
+        c("wowForever.talentTreeNodes", async () => {
+            const trees = await once("wowForever.talentTrees", () => client.wowForever.talentTrees());
+            const link = talentTreeLinks(trees, "class_talent_trees")[0];
+            if (!link) throw new Error("no class talent trees available");
+            const treeId = typeof link.id === "number" ? link.id : idFromHref(link.key?.href ?? "");
+            return await client.wowForever.talentTreeNodes(treeId);
+        }),
+
+        // ----- wow: forever (user-token account profile) ---------------------
+        userCase("wowForever.accountProfileSummary", () => requireUserClient().wowForever.accountProfileSummary()),
+        userCase("wowForever.accountCollectionsIndex", () => requireUserClient().wowForever.accountCollectionsIndex()),
+        userCase("wowForever.accountMountsCollection", () => requireUserClient().wowForever.accountMountsCollection()),
+        userCase("wowForever.accountPetsCollection", () => requireUserClient().wowForever.accountPetsCollection()),
+        userCase("wowForever.accountToysCollection", () => requireUserClient().wowForever.accountToysCollection()),
+        userCase(
+            "wowForever.accountHeirloomsCollection",
+            () => requireUserClient().wowForever.accountHeirloomsCollection(),
+        ),
+        userCase(
+            "wowForever.accountTransmogsCollection",
+            () => requireUserClient().wowForever.accountTransmogsCollection(),
+        ),
+
         // ----- hearthstone ---------------------------------------------------
         c("hearthstone.searchCards", () => client.hearthstone.searchCards({ pageSize: 1 })),
         c("hearthstone.fetchCard", async () => {
@@ -1330,7 +1746,7 @@ function buildCases(): Case[] {
 // ---------------------------------------------------------------------------
 
 /** Cases that call user-scoped endpoints (account profile). Their responses are never written to fixtures/. */
-const USER_SCOPED_CASE = /^wow\.(account|protectedCharacter)/;
+const USER_SCOPED_CASE = /^(?:wow|wowForever)\.(account|protectedCharacter)/;
 
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -1402,11 +1818,13 @@ async function main(): Promise<void> {
         console.error("Missing BLIZZARD_CLIENT_ID and/or BLIZZARD_CLIENT_SECRET environment variables.");
         Deno.exit(1);
     }
+    const foreverStaticVersion = Deno.env.get("BLIZZARD_FOREVER_STATIC_VERSION");
     config = {
         clientId,
         clientSecret,
         region: (Deno.env.get("BLIZZARD_REGION") ?? "eu") as Regions,
         locale: (Deno.env.get("BLIZZARD_LOCALE") ?? "en_GB") as Locales,
+        ...(foreverStaticVersion ? { foreverStaticVersion } : {}),
     };
     client = createClient(config);
     setup(config);

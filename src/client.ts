@@ -11,6 +11,7 @@ import { bindAll, type Bound } from "./shared/bind.ts";
 import * as wowEndpoints from "./wow/index.ts";
 import * as wowClassicEndpoints from "./wow_classic/index.ts";
 import * as wowClassicEraEndpoints from "./wow_classic/era.ts";
+import * as wowForeverEndpoints from "./wow_forever/index.ts";
 import * as hearthstoneEndpoints from "./hearthstone/index.ts";
 import * as sc2Endpoints from "./starcraft2/index.ts";
 import * as diablo3Endpoints from "./diablo3/index.ts";
@@ -18,11 +19,12 @@ import * as diablo3Endpoints from "./diablo3/index.ts";
 import type { WowApi } from "./generated/wow_api.ts";
 import type { WowClassicApi } from "./generated/wow_classic_api.ts";
 import type { WowClassicEraApi } from "./generated/wow_classic_era_api.ts";
+import type { WowForeverApi } from "./generated/wow_forever_api.ts";
 import type { HearthstoneApi } from "./generated/hearthstone_api.ts";
 import type { Sc2Api } from "./generated/sc2_api.ts";
 import type { Diablo3Api } from "./generated/diablo3_api.ts";
 
-export type { Diablo3Api, HearthstoneApi, Sc2Api, WowApi, WowClassicApi, WowClassicEraApi };
+export type { Diablo3Api, HearthstoneApi, Sc2Api, WowApi, WowClassicApi, WowClassicEraApi, WowForeverApi };
 
 // Compile-time guard: each generated interface must have exactly the bound endpoint functions, with compatible
 // signatures. (One-way assignability: a mapped type can't express generic endpoints such as Hearthstone's
@@ -35,6 +37,7 @@ export type _GeneratedApisAreCurrent = [
     Assert<Exact<WowApi, Bound<typeof wowEndpoints>>>,
     Assert<Exact<WowClassicApi, Bound<typeof wowClassicEndpoints>>>,
     Assert<Exact<WowClassicEraApi, Bound<typeof wowClassicEraEndpoints>>>,
+    Assert<Exact<WowForeverApi, Bound<typeof wowForeverEndpoints>>>,
     Assert<Exact<HearthstoneApi, Bound<typeof hearthstoneEndpoints>>>,
     Assert<Exact<Sc2Api, Bound<typeof sc2Endpoints>>>,
     Assert<Exact<Diablo3Api, Bound<typeof diablo3Endpoints>>>,
@@ -50,6 +53,11 @@ export interface BlizzardClient {
     readonly wowClassic: WowClassicApi;
     /** World of Warcraft Classic Era endpoints (Era, Season of Discovery, Hardcore, Anniversary). */
     readonly wowClassicEra: WowClassicEraApi;
+    /**
+     * World of Warcraft: Forever endpoints (game data and account profile). Before launch, set
+     * `foreverStaticVersion` in the client config for static game data.
+     */
+    readonly wowForever: WowForeverApi;
     /** Hearthstone endpoints. */
     readonly hearthstone: HearthstoneApi;
     /** StarCraft II endpoints. */
@@ -101,6 +109,10 @@ export function clientFromContext(ctx: ApiContext): BlizzardClient {
         wow: bindAll(ctx, wowEndpoints),
         wowClassic: bindAll(ctx.withNamespaceVariant("classic"), wowClassicEndpoints),
         wowClassicEra: bindAll(ctx.withNamespaceVariant("classic1x"), wowClassicEraEndpoints),
+        wowForever: bindAll(
+            ctx.withNamespaceVariant("forever", (config) => config.foreverStaticVersion),
+            wowForeverEndpoints,
+        ),
         // bind() keeps metadata<T> generic at runtime; the mapped Bound type cannot, so use the generated interface.
         hearthstone: bindAll(ctx, hearthstoneEndpoints) as unknown as HearthstoneApi,
         sc2: bindAll(ctx, sc2Endpoints),

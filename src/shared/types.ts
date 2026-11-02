@@ -53,7 +53,10 @@ export type Namespaces =
     | //Classic
     "static-classic"
     | "dynamic-classic"
-    | "profile-classic"; //Classic Cataclysm
+    | "profile-classic" //Classic Cataclysm
+    | "static-forever"
+    | "dynamic-forever"
+    | "profile-forever"; //WoW: Forever
 
 /**
  * Represents a reference (link) with a URL.

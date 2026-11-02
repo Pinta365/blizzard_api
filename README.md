@@ -18,6 +18,7 @@ Available as:
 | **World of Warcraft:** Profile APIs         | ✅     | Account profile endpoints need a user token          |
 | **World of Warcraft Classic:** Game Data    | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
 | **World of Warcraft Classic:** Profile APIs | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
+| **World of Warcraft: Forever**              | 🚧     | Game data and account profile (`wowForever`)         |
 | **Diablo III:** Community APIs              | ✅     | Including account and hero profiles                  |
 | **Diablo III:** Game Data APIs              | ✅     |                                                      |
 | **Hearthstone:** Game Data APIs             | ✅     |                                                      |
@@ -81,11 +82,28 @@ const { createClient } = require("@pinta365/blizzard_api");
 | `client.wow`           | World of Warcraft (Retail)                                    |
 | `client.wowClassic`    | WoW Classic progression (currently Mists of Pandaria Classic) |
 | `client.wowClassicEra` | WoW Classic Era, Season of Discovery, Hardcore, Anniversary   |
+| `client.wowForever`    | WoW: Forever (game data and account profile)                  |
 | `client.hearthstone`   | Hearthstone                                                   |
 | `client.sc2`           | StarCraft II                                                  |
 | `client.diablo3`       | Diablo III                                                    |
 
-The two Classic properties only include the endpoints Blizzard supports for that flavor.
+The Classic and Forever properties only include the endpoints Blizzard supports for that flavor.
+
+### WoW: Forever
+
+Blizzard hasn't documented the Forever API yet; `wowForever` covers what answers before launch (Nov 4, 2026): game data
+and the account profile. Forever is realmless: players pick a ruleset (a realm's `type`: `NORMAL`, `PVP`, `RP`,
+`PVP_RP`) and characters have a two-part name (`name` and `surname`). Character, guild and auction endpoints follow once
+Blizzard serves them.
+
+Before launch, static game data only answers under a versioned namespace. Set `foreverStaticVersion` to use it:
+
+```ts
+const client = createClient({ region: "eu", clientId, clientSecret, foreverStaticVersion: "1.60.1_70399" });
+const races = await client.wowForever.playableRaces();
+```
+
+The current version is in the `playable_class` links of `client.forUser(token).wowForever.accountProfileSummary()`.
 
 ## Response types
 
@@ -96,9 +114,10 @@ import type { Mount } from "@pinta365/blizzard-api/wow";
 import type { Card } from "@pinta365/blizzard-api/hearthstone";
 ```
 
-Entry points: `/wow`, `/wow-classic`, `/hearthstone`, `/sc2` and `/diablo3`. The Classic clients mostly return the same
-types as Retail (import those from `/wow`). `/wow-classic` holds the Classic-only ones, such as
-`ClassicCharacterProfile`, where fields that only Retail returns are optional.
+Entry points: `/wow`, `/wow-classic`, `/wow-forever`, `/hearthstone`, `/sc2` and `/diablo3`. The Classic and Forever
+clients mostly return the same types as Retail (import those from `/wow`). `/wow-classic` and `/wow-forever` hold the
+flavor-only ones, such as `ClassicCharacterProfile` or `ForeverAccountProfileSummary`, where fields that only Retail
+returns are optional.
 
 ## Following links
 
