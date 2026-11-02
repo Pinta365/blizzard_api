@@ -30,6 +30,8 @@ export interface AchievementCategory extends LinkSelfHref {
     name: LocalizedString;
     achievements?: KeyNameId[];
     parent_category?: KeyNameId;
+    /** Absent when the category has no subcategories. */
+    subcategories?: KeyNameId[];
     is_guild_category: boolean;
     aggregates_by_faction: AggregatesByFaction;
     display_order: number;
@@ -52,6 +54,8 @@ export interface Achievement extends LinkSelfHref {
         amount: number;
     };
     next_achievement?: KeyNameId;
+    /** Absent when the achievement grants no reward. */
+    reward_description?: LocalizedString;
     media: KeyId;
     display_order: number;
 }

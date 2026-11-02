@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString } from "../../shared/index.ts";
+import type { KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../../shared/index.ts";
 
 export interface ReputationFactions extends LinkSelfHref {
     factions: KeyNameId[];
@@ -11,6 +11,12 @@ export interface ReputationFaction extends LinkSelfHref {
     name: LocalizedString;
     description: LocalizedString;
     reputation_tiers: KeyId;
+    /** Present for header factions, which group the sub-factions in `factions`. */
+    is_header?: boolean;
+    /** The sub-factions; present for header factions. */
+    factions?: KeyNameId[];
+    /** The faction's player faction; present for header factions. */
+    player_faction?: TypeName;
 }
 
 export interface ReputationTiers extends LinkSelfHref {

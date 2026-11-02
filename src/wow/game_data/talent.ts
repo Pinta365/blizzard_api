@@ -11,7 +11,8 @@ export interface SpellTooltip {
     spell: KeyNameId;
     description: string;
     cast_time: string;
-    power_cost?: string;
+    /** null for abilities without a power cost. */
+    power_cost?: string | null;
     range?: string;
     cooldown?: string;
 }
@@ -91,7 +92,10 @@ export interface Talent extends LinkSelfHref {
         description: LocalizedString | null;
     }[];
     spell: KeyNameId;
-    playable_class: KeyId;
+    playable_class: KeyId & {
+        /** Absent when the talent is not tied to a class (id 0). */
+        name?: string;
+    };
     playable_specialization?: KeyNameId;
 }
 
