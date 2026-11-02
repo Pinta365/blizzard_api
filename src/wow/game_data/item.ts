@@ -61,8 +61,10 @@ export interface Item extends LinkSelfHref {
         item_subclass: KeyNameId;
         inventory_type: TypeName;
         binding: TypeName;
-        unique_equipped: string;
-        weapon: {
+        /** Absent for items that are not unique-equipped. */
+        unique_equipped?: string;
+        /** Absent for non-weapon items. */
+        weapon?: {
             damage: {
                 min_value: number;
                 max_value: number;
@@ -84,6 +86,19 @@ export interface Item extends LinkSelfHref {
                 display_string: LocalizedString;
             };
         };
+        /** Absent for non-armor items. */
+        armor?: {
+            value: number;
+            display: {
+                display_string: LocalizedString;
+                color: {
+                    r: number;
+                    g: number;
+                    b: number;
+                    a: number;
+                };
+            };
+        };
         stats: {
             type: TypeName;
             value: number;
@@ -98,7 +113,8 @@ export interface Item extends LinkSelfHref {
                 };
             };
         }[];
-        spells: {
+        /** Absent for items without spells. */
+        spells?: {
             spell: KeyNameId;
             description: LocalizedString;
         }[];

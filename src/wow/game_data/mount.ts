@@ -11,7 +11,8 @@ export interface Mount extends LinkSelfHref {
     id: number;
     name: LocalizedString;
     creature_displays: KeyId[];
-    description: LocalizedString;
+    /** null for mounts without a description. */
+    description: LocalizedString | null;
     source: TypeName;
     faction?: TypeName;
     should_exclude_if_uncollected?: boolean;
