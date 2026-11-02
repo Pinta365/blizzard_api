@@ -112,7 +112,8 @@ export interface AccountToysCollection extends AccountLinks {
 }
 
 export interface AccountHeirloomsCollection extends AccountLinks {
-    heirlooms: CollectedHeirloom[];
+    /** Absent when the account has collected no heirlooms. */
+    heirlooms?: CollectedHeirloom[];
 }
 
 export interface AccountTransmogsCollection extends AccountLinks {
