@@ -5,10 +5,12 @@ export interface CharacterAppearanceSummary extends LinkSelfHref {
     character: Character;
     playable_race: KeyNameId;
     playable_class: KeyNameId;
-    active_spec: KeyNameId;
+    /** Absent for characters below level 10, which have no specialization. */
+    active_spec?: KeyNameId;
     gender: TypeName;
     faction: TypeName;
-    guild_crest: {
+    /** Absent when the character is not in a guild. */
+    guild_crest?: {
         emblem: {
             id: number;
             media: KeyId;

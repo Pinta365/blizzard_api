@@ -14,7 +14,8 @@ export interface CharacterProfile extends LinkSelfHref {
     faction: TypeName;
     race: KeyNameId;
     character_class: KeyNameId;
-    active_spec: KeyNameId;
+    /** Absent for characters below level 10, which have no specialization. */
+    active_spec?: KeyNameId;
     realm: CharacterRealm;
     guild?: {
         key: Href;

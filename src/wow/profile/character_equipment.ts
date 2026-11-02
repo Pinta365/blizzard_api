@@ -59,6 +59,11 @@ export interface characterEquipments extends LinkSelfHref {
                 id: number;
                 type?: string;
             };
+            /** Present for on-use spell enchantments (e.g. engineering tinkers). */
+            spell?: {
+                spell: KeyNameId;
+                description: LocalizedString;
+            };
         }[];
         slot: TypeName;
         quantity: number;
@@ -119,6 +124,11 @@ export interface characterEquipments extends LinkSelfHref {
             reputation?: {
                 faction: KeyNameId;
                 min_reputation_level: number;
+                display_string: LocalizedString;
+            };
+            skill?: {
+                profession: KeyNameId;
+                level: number;
                 display_string: LocalizedString;
             };
         };

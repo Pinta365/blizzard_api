@@ -427,7 +427,7 @@ function getProgressionContext(): Promise<ClassicContext> {
             } catch {
                 continue;
             }
-            const entry = leaderboard.entries[0];
+            const entry = leaderboard.entries?.[0];
             if (!entry) continue;
             const realm = entry.character.realm.slug;
             const name = entry.character.name.toLowerCase();

@@ -73,8 +73,8 @@ export interface Sc2ProfileSummary {
     id: string;
     realm: number;
     displayName: string;
-    clanName: string;
-    clanTag: string;
+    clanName?: string;
+    clanTag?: string;
     portrait: string;
     decalTerran: string;
     decalProtoss: string;
@@ -222,7 +222,7 @@ export interface Sc2LadderSummary {
 export interface Sc2Ladder {
     ladderTeams: Sc2LadderTeam[];
     allLadderMemberships: Sc2LadderMembership[];
-    localizedDivision: string;
+    localizedDivision?: string;
     league: string;
     currentLadderMembership: {
         ladderId: string;
@@ -231,7 +231,7 @@ export interface Sc2Ladder {
     ranksAndPools: {
         rank: number;
         mmr: number;
-        bonusPool: number;
+        bonusPool?: number;
     }[];
 }
 

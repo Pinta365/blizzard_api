@@ -3,7 +3,8 @@ import type { Href, KeyId, KeyNameId, LinkSelfHref, TypeName } from "../../share
 
 export interface PvpSeasons extends LinkSelfHref {
     seasons: KeyId[];
-    current_season: KeyId;
+    /** Absent when there is no active PvP season (between seasons). */
+    current_season?: KeyId;
 }
 
 export interface PvpSeason extends LinkSelfHref {
@@ -32,7 +33,10 @@ export interface PvpSeasonLeaderboard extends LinkSelfHref {
         id: number;
         type: string;
     };
-    entries: {
+    /**
+     * Omitted when the bracket has no entries (e.g. an empty Classic bracket).
+     */
+    entries?: {
         character: {
             name: string;
             id: number;
