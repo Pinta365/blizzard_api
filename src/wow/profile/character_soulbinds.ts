@@ -11,7 +11,7 @@ export interface CharacterSoulbinds extends LinkSelfHref {
             trait?: KeyNameId;
             conduit_socket?: {
                 type: TypeName;
-                socket: {
+                socket?: {
                     conduit: KeyNameId;
                     rank: number;
                 };

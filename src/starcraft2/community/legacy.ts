@@ -19,8 +19,8 @@ export interface Sc2LegacyCharacter {
     realm: number;
     region: number;
     displayName: string;
-    clanName: string;
-    clanTag: string;
+    clanName?: string;
+    clanTag?: string;
     profilePath: string;
 }
 
@@ -75,8 +75,8 @@ export interface Sc2LegacyProfile {
     id: string;
     realm: number;
     displayName: string;
-    clanName: string;
-    clanTag: string;
+    clanName?: string;
+    clanTag?: string;
     profilePath: string;
     portrait: Sc2LegacyIcon;
     career: Sc2LegacyCareer;

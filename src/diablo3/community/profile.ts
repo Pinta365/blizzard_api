@@ -144,9 +144,9 @@ export interface D3FollowerItems {
 }
 
 export interface D3HeroFollowerItems {
-    templar: D3FollowerItems;
-    scoundrel: D3FollowerItems;
-    enchantress: D3FollowerItems;
+    templar?: D3FollowerItems;
+    scoundrel?: D3FollowerItems;
+    enchantress?: D3FollowerItems;
 }
 
 export interface D3Skill {
@@ -230,23 +230,27 @@ export interface D3Hero {
     };
     hardcore: boolean;
     seasonal: boolean;
-    seasonCreated: number;
+    /** Absent for non-seasonal heroes. */
+    seasonCreated?: number;
     skills: {
         active: {
             skill: D3Skill;
-            rune: D3SkillRune;
+            /** Absent when the skill has no rune selected. */
+            rune?: D3SkillRune;
         }[];
         passive: {
             skill: D3Skill;
         }[];
     };
     items: D3HeroItems;
-    followers: {
-        templar: D3Follower;
-        scoundrel: D3Follower;
-        enchantress: D3Follower;
+    /** Absent for some heroes. */
+    followers?: {
+        templar?: D3Follower;
+        scoundrel?: D3Follower;
+        enchantress?: D3Follower;
     };
-    legendaryPowers: D3ItemRef[];
+    /** Absent for some heroes. */
+    legendaryPowers?: D3ItemRef[];
     progression: {
         act1: D3ActProgress;
         act2: D3ActProgress;
@@ -317,7 +321,8 @@ export interface D3Account {
     paragonLevelHardcore: number;
     paragonLevelSeason: number;
     paragonLevelSeasonHardcore: number;
-    guildName: string;
+    /** Absent when the account is not in a guild. */
+    guildName?: string;
     heroes: D3AccountHero[];
     lastHeroPlayed: number;
     lastUpdated: number;

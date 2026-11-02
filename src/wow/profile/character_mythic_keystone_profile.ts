@@ -45,14 +45,16 @@ export interface CharacterMythicKeystoneProfile extends LinkSelfHref {
     };
     seasons: KeyId[];
     character: Character;
-    current_mythic_rating: MythicRating;
+    /** Absent until the character has earned a rating in the current season. */
+    current_mythic_rating?: MythicRating;
 }
 
 export interface CharacterMythicKeystoneSeasonDetails extends LinkSelfHref {
     season: KeyId;
     best_runs: MythicKeystoneBestRun[];
     character: Character;
-    mythic_rating: MythicRating;
+    /** Absent for seasons in which the character earned no rating. */
+    mythic_rating?: MythicRating;
 }
 
 /**

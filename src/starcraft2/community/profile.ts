@@ -73,8 +73,8 @@ export interface Sc2ProfileSummary {
     id: string;
     realm: number;
     displayName: string;
-    clanName: string;
-    clanTag: string;
+    clanName?: string;
+    clanTag?: string;
     portrait: string;
     decalTerran: string;
     decalProtoss: string;

@@ -126,6 +126,11 @@ export interface characterEquipments extends LinkSelfHref {
                 min_reputation_level: number;
                 display_string: LocalizedString;
             };
+            skill?: {
+                profession: KeyNameId;
+                level: number;
+                display_string: LocalizedString;
+            };
         };
         set?: {
             item_set: KeyNameId;
