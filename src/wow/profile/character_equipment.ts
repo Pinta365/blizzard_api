@@ -54,15 +54,15 @@ export interface characterEquipments extends LinkSelfHref {
         enchantments?: {
             display_string?: LocalizedString;
             source_item?: KeyNameId;
+            /** The spell an on-use enchantment casts (seen on Classic, e.g. Synapse Springs). */
+            spell?: {
+                spell: KeyNameId;
+                description: LocalizedString;
+            };
             enchantment_id: number;
             enchantment_slot: {
                 id: number;
                 type?: string;
-            };
-            /** Present for on-use spell enchantments (e.g. engineering tinkers). */
-            spell?: {
-                spell: KeyNameId;
-                description: LocalizedString;
             };
         }[];
         slot: TypeName;

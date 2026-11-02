@@ -222,6 +222,7 @@ export interface Sc2LadderSummary {
 export interface Sc2Ladder {
     ladderTeams: Sc2LadderTeam[];
     allLadderMemberships: Sc2LadderMembership[];
+    /** Absent for ladders without divisions (e.g. Grandmaster). */
     localizedDivision?: string;
     league: string;
     currentLadderMembership: {
@@ -231,6 +232,7 @@ export interface Sc2Ladder {
     ranksAndPools: {
         rank: number;
         mmr: number;
+        /** Absent for ladders without a bonus pool (e.g. Grandmaster). */
         bonusPool?: number;
     }[];
 }

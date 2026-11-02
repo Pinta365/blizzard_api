@@ -70,7 +70,8 @@ export interface CollectedHeirloom {
 }
 
 export interface CharacterCollectionHeirlooms extends LinkSelfHref {
-    heirlooms: CollectedHeirloom[];
+    /** Absent when the character has collected no heirlooms. */
+    heirlooms?: CollectedHeirloom[];
 }
 
 export interface DecorItem {
