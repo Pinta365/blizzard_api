@@ -162,6 +162,13 @@ const sword = await blizzardAPI.wow.item(33791);
 
 ## Upgrading
 
+### From 0.6 to 0.7
+
+- More response fields that only some characters, players or brackets have are now optional, so you may need to
+  handle `undefined`. Among them: `active_spec`, `guild_crest`, `current_mythic_rating`, `PvpSeasons.current_season`,
+  `PvpSeasonLeaderboard.entries` (omitted for empty brackets), StarCraft II `clanName`/`clanTag`, and the Diablo III
+  hero `followers`, `legendaryPowers` and `seasonCreated`.
+
 ### From 0.5 to 0.6
 
 - A locale is always sent: when `locale` is not set, the region's main locale is used (`us`: `en_US`, `eu`: `en_GB`,
