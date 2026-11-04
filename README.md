@@ -96,14 +96,15 @@ and the account profile. Forever is realmless: players pick a ruleset (a realm's
 `PVP_RP`) and characters have a two-part name (`name` and `surname`). Character, guild and auction endpoints follow once
 Blizzard serves them.
 
-Before launch, static game data only answers under a versioned namespace. Set `foreverStaticVersion` to use it:
+Static game data uses `static-forever-{region}`, which serves the current game version. To pin a specific version, set
+`foreverStaticVersion`:
 
 ```ts
 const client = createClient({ region: "eu", clientId, clientSecret, foreverStaticVersion: "1.60.1_70399" });
 const races = await client.wowForever.playableRaces();
 ```
 
-The current version is in the `playable_class` links of `client.forUser(token).wowForever.accountProfileSummary()`.
+The version is in the `namespace` of the `self` link of any static response.
 
 ## Response types
 

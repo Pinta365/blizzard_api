@@ -99,7 +99,8 @@ export interface Item extends LinkSelfHref {
                 };
             };
         };
-        stats: {
+        /** Absent for items without stats, such as non-equippable items. */
+        stats?: {
             type: TypeName;
             value: number;
             is_negated?: boolean;
@@ -118,7 +119,8 @@ export interface Item extends LinkSelfHref {
             spell: KeyNameId;
             description: LocalizedString;
         }[];
-        requirements: {
+        /** Absent for items without requirements. */
+        requirements?: {
             level: {
                 value: number;
                 display_string: LocalizedString;
@@ -128,10 +130,13 @@ export interface Item extends LinkSelfHref {
             value: number;
             display_string: LocalizedString;
         };
-        durability: {
+        /** Absent for items without durability, such as non-equippable items. */
+        durability?: {
             value: number;
             display_string: LocalizedString;
         };
+        /** Present on some items, such as companion pets. */
+        is_subclass_hidden?: boolean;
         sell_price?: {
             value: number;
             display_strings: {

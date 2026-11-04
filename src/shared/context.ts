@@ -24,8 +24,8 @@ export interface ClientConfig {
     clientSecret: string;
     /**
      * Static namespace version for WoW: Forever, e.g. "1.60.1_70399". When set, `wowForever` static requests use
-     * `static-<version>-forever-<region>` instead of `static-forever-<region>`. Before launch only the versioned
-     * namespace answers; the current version is in the links of `wowForever.accountProfileSummary()`.
+     * `static-<version>-forever-<region>` instead of `static-forever-<region>` (which serves the current version). Use it
+     * to pin a version; the current one is in the `self` link of any static response.
      */
     foreverStaticVersion?: string;
 }
