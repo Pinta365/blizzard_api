@@ -38,6 +38,7 @@ export type {
     ForeverCharacterEncounterRaids,
     ForeverCharacterEncounters,
     ForeverCharacterEquipment,
+    ForeverCharacterMedia,
     ForeverCharacterMythicKeystoneProfile,
     ForeverCharacterProfessions,
     ForeverCharacterProfile,

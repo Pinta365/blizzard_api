@@ -25,6 +25,7 @@ import type {
     CharacterEncounters,
 } from "../wow/profile/character_encounters.ts";
 import type { characterEquipments as CharacterEquipments } from "../wow/profile/character_equipment.ts";
+import type { CharacterMedia } from "../wow/profile/character_media.ts";
 import type { CharacterMythicKeystoneProfile } from "../wow/profile/character_mythic_keystone_profile.ts";
 import type { CharacterProfessions } from "../wow/profile/character_professions.ts";
 import type { CharacterProfile, CharacterProfileStatus } from "../wow/profile/character_profile.ts";
@@ -132,6 +133,7 @@ export interface ForeverCharacterEncounterDungeons extends WithOptional<Characte
 export interface ForeverCharacterEncounterRaids
     extends WithOptional<WithForeverCharacter<CharacterEncounterRaids>, "expansions"> {}
 export type ForeverCharacterEquipment = WithForeverCharacter<CharacterEquipments>;
+export type ForeverCharacterMedia = WithForeverCharacter<CharacterMedia>;
 /** `seasons` is absent when the character has no Mythic Keystone seasons. */
 export interface ForeverCharacterMythicKeystoneProfile
     extends WithOptional<WithForeverCharacter<CharacterMythicKeystoneProfile>, "seasons"> {}
@@ -381,6 +383,21 @@ export async function characterEquipments(
     surname: string,
 ): Promise<ForeverCharacterEquipment> {
     return await request(ctx, name, surname, "/equipment");
+}
+
+/**
+ * Returns a summary of the media assets available for a character (such as an avatar render).
+ *
+ * @param name - The character's name (first part). Case-insensitive.
+ * @param surname - The character's surname (second part). Case-insensitive.
+ * @returns A promise that resolves to an object representing the character's media assets.
+ */
+export async function characterMedia(
+    ctx: ApiContext,
+    name: string,
+    surname: string,
+): Promise<ForeverCharacterMedia> {
+    return await request(ctx, name, surname, "/character-media");
 }
 
 /**

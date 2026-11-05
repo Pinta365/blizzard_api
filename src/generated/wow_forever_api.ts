@@ -52,6 +52,7 @@ import type {
     ForeverCharacterEncounterRaids,
     ForeverCharacterEncounters,
     ForeverCharacterEquipment,
+    ForeverCharacterMedia,
     ForeverCharacterMythicKeystoneProfile,
     ForeverCharacterProfessions,
     ForeverCharacterProfile,
@@ -347,6 +348,15 @@ export interface WowForeverApi {
      * @returns A promise that resolves to an object representing the equipped items.
      */
     characterEquipments(name: string, surname: string): Promise<ForeverCharacterEquipment>;
+
+    /**
+     * Returns a summary of the media assets available for a character (such as an avatar render).
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the character's media assets.
+     */
+    characterMedia(name: string, surname: string): Promise<ForeverCharacterMedia>;
 
     /**
      * Returns the Mythic Keystone profile index for a character.

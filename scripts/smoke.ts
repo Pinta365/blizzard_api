@@ -1670,6 +1670,10 @@ function buildCases(): Case[] {
             (ch) => client.wowForever.characterEquipments(ch.name, ch.surname),
         ),
         foreverCharacterCase(
+            "wowForever.characterMedia",
+            (ch) => client.wowForever.characterMedia(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
             "wowForever.characterMythicKeystoneProfile",
             (ch) => client.wowForever.characterMythicKeystoneProfile(ch.name, ch.surname),
         ),

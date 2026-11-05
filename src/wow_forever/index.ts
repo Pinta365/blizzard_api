@@ -118,6 +118,7 @@ export {
     characterEncounterRaids,
     characterEncounters,
     characterEquipments,
+    characterMedia,
     characterMythicKeystoneProfile,
     characterProfessions,
     characterProfile,
