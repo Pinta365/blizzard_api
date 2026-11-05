@@ -10,8 +10,8 @@
 // "en_GB"), BLIZZARD_FOREVER_STATIC_VERSION (the versioned static namespace
 // for WoW: Forever, e.g. "1.60.1_70399"), BLIZZARD_FOREVER_CHARACTER (a Forever
 // character of level 10 or higher, "Name Surname"; without it, the highest
-// character of level 10+ on the user token's account is used, and the Forever
-// character cases are skipped when there is none) and BLIZZARD_USER_TOKEN (for the
+// character on the user token's account that the API serves is used, and the
+// Forever character cases are skipped when there is none) and BLIZZARD_USER_TOKEN (for the
 // account profile cases, which are skipped when it is unset). Successful raw
 // responses are written to fixtures/<case>.json.
 
@@ -319,7 +319,8 @@ interface ForeverCharacterName {
 
 /**
  * The Forever character for the character cases: BLIZZARD_FOREVER_CHARACTER ("Name Surname"), or else the highest
- * character of level 10 or higher on the user token's account. Forever only serves characters from level 10.
+ * character on the user token's account whose profile answers. Forever only serves characters from level 10, and the
+ * account summary can lag behind (it may still show level 9), so its levels only set the order.
  */
 function foreverCharacter(): Promise<ForeverCharacterName> {
     return once("wowForever.character", async () => {
@@ -333,13 +334,17 @@ function foreverCharacter(): Promise<ForeverCharacterName> {
             throw new SkipError("needs BLIZZARD_FOREVER_CHARACTER or a BLIZZARD_USER_TOKEN with a level 10+ character");
         }
         const summary = await userClient.wowForever.accountProfileSummary();
-        const best = summary.wow_accounts.flatMap((account) => account.characters)
-            .filter((character) => (character.level ?? 0) >= 10)
-            .sort((a, b) => (b.level ?? 0) - (a.level ?? 0))[0];
-        if (!best) {
-            throw new SkipError("no level 10+ Forever character on the account (set BLIZZARD_FOREVER_CHARACTER)");
+        const candidates = summary.wow_accounts.flatMap((account) => account.characters)
+            .sort((a, b) => b.level - a.level);
+        for (const character of candidates) {
+            try {
+                await client.wowForever.characterProfile(character.name, character.surname);
+                return { name: character.name, surname: character.surname };
+            } catch (error) {
+                if (!(error instanceof errors.APIError && error.statusCode === 404)) throw error;
+            }
         }
-        return { name: best.name, surname: best.surname };
+        throw new SkipError("no character on the account is served yet (level 10+; set BLIZZARD_FOREVER_CHARACTER)");
     });
 }
 
