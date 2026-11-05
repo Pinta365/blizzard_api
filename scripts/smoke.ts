@@ -8,7 +8,10 @@
 // Reads BLIZZARD_CLIENT_ID / BLIZZARD_CLIENT_SECRET from the environment plus
 // the optional BLIZZARD_REGION (default "eu"), BLIZZARD_LOCALE (default
 // "en_GB"), BLIZZARD_FOREVER_STATIC_VERSION (the versioned static namespace
-// for WoW: Forever, e.g. "1.60.1_70399") and BLIZZARD_USER_TOKEN (for the
+// for WoW: Forever, e.g. "1.60.1_70399"), BLIZZARD_FOREVER_CHARACTER (a Forever
+// character of level 10 or higher, "Name Surname"; without it, the highest
+// character of level 10+ on the user token's account is used, and the Forever
+// character cases are skipped when there is none) and BLIZZARD_USER_TOKEN (for the
 // account profile cases, which are skipped when it is unset). Successful raw
 // responses are written to fixtures/<case>.json.
 
@@ -303,8 +306,48 @@ function newestPvpSeasonId(): Promise<number> {
 // derived from the Forever indexes rather than Retail constants)
 // ---------------------------------------------------------------------------
 
-function foreverRealmId(): Promise<number> {
-    return once("wowForever.realms", () => client.wowForever.realms()).then((source) => indexId(source));
+function foreverRulesetId(): Promise<number> {
+    return once("wowForever.rulesets", () => client.wowForever.rulesets()).then((source) =>
+        indexId(source, "rulesets")
+    );
+}
+
+interface ForeverCharacterName {
+    name: string;
+    surname: string;
+}
+
+/**
+ * The Forever character for the character cases: BLIZZARD_FOREVER_CHARACTER ("Name Surname"), or else the highest
+ * character of level 10 or higher on the user token's account. Forever only serves characters from level 10.
+ */
+function foreverCharacter(): Promise<ForeverCharacterName> {
+    return once("wowForever.character", async () => {
+        const configured = Deno.env.get("BLIZZARD_FOREVER_CHARACTER")?.trim();
+        if (configured) {
+            const [name, surname] = configured.split(/[\s-]+/);
+            if (!name || !surname) throw new Error(`BLIZZARD_FOREVER_CHARACTER must be "Name Surname"`);
+            return { name, surname };
+        }
+        if (!userClient) {
+            throw new SkipError("needs BLIZZARD_FOREVER_CHARACTER or a BLIZZARD_USER_TOKEN with a level 10+ character");
+        }
+        const summary = await userClient.wowForever.accountProfileSummary();
+        const best = summary.wow_accounts.flatMap((account) => account.characters)
+            .filter((character) => (character.level ?? 0) >= 10)
+            .sort((a, b) => (b.level ?? 0) - (a.level ?? 0))[0];
+        if (!best) {
+            throw new SkipError("no level 10+ Forever character on the account (set BLIZZARD_FOREVER_CHARACTER)");
+        }
+        return { name: best.name, surname: best.surname };
+    });
+}
+
+function foreverCharacterCase(
+    name: string,
+    fn: (character: ForeverCharacterName) => Promise<unknown>,
+): Case {
+    return c(name, async () => await fn(await foreverCharacter()));
 }
 
 function foreverSearchedCreatureId(): Promise<number> {
@@ -1496,9 +1539,8 @@ function buildCases(): Case[] {
             "wowForever.questType",
             detail("wowForever.questTypes", () => client.wowForever.questTypes(), client.wowForever.questType),
         ),
-        c("wowForever.realms", () => client.wowForever.realms()),
-        c("wowForever.realm", async () => await client.wowForever.realm(await foreverRealmId())),
-        c("wowForever.searchRealm", () => client.wowForever.searchRealm({ pageSize: 1 })),
+        c("wowForever.rulesets", () => client.wowForever.rulesets()),
+        c("wowForever.ruleset", async () => await client.wowForever.ruleset(await foreverRulesetId())),
         c("wowForever.regions", () => client.wowForever.regions()),
         c(
             "wowForever.region",
@@ -1550,6 +1592,104 @@ function buildCases(): Case[] {
             const treeId = typeof link.id === "number" ? link.id : idFromHref(link.key?.href ?? "");
             return await client.wowForever.talentTreeNodes(treeId);
         }),
+
+        // ----- wow: forever (character profile, realmless) ------------------
+        foreverCharacterCase(
+            "wowForever.characterProfile",
+            (ch) => client.wowForever.characterProfile(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterProfileStatus",
+            (ch) => client.wowForever.characterProfileStatus(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterAchievementSummary",
+            (ch) => client.wowForever.characterAchievementSummary(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterAchievementStatistics",
+            (ch) => client.wowForever.characterAchievementStatistics(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterAppearanceSummary",
+            (ch) => client.wowForever.characterAppearanceSummary(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterCollectionTypes",
+            (ch) => client.wowForever.characterCollectionTypes(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterCollectionMounts",
+            (ch) => client.wowForever.characterCollectionMounts(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterCollectionPets",
+            (ch) => client.wowForever.characterCollectionPets(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterCollectionToys",
+            (ch) => client.wowForever.characterCollectionToys(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterCollectionHeirlooms",
+            (ch) => client.wowForever.characterCollectionHeirlooms(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterCollectionTransmogs",
+            (ch) => client.wowForever.characterCollectionTransmogs(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterEncounters",
+            (ch) => client.wowForever.characterEncounters(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterEncounterDungeons",
+            (ch) => client.wowForever.characterEncounterDungeons(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterEncounterRaids",
+            (ch) => client.wowForever.characterEncounterRaids(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterEquipments",
+            (ch) => client.wowForever.characterEquipments(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterMythicKeystoneProfile",
+            (ch) => client.wowForever.characterMythicKeystoneProfile(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterProfessions",
+            (ch) => client.wowForever.characterProfessions(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterPvpSummary",
+            (ch) => client.wowForever.characterPvpSummary(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterQuests",
+            (ch) => client.wowForever.characterQuests(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterCompletedQuests",
+            (ch) => client.wowForever.characterCompletedQuests(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterReputations",
+            (ch) => client.wowForever.characterReputations(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterSpecializations",
+            (ch) => client.wowForever.characterSpecializations(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterStatistics",
+            (ch) => client.wowForever.characterStatistics(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterTitles",
+            (ch) => client.wowForever.characterTitles(ch.name, ch.surname),
+        ),
 
         // ----- wow: forever (user-token account profile) ---------------------
         userCase("wowForever.accountProfileSummary", () => requireUserClient().wowForever.accountProfileSummary()),

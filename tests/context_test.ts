@@ -230,10 +230,10 @@ Deno.test("forever client uses the forever variant and an optional static versio
     await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
         const plain = createClient(config);
         await plain.wowForever.item(19019);
-        await plain.wowForever.realms();
+        await plain.wowForever.rulesets();
         const versioned = createClient({ ...config, foreverStaticVersion: "1.60.1_70399" });
         await versioned.wowForever.item(19019);
-        await versioned.wowForever.realms();
+        await versioned.wowForever.rulesets();
         await versioned.forUser("user-token").wowForever.accountProfileSummary();
         await versioned.wowClassic.item(19019);
         const namespaces = calls.filter((call) => !isToken(call)).map((call) => header(call, "Battlenet-Namespace"));
@@ -245,6 +245,26 @@ Deno.test("forever client uses the forever variant and an optional static versio
             "dynamic-forever-eu",
             "profile-forever-eu",
             "static-classic-eu",
+        ]);
+    });
+});
+
+Deno.test("forever characters use the realmless name-surname path", async () => {
+    await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
+        const client = createClient(config);
+        await client.wowForever.characterProfile("Anduin", "Wrynn");
+        await client.wowForever.characterEquipments("Jaina", "Pröudmoore");
+        await client.wowForever.ruleset(2);
+        const api = calls.filter((call) => !isToken(call));
+        assertEquals(api.map((call) => new URL(call.url).pathname), [
+            "/profile/wow/character/anduin-wrynn",
+            "/profile/wow/character/jaina-pr%C3%B6udmoore/equipment",
+            "/data/wow/ruleset/2",
+        ]);
+        assertEquals(api.map((call) => header(call, "Battlenet-Namespace")), [
+            "profile-forever-eu",
+            "profile-forever-eu",
+            "dynamic-forever-eu",
         ]);
     });
 });

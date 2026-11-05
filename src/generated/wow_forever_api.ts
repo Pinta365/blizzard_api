@@ -37,6 +37,33 @@ import type {
     ForeverTalentTrees,
     ForeverTitle,
 } from "../wow_forever/game_data.ts";
+import type {
+    ForeverCharacterAchievementStatistics,
+    ForeverCharacterAchievementSummary,
+    ForeverCharacterAppearanceSummary,
+    ForeverCharacterCollectionHeirlooms,
+    ForeverCharacterCollectionMounts,
+    ForeverCharacterCollectionPets,
+    ForeverCharacterCollectionToys,
+    ForeverCharacterCollectionTransmogs,
+    ForeverCharacterCollectionTypes,
+    ForeverCharacterCompletedQuests,
+    ForeverCharacterEncounterDungeons,
+    ForeverCharacterEncounterRaids,
+    ForeverCharacterEncounters,
+    ForeverCharacterEquipment,
+    ForeverCharacterMythicKeystoneProfile,
+    ForeverCharacterProfessions,
+    ForeverCharacterProfile,
+    ForeverCharacterProfileStatus,
+    ForeverCharacterPvpSummary,
+    ForeverCharacterQuests,
+    ForeverCharacterReputations,
+    ForeverCharacterSpecializations,
+    ForeverCharacterStatistics,
+    ForeverCharacterTitles,
+} from "../wow_forever/character.ts";
+import type { ForeverRuleset, ForeverRulesets } from "../wow_forever/ruleset.ts";
 import type { GuildCrestBorder, GuildCrestEmblem, GuildCrests } from "../wow/game_data/guild_crest.ts";
 import type { Heirloom } from "../wow/game_data/heirloom.ts";
 import type {
@@ -83,7 +110,6 @@ import type {
     QuestType,
     QuestTypes,
 } from "../wow/game_data/quest.ts";
-import type { Realm, Realms } from "../wow/game_data/realm.ts";
 import type { Region, Regions } from "../wow/game_data/region.ts";
 import type { ReputationFactions, ReputationTier, ReputationTiers } from "../wow/game_data/reputations.ts";
 import type { Search, SearchParameters } from "../wow/search.ts";
@@ -189,6 +215,223 @@ export interface WowForeverApi {
      * @returns A promise that resolves to an object representing the index of achievements.
      */
     achievements(): Promise<Achievements>;
+
+    /**
+     * Returns a character's statistics as they pertain to achievements.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the achievement statistics.
+     */
+    characterAchievementStatistics(name: string, surname: string): Promise<ForeverCharacterAchievementStatistics>;
+
+    /**
+     * Returns a summary of the achievements a character has completed.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the achievement summary.
+     */
+    characterAchievementSummary(name: string, surname: string): Promise<ForeverCharacterAchievementSummary>;
+
+    /**
+     * Returns a summary of a character's appearance settings.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the appearance summary.
+     */
+    characterAppearanceSummary(name: string, surname: string): Promise<ForeverCharacterAppearanceSummary>;
+
+    /**
+     * Returns the heirlooms a character has collected.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the collected heirlooms.
+     */
+    characterCollectionHeirlooms(name: string, surname: string): Promise<ForeverCharacterCollectionHeirlooms>;
+
+    /**
+     * Returns the mounts a character has collected.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the collected mounts.
+     */
+    characterCollectionMounts(name: string, surname: string): Promise<ForeverCharacterCollectionMounts>;
+
+    /**
+     * Returns the battle pets a character has collected.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the collected pets.
+     */
+    characterCollectionPets(name: string, surname: string): Promise<ForeverCharacterCollectionPets>;
+
+    /**
+     * Returns the toys a character has collected.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the collected toys.
+     */
+    characterCollectionToys(name: string, surname: string): Promise<ForeverCharacterCollectionToys>;
+
+    /**
+     * Returns the transmog appearances a character has collected.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the collected transmogs.
+     */
+    characterCollectionTransmogs(name: string, surname: string): Promise<ForeverCharacterCollectionTransmogs>;
+
+    /**
+     * Returns an index of collection types for a character.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the collection index.
+     */
+    characterCollectionTypes(name: string, surname: string): Promise<ForeverCharacterCollectionTypes>;
+
+    /**
+     * Returns the quests a character has completed.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the completed quests.
+     */
+    characterCompletedQuests(name: string, surname: string): Promise<ForeverCharacterCompletedQuests>;
+
+    /**
+     * Returns a summary of a character's completed dungeons.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the completed dungeons.
+     */
+    characterEncounterDungeons(name: string, surname: string): Promise<ForeverCharacterEncounterDungeons>;
+
+    /**
+     * Returns a summary of a character's completed raids.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the completed raids.
+     */
+    characterEncounterRaids(name: string, surname: string): Promise<ForeverCharacterEncounterRaids>;
+
+    /**
+     * Returns a summary of a character's encounters.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the encounter summary.
+     */
+    characterEncounters(name: string, surname: string): Promise<ForeverCharacterEncounters>;
+
+    /**
+     * Returns a summary of the items equipped by a character.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the equipped items.
+     */
+    characterEquipments(name: string, surname: string): Promise<ForeverCharacterEquipment>;
+
+    /**
+     * Returns the Mythic Keystone profile index for a character.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the Mythic Keystone profile.
+     */
+    characterMythicKeystoneProfile(name: string, surname: string): Promise<ForeverCharacterMythicKeystoneProfile>;
+
+    /**
+     * Returns a summary of a character's professions.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the professions.
+     */
+    characterProfessions(name: string, surname: string): Promise<ForeverCharacterProfessions>;
+
+    /**
+     * Returns a profile summary for a character.
+     *
+     * @param name - The character's name (first part), e.g. "Anduin". Case-insensitive.
+     * @param surname - The character's surname (second part), e.g. "Wrynn". Case-insensitive.
+     * @returns A promise that resolves to an object representing a profile summary.
+     */
+    characterProfile(name: string, surname: string): Promise<ForeverCharacterProfile>;
+
+    /**
+     * Returns the status and a unique ID for a character. Use the ID to check whether a character with the same name is
+     * still the same character.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the character's status.
+     */
+    characterProfileStatus(name: string, surname: string): Promise<ForeverCharacterProfileStatus>;
+
+    /**
+     * Returns a PvP summary for a character.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the PvP summary.
+     */
+    characterPvpSummary(name: string, surname: string): Promise<ForeverCharacterPvpSummary>;
+
+    /**
+     * Returns a character's active quests and links to its completed quests.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the quests.
+     */
+    characterQuests(name: string, surname: string): Promise<ForeverCharacterQuests>;
+
+    /**
+     * Returns a summary of a character's reputations.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the reputations.
+     */
+    characterReputations(name: string, surname: string): Promise<ForeverCharacterReputations>;
+
+    /**
+     * Returns a summary of a character's specializations.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the specializations.
+     */
+    characterSpecializations(name: string, surname: string): Promise<ForeverCharacterSpecializations>;
+
+    /**
+     * Returns a statistics summary for a character.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the statistics.
+     */
+    characterStatistics(name: string, surname: string): Promise<ForeverCharacterStatistics>;
+
+    /**
+     * Returns a summary of the titles a character has obtained.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the titles.
+     */
+    characterTitles(name: string, surname: string): Promise<ForeverCharacterTitles>;
 
     /**
      * Returns details about a creature
@@ -674,21 +917,6 @@ export interface WowForeverApi {
     questTypes(): Promise<QuestTypes>;
 
     /**
-     * Returns a single realm by slug or ID.
-     *
-     * @param realmSlugOrId - The unique identifier for the realm.
-     * @returns A promise that resolves to an object representing details about a realm.
-     */
-    realm(realmSlugOrId: string | number): Promise<Realm>;
-
-    /**
-     * Returns an index of realms.
-     *
-     * @returns A promise that resolves to an object representing a list of realms.
-     */
-    realms(): Promise<Realms>;
-
-    /**
      * Returns a region by ID.
      *
      * @param regionId - The unique identifier for the region.
@@ -732,6 +960,21 @@ export interface WowForeverApi {
      * @returns A promise that resolves to an object representing a list of reputation tiers.
      */
     reputationTiers(): Promise<ReputationTiers>;
+
+    /**
+     * Returns a ruleset by ID.
+     *
+     * @param rulesetId - The ID of the ruleset.
+     * @returns A promise that resolves to an object representing the ruleset.
+     */
+    ruleset(rulesetId: number): Promise<ForeverRuleset>;
+
+    /**
+     * Returns an index of the rulesets in the region.
+     *
+     * @returns A promise that resolves to an object representing the ruleset index.
+     */
+    rulesets(): Promise<ForeverRulesets>;
 
     /**
      * Performs a search of creatures.
@@ -780,14 +1023,6 @@ export interface WowForeverApi {
      * @returns A promise that resolves to an object representing details about a mount search.
      */
     searchMount(searchParameters: SearchParameters): Promise<Search>;
-
-    /**
-     * Performs a search of realms.
-     *
-     * @param SearchParameters - Object containing search parameters.
-     * @returns A promise that resolves to an object representing details about a realm search.
-     */
-    searchRealm(searchParameters: SearchParameters): Promise<Search>;
 
     /**
      * Performs a search of spells.

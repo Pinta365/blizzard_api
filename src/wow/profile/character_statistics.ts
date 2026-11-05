@@ -79,6 +79,10 @@ export interface CharacterStatistics extends LinkSelfHref {
         base: number;
         effective: number;
     };
+    frost_resistance?: {
+        base: number;
+        effective: number;
+    };
     fire_resistance?: {
         base: number;
         effective: number;

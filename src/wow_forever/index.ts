@@ -3,10 +3,10 @@
  * the Forever API supports; the client binds them to a "forever" context. Forever runs on the Retail game data
  * (specializations, talents, mounts, pets, toys, ...) with Classic-era content.
  *
- * Forever is realmless: players pick a ruleset (NORMAL, PVP, RP, PVP_RP), not a realm. Character, guild and auction
- * endpoints are not included yet: the realmless character route (`/profile/wow/character/{name}-{surname}`) is
- * routed but returns no data yet, and connected realms are empty.
- * Verified against the live API (EU) on 2026-11-05, at launch.
+ * Forever is realmless: players pick a ruleset (Normal, PvP, Roleplay, Roleplay PvP), not a realm, and characters are
+ * looked up by `name` and `surname`. The realm endpoints are left out (the realm index was taken down at launch);
+ * use `rulesets()`. Guild and auction endpoints are not included yet: their routes exist but return no data.
+ * Verified against the live API (EU) on 2026-11-05.
  */
 
 // Game Data APIs
@@ -70,7 +70,6 @@ export {
     questType,
     questTypes,
 } from "../wow/game_data/quest.ts";
-export { realm, realms, searchRealm } from "../wow/game_data/realm.ts";
 export { region, regions } from "../wow/game_data/region.ts";
 export { reputationFactions, reputationTier, reputationTiers } from "../wow/game_data/reputations.ts";
 export { searchSpell, spell, spellMedia } from "../wow/game_data/spell.ts";
@@ -98,6 +97,37 @@ export {
     talentTrees,
     title,
 } from "./game_data.ts";
+
+// Rulesets (replace realms)
+export { ruleset, rulesets } from "./ruleset.ts";
+
+// Character Profile APIs (realmless: name and surname)
+export {
+    characterAchievementStatistics,
+    characterAchievementSummary,
+    characterAppearanceSummary,
+    characterCollectionHeirlooms,
+    characterCollectionMounts,
+    characterCollectionPets,
+    characterCollectionToys,
+    characterCollectionTransmogs,
+    characterCollectionTypes,
+    characterCompletedQuests,
+    characterEncounterDungeons,
+    characterEncounterRaids,
+    characterEncounters,
+    characterEquipments,
+    characterMythicKeystoneProfile,
+    characterProfessions,
+    characterProfile,
+    characterProfileStatus,
+    characterPvpSummary,
+    characterQuests,
+    characterReputations,
+    characterSpecializations,
+    characterStatistics,
+    characterTitles,
+} from "./character.ts";
 
 // Account Profile APIs (user token)
 export {
