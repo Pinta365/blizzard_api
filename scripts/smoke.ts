@@ -348,6 +348,16 @@ function foreverCharacter(): Promise<ForeverCharacterName> {
     });
 }
 
+/** The guild of the Forever test character, or a skip when it has none. */
+function foreverGuildSlug(): Promise<string> {
+    return once("wowForever.guildSlug", async () => {
+        const { name, surname } = await foreverCharacter();
+        const profile = await client.wowForever.characterProfile(name, surname);
+        if (!profile.guild) throw new SkipError(`${name} ${surname} is not in a guild`);
+        return profile.guild.slug;
+    });
+}
+
 function foreverCharacterCase(
     name: string,
     fn: (character: ForeverCharacterName) => Promise<unknown>,
@@ -1695,6 +1705,15 @@ function buildCases(): Case[] {
             "wowForever.characterTitles",
             (ch) => client.wowForever.characterTitles(ch.name, ch.surname),
         ),
+
+        // ----- wow: forever (guild, realmless) --------------------------------
+        c("wowForever.guild", async () => await client.wowForever.guild(await foreverGuildSlug())),
+        c("wowForever.guildActivity", async () => await client.wowForever.guildActivity(await foreverGuildSlug())),
+        c(
+            "wowForever.guildAchievements",
+            async () => await client.wowForever.guildAchievements(await foreverGuildSlug()),
+        ),
+        c("wowForever.guildRoster", async () => await client.wowForever.guildRoster(await foreverGuildSlug())),
 
         // ----- wow: forever (user-token account profile) ---------------------
         userCase("wowForever.accountProfileSummary", () => requireUserClient().wowForever.accountProfileSummary()),

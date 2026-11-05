@@ -63,6 +63,12 @@ import type {
     ForeverCharacterStatistics,
     ForeverCharacterTitles,
 } from "../wow_forever/character.ts";
+import type {
+    ForeverGuild,
+    ForeverGuildAchievements,
+    ForeverGuildActivity,
+    ForeverGuildRoster,
+} from "../wow_forever/guild.ts";
 import type { ForeverRuleset, ForeverRulesets } from "../wow_forever/ruleset.ts";
 import type { GuildCrestBorder, GuildCrestEmblem, GuildCrests } from "../wow/game_data/guild_crest.ts";
 import type { Heirloom } from "../wow/game_data/heirloom.ts";
@@ -488,6 +494,30 @@ export interface WowForeverApi {
     creatureTypes(): Promise<CreatureTypes>;
 
     /**
+     * Returns a single guild by its name slug.
+     *
+     * @param nameSlug - The slug of the guild, e.g. "unbound".
+     * @returns A promise that resolves to an object representing the guild.
+     */
+    guild(nameSlug: string): Promise<ForeverGuild>;
+
+    /**
+     * Returns a guild's achievements.
+     *
+     * @param nameSlug - The slug of the guild.
+     * @returns A promise that resolves to an object representing the guild's achievements.
+     */
+    guildAchievements(nameSlug: string): Promise<ForeverGuildAchievements>;
+
+    /**
+     * Returns a guild's recent activity.
+     *
+     * @param nameSlug - The slug of the guild.
+     * @returns A promise that resolves to an object representing the guild's activity.
+     */
+    guildActivity(nameSlug: string): Promise<ForeverGuildActivity>;
+
+    /**
      * Returns a Guild Crest Border Media
      *
      * @param borderId - The unique identifier for the Covenant
@@ -509,6 +539,14 @@ export interface WowForeverApi {
      * @returns A promise that resolves to an object representing a list of all Guild Crest Components.
      */
     guildCrests(): Promise<GuildCrests>;
+
+    /**
+     * Returns a guild's roster.
+     *
+     * @param nameSlug - The slug of the guild.
+     * @returns A promise that resolves to an object representing the guild's roster.
+     */
+    guildRoster(nameSlug: string): Promise<ForeverGuildRoster>;
 
     /**
      * Returns a Heirloom

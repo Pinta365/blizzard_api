@@ -249,22 +249,25 @@ Deno.test("forever client uses the forever variant and an optional static versio
     });
 });
 
-Deno.test("forever characters use the realmless name-surname path", async () => {
+Deno.test("forever characters and guilds use realmless paths", async () => {
     await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
         const client = createClient(config);
         await client.wowForever.characterProfile("Anduin", "Wrynn");
         await client.wowForever.characterEquipments("Jaina", "Pröudmoore");
         await client.wowForever.ruleset(2);
+        await client.wowForever.guildRoster("unbound");
         const api = calls.filter((call) => !isToken(call));
         assertEquals(api.map((call) => new URL(call.url).pathname), [
             "/profile/wow/character/anduin-wrynn",
             "/profile/wow/character/jaina-pr%C3%B6udmoore/equipment",
             "/data/wow/ruleset/2",
+            "/data/wow/guild/unbound/roster",
         ]);
         assertEquals(api.map((call) => header(call, "Battlenet-Namespace")), [
             "profile-forever-eu",
             "profile-forever-eu",
             "dynamic-forever-eu",
+            "profile-forever-eu",
         ]);
     });
 });

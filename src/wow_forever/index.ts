@@ -5,7 +5,8 @@
  *
  * Forever is realmless: players pick a ruleset (Normal, PvP, Roleplay, Roleplay PvP), not a realm, and characters are
  * looked up by `name` and `surname`. The realm endpoints are left out (the realm index was taken down at launch);
- * use `rulesets()`. Guild and auction endpoints are not included yet: their routes exist but return no data.
+ * use `rulesets()`. Guilds are looked up by name slug alone. Auction endpoints are not included yet: the ruleset
+ * auctions route exists but returns no data.
  * Verified against the live API (EU) on 2026-11-05.
  */
 
@@ -128,6 +129,9 @@ export {
     characterStatistics,
     characterTitles,
 } from "./character.ts";
+
+// Guild APIs (realmless: name slug)
+export { guild, guildAchievements, guildActivity, guildRoster } from "./guild.ts";
 
 // Account Profile APIs (user token)
 export {

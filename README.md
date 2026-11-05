@@ -18,7 +18,7 @@ Available as:
 | **World of Warcraft:** Profile APIs         | ✅     | Account profile endpoints need a user token          |
 | **World of Warcraft Classic:** Game Data    | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
 | **World of Warcraft Classic:** Profile APIs | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
-| **World of Warcraft: Forever**              | 🚧     | Game data, characters, account (`wowForever`)        |
+| **World of Warcraft: Forever**              | 🚧     | Game data, characters, guilds (`wowForever`)         |
 | **Diablo III:** Community APIs              | ✅     | Including account and hero profiles                  |
 | **Diablo III:** Game Data APIs              | ✅     |                                                      |
 | **Hearthstone:** Game Data APIs             | ✅     |                                                      |
@@ -92,7 +92,7 @@ The Classic and Forever properties only include the endpoints Blizzard supports 
 ### WoW: Forever
 
 Blizzard hasn't documented the Forever API yet; `wowForever` covers what answers so far: game data, rulesets, character
-profiles and the account profile. Guild and auction endpoints follow once Blizzard serves them.
+profiles, guilds and the account profile. Auction endpoints follow once Blizzard serves them.
 
 Forever is realmless. Players pick a ruleset (Normal, PvP, Roleplay, Roleplay PvP) instead of a realm, so use
 `rulesets()` and `ruleset(id)` instead of the realm endpoints. Characters have a two-part name, unique per region, and
@@ -103,7 +103,8 @@ const profile = await client.wowForever.characterProfile("Anduin", "Wrynn");
 const gear = await client.wowForever.characterEquipments("Anduin", "Wrynn");
 ```
 
-Characters only show up from level 10; below that the API returns 404.
+Characters only show up from level 10, after they log out; before that the API returns 404. Guilds are realmless too, so
+they are looked up by their slug alone: `client.wowForever.guildRoster("my-guild")`.
 
 Static game data uses `static-forever-{region}`, which serves the current game version. To pin a specific version, set
 `foreverStaticVersion`:

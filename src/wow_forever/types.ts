@@ -53,3 +53,11 @@ export type {
     WithForeverCharacter,
 } from "./character.ts";
 export type { ForeverRuleset, ForeverRulesets } from "./ruleset.ts";
+export type {
+    ForeverGuild,
+    ForeverGuildAchievements,
+    ForeverGuildActivity,
+    ForeverGuildRef,
+    ForeverGuildRoster,
+    ForeverGuildRosterMemberCharacter,
+} from "./guild.ts";
