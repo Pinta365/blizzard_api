@@ -90,7 +90,8 @@ export interface ForeverCharacterSpecializations {
     character: ForeverCharacterRef;
     specialization_groups: {
         is_active: boolean;
-        specializations: {
+        /** Absent while no talent points are spent in the group. */
+        specializations?: {
             specialization: KeyNameId;
             specialization_name: string;
             spent_points: number;
