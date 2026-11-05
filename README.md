@@ -18,7 +18,7 @@ Available as:
 | **World of Warcraft:** Profile APIs         | ✅     | Account profile endpoints need a user token          |
 | **World of Warcraft Classic:** Game Data    | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
 | **World of Warcraft Classic:** Profile APIs | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
-| **World of Warcraft: Forever**              | 🚧     | Game data, characters, guilds (`wowForever`)         |
+| **World of Warcraft: Forever**              | ✅     | `wowForever`; auctions once Blizzard serves them     |
 | **Diablo III:** Community APIs              | ✅     | Including account and hero profiles                  |
 | **Diablo III:** Game Data APIs              | ✅     |                                                      |
 | **Hearthstone:** Game Data APIs             | ✅     |                                                      |
@@ -191,6 +191,12 @@ const sword = await blizzardAPI.wow.item(33791);
 ```
 
 ## Upgrading
+
+### From 0.7 to 0.8
+
+- New `wowForever` client for WoW: Forever (see [WoW: Forever](#wow-forever)).
+- Retail `Item.preview_item.stats`, `requirements` and `durability` are optional: the API omits them for items without
+  them, such as companion pets, so you may need to handle `undefined`.
 
 ### From 0.6 to 0.7
 
