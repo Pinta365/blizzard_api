@@ -119,9 +119,12 @@ export interface ForeverCharacterAchievementSummary extends
 export type ForeverCharacterAchievementStatistics = WithForeverCharacter<CharacterAchievementStatistics>;
 export type ForeverCharacterAppearanceSummary = WithForeverCharacter<CharacterAppearanceSummary>;
 export type ForeverCharacterCollectionTypes = WithForeverCharacter<CharacterCollectionTypes>;
-export type ForeverCharacterCollectionMounts = CharacterCollectionMounts;
-export type ForeverCharacterCollectionPets = CharacterCollectionPets;
-export type ForeverCharacterCollectionToys = CharacterCollectionToys;
+/** `mounts` is absent when the character has collected no mounts. */
+export interface ForeverCharacterCollectionMounts extends WithOptional<CharacterCollectionMounts, "mounts"> {}
+/** `pets` is absent when the character has collected no battle pets. */
+export interface ForeverCharacterCollectionPets extends WithOptional<CharacterCollectionPets, "pets"> {}
+/** `toys` is absent when the character has collected no toys. */
+export interface ForeverCharacterCollectionToys extends WithOptional<CharacterCollectionToys, "toys"> {}
 export type ForeverCharacterCollectionHeirlooms = CharacterCollectionHeirlooms;
 /** `appearance_sets` is absent when the character has collected no appearance sets. */
 export interface ForeverCharacterCollectionTransmogs
