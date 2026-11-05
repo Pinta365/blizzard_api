@@ -104,6 +104,8 @@ export interface Item extends LinkSelfHref {
             type: TypeName;
             value: number;
             is_negated?: boolean;
+            /** Present on "Equip:" bonus stats, such as spell power. */
+            is_equip_bonus?: boolean;
             display: {
                 display_string: LocalizedString;
                 color: {

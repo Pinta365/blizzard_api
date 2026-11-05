@@ -91,10 +91,9 @@ The Classic and Forever properties only include the endpoints Blizzard supports 
 
 ### WoW: Forever
 
-Blizzard hasn't documented the Forever API yet; `wowForever` covers what answers before launch (Nov 4, 2026): game data
-and the account profile. Forever is realmless: players pick a ruleset (a realm's `type`: `NORMAL`, `PVP`, `RP`,
-`PVP_RP`) and characters have a two-part name (`name` and `surname`). Character, guild and auction endpoints follow once
-Blizzard serves them.
+Blizzard hasn't documented the Forever API yet; `wowForever` covers what answers so far: game data and the account
+profile. Forever is realmless: players pick a ruleset (`NORMAL`, `PVP`, `RP`, `PVP_RP`) and characters have a two-part
+name (`name` and `surname`). Character, guild and auction endpoints follow once Blizzard serves them.
 
 Static game data uses `static-forever-{region}`, which serves the current game version. To pin a specific version, set
 `foreverStaticVersion`:

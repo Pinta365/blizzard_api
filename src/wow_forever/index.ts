@@ -3,10 +3,10 @@
  * the Forever API supports; the client binds them to a "forever" context. Forever runs on the Retail game data
  * (specializations, talents, mounts, pets, toys, ...) with Classic-era content.
  *
- * Forever is realmless: players pick a ruleset (realm `type`: NORMAL, PVP, RP, PVP_RP), not a realm. Character,
- * guild and auction endpoints are not included yet: before launch the realmless character route is not served and
- * connected realms are empty.
- * Verified against the live API (EU) on 2026-11-02, before launch.
+ * Forever is realmless: players pick a ruleset (NORMAL, PVP, RP, PVP_RP), not a realm. Character, guild and auction
+ * endpoints are not included yet: the realmless character route (`/profile/wow/character/{name}-{surname}`) is
+ * routed but returns no data yet, and connected realms are empty.
+ * Verified against the live API (EU) on 2026-11-05, at launch.
  */
 
 // Game Data APIs
