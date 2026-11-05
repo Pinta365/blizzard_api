@@ -5,6 +5,7 @@
         ".": "./mod.ts",
         "./wow": "./src/wow/types.ts",
         "./wow-classic": "./src/wow_classic/types.ts",
+        "./wow-forever": "./src/wow_forever/types.ts",
         "./hearthstone": "./src/hearthstone/types.ts",
         "./sc2": "./src/starcraft2/types.ts",
         "./diablo3": "./src/diablo3/types.ts"

@@ -226,6 +226,52 @@ Deno.test("classic clients add the namespace variant", async () => {
     });
 });
 
+Deno.test("forever client uses the forever variant and an optional static version", async () => {
+    await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
+        const plain = createClient(config);
+        await plain.wowForever.item(19019);
+        await plain.wowForever.rulesets();
+        const versioned = createClient({ ...config, foreverStaticVersion: "1.60.1_70399" });
+        await versioned.wowForever.item(19019);
+        await versioned.wowForever.rulesets();
+        await versioned.forUser("user-token").wowForever.accountProfileSummary();
+        await versioned.wowClassic.item(19019);
+        const namespaces = calls.filter((call) => !isToken(call)).map((call) => header(call, "Battlenet-Namespace"));
+        assertEquals(namespaces, [
+            "static-forever-eu",
+            "dynamic-forever-eu",
+            // The version only applies to Forever's static namespace.
+            "static-1.60.1_70399-forever-eu",
+            "dynamic-forever-eu",
+            "profile-forever-eu",
+            "static-classic-eu",
+        ]);
+    });
+});
+
+Deno.test("forever characters and guilds use realmless paths", async () => {
+    await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
+        const client = createClient(config);
+        await client.wowForever.characterProfile("Anduin", "Wrynn");
+        await client.wowForever.characterEquipments("Jaina", "Pröudmoore");
+        await client.wowForever.ruleset(2);
+        await client.wowForever.guildRoster("unbound");
+        const api = calls.filter((call) => !isToken(call));
+        assertEquals(api.map((call) => new URL(call.url).pathname), [
+            "/profile/wow/character/anduin-wrynn",
+            "/profile/wow/character/jaina-pr%C3%B6udmoore/equipment",
+            "/data/wow/ruleset/2",
+            "/data/wow/guild/unbound/roster",
+        ]);
+        assertEquals(api.map((call) => header(call, "Battlenet-Namespace")), [
+            "profile-forever-eu",
+            "profile-forever-eu",
+            "dynamic-forever-eu",
+            "profile-forever-eu",
+        ]);
+    });
+});
+
 Deno.test("sends the region's default locale when none is configured", async () => {
     await withFetch((call) => isToken(call) ? tokenResponse("t1") : json({}), async (calls) => {
         const { locale: _, ...withoutLocale } = config;

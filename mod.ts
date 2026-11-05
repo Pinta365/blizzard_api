@@ -23,6 +23,7 @@ import type {
     WowApi,
     WowClassicApi,
     WowClassicEraApi,
+    WowForeverApi,
 } from "./src/client.ts";
 import * as errors from "./src/shared/errors.ts";
 
@@ -35,6 +36,7 @@ export type {
     WowApi,
     WowClassicApi,
     WowClassicEraApi,
+    WowForeverApi,
 } from "./src/client.ts";
 export type {
     AuthConfig,
@@ -99,6 +101,8 @@ export const wow: WowApi = defaultClient.wow;
 export const wowClassic: WowClassicApi = defaultClient.wowClassic;
 /** World of Warcraft Classic Era endpoints on the default client. */
 export const wowClassicEra: WowClassicEraApi = defaultClient.wowClassicEra;
+/** World of Warcraft: Forever endpoints on the default client. */
+export const wowForever: WowForeverApi = defaultClient.wowForever;
 /** Hearthstone endpoints on the default client. */
 export const hearthstone: HearthstoneApi = defaultClient.hearthstone;
 /** StarCraft II endpoints on the default client. */

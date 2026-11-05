@@ -36,6 +36,11 @@ const targets: Target[] = [
         name: "WowClassicEraApi",
         description: "World of Warcraft Classic Era endpoints (Era, Season of Discovery, Hardcore, Anniversary).",
     },
+    {
+        module: "src/wow_forever/index.ts",
+        name: "WowForeverApi",
+        description: "World of Warcraft: Forever endpoints (game data and account profile).",
+    },
     { module: "src/hearthstone/index.ts", name: "HearthstoneApi", description: "Hearthstone endpoints." },
     { module: "src/starcraft2/index.ts", name: "Sc2Api", description: "StarCraft II endpoints." },
     { module: "src/diablo3/index.ts", name: "Diablo3Api", description: "Diablo III endpoints." },

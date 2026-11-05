@@ -18,6 +18,7 @@ Available as:
 | **World of Warcraft:** Profile APIs         | ✅     | Account profile endpoints need a user token          |
 | **World of Warcraft Classic:** Game Data    | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
 | **World of Warcraft Classic:** Profile APIs | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
+| **World of Warcraft: Forever**              | 🚧     | Game data, characters, guilds (`wowForever`)         |
 | **Diablo III:** Community APIs              | ✅     | Including account and hero profiles                  |
 | **Diablo III:** Game Data APIs              | ✅     |                                                      |
 | **Hearthstone:** Game Data APIs             | ✅     |                                                      |
@@ -81,11 +82,39 @@ const { createClient } = require("@pinta365/blizzard_api");
 | `client.wow`           | World of Warcraft (Retail)                                    |
 | `client.wowClassic`    | WoW Classic progression (currently Mists of Pandaria Classic) |
 | `client.wowClassicEra` | WoW Classic Era, Season of Discovery, Hardcore, Anniversary   |
+| `client.wowForever`    | WoW: Forever (game data, characters and account profile)      |
 | `client.hearthstone`   | Hearthstone                                                   |
 | `client.sc2`           | StarCraft II                                                  |
 | `client.diablo3`       | Diablo III                                                    |
 
-The two Classic properties only include the endpoints Blizzard supports for that flavor.
+The Classic and Forever properties only include the endpoints Blizzard supports for that flavor.
+
+### WoW: Forever
+
+Blizzard hasn't documented the Forever API yet; `wowForever` covers what answers so far: game data, rulesets, character
+profiles, guilds and the account profile. Auction endpoints follow once Blizzard serves them.
+
+Forever is realmless. Players pick a ruleset (Normal, PvP, Roleplay, Roleplay PvP) instead of a realm, so use
+`rulesets()` and `ruleset(id)` instead of the realm endpoints. Characters have a two-part name, unique per region, and
+are looked up by `name` and `surname`:
+
+```ts
+const profile = await client.wowForever.characterProfile("Anduin", "Wrynn");
+const gear = await client.wowForever.characterEquipments("Anduin", "Wrynn");
+```
+
+Characters only show up from level 10, after they log out; before that the API returns 404. Guilds are realmless too, so
+they are looked up by their slug alone: `client.wowForever.guildRoster("my-guild")`.
+
+Static game data uses `static-forever-{region}`, which serves the current game version. To pin a specific version, set
+`foreverStaticVersion`:
+
+```ts
+const client = createClient({ region: "eu", clientId, clientSecret, foreverStaticVersion: "1.60.1_70399" });
+const races = await client.wowForever.playableRaces();
+```
+
+The version is in the `namespace` of the `self` link of any static response.
 
 ## Response types
 
@@ -96,9 +125,10 @@ import type { Mount } from "@pinta365/blizzard-api/wow";
 import type { Card } from "@pinta365/blizzard-api/hearthstone";
 ```
 
-Entry points: `/wow`, `/wow-classic`, `/hearthstone`, `/sc2` and `/diablo3`. The Classic clients mostly return the same
-types as Retail (import those from `/wow`). `/wow-classic` holds the Classic-only ones, such as
-`ClassicCharacterProfile`, where fields that only Retail returns are optional.
+Entry points: `/wow`, `/wow-classic`, `/wow-forever`, `/hearthstone`, `/sc2` and `/diablo3`. The Classic and Forever
+clients mostly return the same types as Retail (import those from `/wow`). `/wow-classic` and `/wow-forever` hold the
+flavor-only ones, such as `ClassicCharacterProfile` or `ForeverCharacterProfile`, where fields that only Retail returns
+are optional.
 
 ## Following links
 

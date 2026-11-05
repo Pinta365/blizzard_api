@@ -17,6 +17,7 @@ const apis: Record<string, { type: string; module: string }> = {
     wow: { type: "WowApi", module: "wow_api.ts" },
     wowClassic: { type: "WowClassicApi", module: "wow_classic_api.ts" },
     wowClassicEra: { type: "WowClassicEraApi", module: "wow_classic_era_api.ts" },
+    wowForever: { type: "WowForeverApi", module: "wow_forever_api.ts" },
     hearthstone: { type: "HearthstoneApi", module: "hearthstone_api.ts" },
     sc2: { type: "Sc2Api", module: "sc2_api.ts" },
     diablo3: { type: "Diablo3Api", module: "diablo3_api.ts" },

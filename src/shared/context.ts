@@ -22,6 +22,12 @@ export interface ClientConfig {
     locale?: Locales;
     clientId: string;
     clientSecret: string;
+    /**
+     * Static namespace version for WoW: Forever, e.g. "1.60.1_70399". When set, `wowForever` static requests use
+     * `static-<version>-forever-<region>` instead of `static-forever-<region>` (which serves the current version). Use it
+     * to pin a version; the current one is in the `self` link of any static response.
+     */
+    foreverStaticVersion?: string;
 }
 
 /**
@@ -77,7 +83,11 @@ interface BlizzardAPIErrorResponse {
 interface ContextOptions {
     userToken?: string;
     namespaceVariant?: string;
+    staticVersion?: StaticVersion;
 }
+
+/** Returns the static namespace version to insert before the variant, or undefined for the plain namespace. */
+type StaticVersion = (config: Readonly<Partial<ClientConfig>>) => string | undefined;
 
 interface TokenState extends AuthConfig {
     pending?: Promise<string>;
@@ -169,17 +179,19 @@ export class ApiContext {
     readonly #token: TokenState;
     readonly #userToken?: string;
     readonly #namespaceVariant?: string;
+    readonly #staticVersion?: StaticVersion;
 
     /**
      * @param {Partial<ClientConfig>} config - The client configuration. Shared by reference with derived contexts.
      * @param {TokenState} [token] - Token state to share (used by derived contexts).
-     * @param {ContextOptions} [options] - User token and namespace variant.
+     * @param {ContextOptions} [options] - User token, namespace variant and static namespace version.
      */
     constructor(config: Partial<ClientConfig> = {}, token?: TokenState, options: ContextOptions = {}) {
         this.#config = config;
         this.#token = token ?? { accessToken: "", tokenExpiration: 0 };
         this.#userToken = options.userToken;
         this.#namespaceVariant = options.namespaceVariant;
+        this.#staticVersion = options.staticVersion;
     }
 
     /**
@@ -217,7 +229,11 @@ export class ApiContext {
      * @param {string} userToken - A user access token from the authorization code flow.
      */
     forUser(userToken: string): ApiContext {
-        return new ApiContext(this.#config, this.#token, { userToken, namespaceVariant: this.#namespaceVariant });
+        return new ApiContext(this.#config, this.#token, {
+            userToken,
+            namespaceVariant: this.#namespaceVariant,
+            staticVersion: this.#staticVersion,
+        });
     }
 
     /**
@@ -225,9 +241,15 @@ export class ApiContext {
      * inserted before the region, e.g. "classic1x" turns "static" into "static-classic1x-eu".
      * It shares configuration, tokens and the user token with this context.
      * @param {string} namespaceVariant - The namespace variant, e.g. "classic" or "classic1x".
+     * @param {StaticVersion} [staticVersion] - Reads a static namespace version from the configuration, e.g. "1.60.1_70399"
+     *   turns "static" into "static-1.60.1_70399-forever-eu". When it returns undefined, the plain namespace is used.
      */
-    withNamespaceVariant(namespaceVariant: string): ApiContext {
-        return new ApiContext(this.#config, this.#token, { userToken: this.#userToken, namespaceVariant });
+    withNamespaceVariant(namespaceVariant: string, staticVersion?: StaticVersion): ApiContext {
+        return new ApiContext(this.#config, this.#token, {
+            userToken: this.#userToken,
+            namespaceVariant,
+            staticVersion,
+        });
     }
 
     /**
@@ -345,9 +367,11 @@ export class ApiContext {
 
     #namespaceHeader(namespace: string, region: Regions): string {
         const isBase = namespace === "static" || namespace === "dynamic" || namespace === "profile";
-        return isBase && this.#namespaceVariant
-            ? `${namespace}-${this.#namespaceVariant}-${region}`
-            : `${namespace}-${region}`;
+        if (!isBase || !this.#namespaceVariant) return `${namespace}-${region}`;
+        const version = namespace === "static" ? this.#staticVersion?.(this.#config) : undefined;
+        return version
+            ? `${namespace}-${version}-${this.#namespaceVariant}-${region}`
+            : `${namespace}-${this.#namespaceVariant}-${region}`;
     }
 
     async #send(url: string, namespaceHeader: string | undefined, userScoped: boolean): Promise<unknown> {

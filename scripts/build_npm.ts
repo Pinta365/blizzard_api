@@ -15,6 +15,7 @@ await build({
         "./mod.ts",
         { name: "./wow", path: "./src/wow/types.ts" },
         { name: "./wow-classic", path: "./src/wow_classic/types.ts" },
+        { name: "./wow-forever", path: "./src/wow_forever/types.ts" },
         { name: "./hearthstone", path: "./src/hearthstone/types.ts" },
         { name: "./sc2", path: "./src/starcraft2/types.ts" },
         { name: "./diablo3", path: "./src/diablo3/types.ts" },
