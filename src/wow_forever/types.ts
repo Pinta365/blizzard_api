@@ -53,6 +53,11 @@ export type {
     ForeverCharacterTitles,
     WithForeverCharacter,
 } from "./character.ts";
+export type {
+    ForeverAuctionHouseAuctions,
+    ForeverAuctionHouseCommodities,
+    ForeverAuctionHouses,
+} from "./auction_house.ts";
 export type { ForeverRuleset, ForeverRulesets } from "./ruleset.ts";
 export type {
     ForeverGuild,
