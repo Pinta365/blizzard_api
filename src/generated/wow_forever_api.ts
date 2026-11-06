@@ -252,7 +252,8 @@ export interface WowForeverApi {
     auctionHouseCommodities(rulesetId: number, auctionHouseId: number): Promise<ForeverAuctionHouseCommodities>;
 
     /**
-     * Returns an index of a ruleset's auction houses (Alliance, Horde and neutral).
+     * Returns an index of the auction houses (Alliance, Horde and neutral), as listed under a ruleset. Every ruleset of a
+     * region currently lists the same auction houses.
      *
      * @param rulesetId - The ID of the ruleset, from rulesets().
      * @returns A promise that resolves to an object listing the auction houses.

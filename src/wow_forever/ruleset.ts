@@ -1,6 +1,6 @@
 /**
  * WoW: Forever ruleset endpoints. Forever is realmless: players pick a ruleset (Normal, PvP, Roleplay, Roleplay PvP)
- * instead of a realm, and each ruleset has its own auction houses. The ruleset index replaces the realm index.
+ * instead of a realm. Auction houses are listed under a ruleset, see auction_house.ts. The ruleset index replaces the realm index.
  * Verified against the live API (EU, US, KR, TW) on 2026-11-05.
  */
 

@@ -106,14 +106,17 @@ const gear = await client.wowForever.characterEquipments("Anduin", "Wrynn");
 Characters only show up from level 10, after they log out; before that the API returns 404. Guilds are realmless too, so
 they are looked up by their slug alone: `client.wowForever.guildRoster("my-guild")`.
 
-Each ruleset has several auction houses (Alliance, Horde and neutral). List them, then fetch the auctions and
-commodities of one:
+Auctions are listed per auction house (Alliance, Horde and neutral), under a ruleset. List the houses, then fetch the
+auctions and commodities of one:
 
 ```ts
 const houses = await client.wowForever.auctionHouses(2); // ruleset 2: Normal
 const auctions = await client.wowForever.auctionHouse(2, houses.auctions[0].id);
 const commodities = await client.wowForever.auctionHouseCommodities(2, houses.auctions[0].id);
 ```
+
+For now, every ruleset of a region lists the same auction houses with the same auctions: the ruleset ID must be valid,
+but doesn't filter them.
 
 Static game data uses `static-forever-{region}`, which serves the current game version. To pin a specific version, set
 `foreverStaticVersion`:

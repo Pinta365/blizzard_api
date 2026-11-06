@@ -1,13 +1,14 @@
 /**
- * WoW: Forever auction house endpoints. Each ruleset has several auction houses (Alliance, Horde and the neutral
- * Blackwater auction house), so auctions and commodities are listed per auction house of a ruleset.
+ * WoW: Forever auction house endpoints. Auctions and commodities are listed per auction house (Alliance, Horde and the
+ * neutral Blackwater auction house), under a ruleset. As of 2026-11-06 every ruleset of a region lists the same auction
+ * houses with the same auctions: the ruleset ID must be valid, but does not filter them.
  * Verified against the live API (EU, US, KR, TW) on 2026-11-06.
  */
 
 import type { ApiContext, Href, LinkSelfHref, NamedRef } from "../shared/index.ts";
 import type { AuctionListing, commodity } from "../wow/game_data/auction_house.ts";
 
-/** The index of a ruleset's auction houses. */
+/** The index of the auction houses, as listed under a ruleset. */
 export interface ForeverAuctionHouses extends LinkSelfHref {
     auctions: NamedRef[];
 }
@@ -29,7 +30,8 @@ export interface ForeverAuctionHouseCommodities extends LinkSelfHref {
 }
 
 /**
- * Returns an index of a ruleset's auction houses (Alliance, Horde and neutral).
+ * Returns an index of the auction houses (Alliance, Horde and neutral), as listed under a ruleset. Every ruleset of a
+ * region currently lists the same auction houses.
  *
  * @param rulesetId - The ID of the ruleset, from rulesets().
  * @returns A promise that resolves to an object listing the auction houses.
