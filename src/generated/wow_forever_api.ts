@@ -38,6 +38,11 @@ import type {
     ForeverTitle,
 } from "../wow_forever/game_data.ts";
 import type {
+    ForeverAuctionHouseAuctions,
+    ForeverAuctionHouseCommodities,
+    ForeverAuctionHouses,
+} from "../wow_forever/auction_house.ts";
+import type {
     ForeverCharacterAchievementStatistics,
     ForeverCharacterAchievementSummary,
     ForeverCharacterAppearanceSummary,
@@ -222,6 +227,37 @@ export interface WowForeverApi {
      * @returns A promise that resolves to an object representing the index of achievements.
      */
     achievements(): Promise<Achievements>;
+
+    /**
+     * Returns all active auctions of one auction house of a ruleset. Commodities are listed separately, see
+     * auctionHouseCommodities().
+     *
+     * NOTE: The response can be large (tens of thousands of auctions).
+     *
+     * @param rulesetId - The ID of the ruleset.
+     * @param auctionHouseId - The ID of the auction house, from auctionHouses().
+     * @returns A promise that resolves to an object listing the auctions.
+     */
+    auctionHouse(rulesetId: number, auctionHouseId: number): Promise<ForeverAuctionHouseAuctions>;
+
+    /**
+     * Returns all active commodity auctions of one auction house of a ruleset.
+     *
+     * NOTE: The response can be large (tens of thousands of auctions).
+     *
+     * @param rulesetId - The ID of the ruleset.
+     * @param auctionHouseId - The ID of the auction house, from auctionHouses().
+     * @returns A promise that resolves to an object listing the commodity auctions.
+     */
+    auctionHouseCommodities(rulesetId: number, auctionHouseId: number): Promise<ForeverAuctionHouseCommodities>;
+
+    /**
+     * Returns an index of a ruleset's auction houses (Alliance, Horde and neutral).
+     *
+     * @param rulesetId - The ID of the ruleset, from rulesets().
+     * @returns A promise that resolves to an object listing the auction houses.
+     */
+    auctionHouses(rulesetId: number): Promise<ForeverAuctionHouses>;
 
     /**
      * Returns a character's statistics as they pertain to achievements.

@@ -12,18 +12,18 @@ Available as:
 
 ### APIs implemented
 
-| APIs                                        | Status | Note                                                 |
-| ------------------------------------------- | ------ | ---------------------------------------------------- |
-| **World of Warcraft:** Game Data APIs       | ✅     | Including housing, item appearances, hero talents    |
-| **World of Warcraft:** Profile APIs         | ✅     | Account profile endpoints need a user token          |
-| **World of Warcraft Classic:** Game Data    | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
-| **World of Warcraft Classic:** Profile APIs | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`) |
-| **World of Warcraft: Forever**              | ✅     | `wowForever`; auctions once Blizzard serves them     |
-| **Diablo III:** Community APIs              | ✅     | Including account and hero profiles                  |
-| **Diablo III:** Game Data APIs              | ✅     |                                                      |
-| **Hearthstone:** Game Data APIs             | ✅     |                                                      |
-| **StarCraft II:** Community APIs            | ✅     | Including the legacy endpoints                       |
-| **StarCraft II:** Game Data APIs            | ✅     |                                                      |
+| APIs                                        | Status | Note                                                   |
+| ------------------------------------------- | ------ | ------------------------------------------------------ |
+| **World of Warcraft:** Game Data APIs       | ✅     | Including housing, item appearances, hero talents      |
+| **World of Warcraft:** Profile APIs         | ✅     | Account profile endpoints need a user token            |
+| **World of Warcraft Classic:** Game Data    | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`)   |
+| **World of Warcraft Classic:** Profile APIs | ✅     | Progression (`wowClassic`) and Era (`wowClassicEra`)   |
+| **World of Warcraft: Forever**              | ✅     | Game data, characters, guilds, auctions (`wowForever`) |
+| **Diablo III:** Community APIs              | ✅     | Including account and hero profiles                    |
+| **Diablo III:** Game Data APIs              | ✅     |                                                        |
+| **Hearthstone:** Game Data APIs             | ✅     |                                                        |
+| **StarCraft II:** Community APIs            | ✅     | Including the legacy endpoints                         |
+| **StarCraft II:** Game Data APIs            | ✅     |                                                        |
 
 Every endpoint is checked against the live API by the project's smoke test.
 
@@ -92,7 +92,7 @@ The Classic and Forever properties only include the endpoints Blizzard supports 
 ### WoW: Forever
 
 Blizzard hasn't documented the Forever API yet; `wowForever` covers what answers so far: game data, rulesets, character
-profiles, guilds and the account profile. Auction endpoints follow once Blizzard serves them.
+profiles, guilds, auction houses and the account profile.
 
 Forever is realmless. Players pick a ruleset (Normal, PvP, Roleplay, Roleplay PvP) instead of a realm, so use
 `rulesets()` and `ruleset(id)` instead of the realm endpoints. Characters have a two-part name, unique per region, and
@@ -105,6 +105,15 @@ const gear = await client.wowForever.characterEquipments("Anduin", "Wrynn");
 
 Characters only show up from level 10, after they log out; before that the API returns 404. Guilds are realmless too, so
 they are looked up by their slug alone: `client.wowForever.guildRoster("my-guild")`.
+
+Each ruleset has several auction houses (Alliance, Horde and neutral). List them, then fetch the auctions and
+commodities of one:
+
+```ts
+const houses = await client.wowForever.auctionHouses(2); // ruleset 2: Normal
+const auctions = await client.wowForever.auctionHouse(2, houses.auctions[0].id);
+const commodities = await client.wowForever.auctionHouseCommodities(2, houses.auctions[0].id);
+```
 
 Static game data uses `static-forever-{region}`, which serves the current game version. To pin a specific version, set
 `foreverStaticVersion`:

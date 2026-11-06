@@ -1556,6 +1556,19 @@ function buildCases(): Case[] {
         ),
         c("wowForever.rulesets", () => client.wowForever.rulesets()),
         c("wowForever.ruleset", async () => await client.wowForever.ruleset(await foreverRulesetId())),
+        c("wowForever.auctionHouses", async () => await client.wowForever.auctionHouses(await foreverRulesetId())),
+        c("wowForever.auctionHouse", async () => {
+            const rulesetId = await foreverRulesetId();
+            const house = (await client.wowForever.auctionHouses(rulesetId)).auctions[0];
+            if (!house) throw new SkipError("no auction houses for the ruleset");
+            return await client.wowForever.auctionHouse(rulesetId, house.id);
+        }),
+        c("wowForever.auctionHouseCommodities", async () => {
+            const rulesetId = await foreverRulesetId();
+            const house = (await client.wowForever.auctionHouses(rulesetId)).auctions[0];
+            if (!house) throw new SkipError("no auction houses for the ruleset");
+            return await client.wowForever.auctionHouseCommodities(rulesetId, house.id);
+        }),
         c("wowForever.regions", () => client.wowForever.regions()),
         c(
             "wowForever.region",
