@@ -1,0 +1,54 @@
+# Builds the docs site in docs/ with tryck and deploys it to GitHub Pages (blizzard.pinta.land).
+#
+# The site documents the latest release, so it deploys when a release is published, not on every push to main.
+# To publish a docs-only change between releases (such as the WoW: Forever notes), run this workflow by hand on
+# main (Actions > Docs > Run workflow); that also publishes any unreleased changes documented there.
+name: Docs
+
+on:
+    release:
+        types: [released]
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+concurrency:
+    group: pages
+    cancel-in-progress: false
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  fetch-depth: 0 # full history, for the "Last updated" dates
+            - uses: denoland/setup-deno@v2
+              with:
+                  deno-version: v2.x
+            - uses: actions/setup-go@v7
+              with:
+                  go-version: stable
+            - id: pages
+              uses: actions/configure-pages@v6
+            - name: Generate the endpoint reference
+              run: deno task docs:gen
+            - name: Build
+              working-directory: docs
+              run: go run github.com/Pinta365/tryck/cmd/tryck@v0.12.0 build --strict --base-url "${{ steps.pages.outputs.base_url }}/"
+            - uses: actions/upload-pages-artifact@v5
+              with:
+                  path: docs/dist
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - id: deployment
+              uses: actions/deploy-pages@v5
