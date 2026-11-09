@@ -32,6 +32,7 @@ jobs:
             - uses: actions/setup-go@v7
               with:
                   go-version: stable
+                  cache: false # no go.mod here: tryck is fetched with go run
             - id: pages
               uses: actions/configure-pages@v6
             - name: Generate the endpoint reference
