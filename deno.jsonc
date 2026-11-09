@@ -11,7 +11,7 @@
         "./diablo3": "./src/diablo3/types.ts"
     },
     "publish": {
-        "exclude": [".github/", "scripts/", "tests/", "fixtures/", "PLAN.md"]
+        "exclude": [".github/", "scripts/", "tests/", "fixtures/", "docs/", "PLAN.md"]
     },
     "imports": {
         "@deno/dnt": "jsr:@deno/dnt@^0.43.2",
@@ -29,13 +29,15 @@
         "check:fields": "deno run --allow-read --allow-env scripts/check_fields.ts",
         "gen:api": "deno run --allow-read --allow-write --allow-run --allow-env scripts/gen_api.ts",
         "user-token": "deno run --env-file=.env --allow-net --allow-env --allow-read=.env --allow-write=.env scripts/user_token.ts",
-        "smoke": "deno run --env-file=.env -A scripts/smoke.ts"
+        "smoke": "deno run --env-file=.env -A scripts/smoke.ts",
+        "docs:gen": "deno run --allow-read --allow-write --allow-env scripts/gen_docs.ts"
     },
     "test": {
         "include": ["tests/"]
     },
     "fmt": {
         "lineWidth": 120,
-        "indentWidth": 4
+        "indentWidth": 4,
+        "exclude": ["docs/"]
     }
 }

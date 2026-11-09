@@ -1,0 +1,34 @@
+site:
+  title: "blizzard_api"
+  description: "TypeScript client for the Blizzard Battle.net APIs: World of Warcraft (Retail, Classic, Forever), Hearthstone, StarCraft II and Diablo III."
+  baseUrl: "https://blizzard.pinta.land/"
+  language: "en"
+
+build:
+  contentDir: "./content"
+  outputDir: "./dist"
+  staticDir: "./static"
+  lastUpdated: true
+
+defaults:
+  layout: "doc"
+  toc: true
+  tocDepth: [2, 3]
+
+theme:
+  colorScheme: auto
+  nav:
+    - title: JSR
+      url: https://jsr.io/@pinta365/blizzard-api
+    - title: npm
+      url: https://www.npmjs.com/package/@pinta365/blizzard_api
+    - title: GitHub
+      url: https://github.com/Pinta365/blizzard_api
+  editUrl: "https://github.com/Pinta365/blizzard_api/edit/main/docs/content/"
+  footer: "Not affiliated with Blizzard Entertainment. Built with [tryck](https://github.com/Pinta365/tryck)."
+
+plugins:
+  syntaxHighlighting:
+    theme: "github"
+    darkTheme: "github-dark"
+    lineNumbers: false

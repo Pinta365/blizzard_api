@@ -5,3 +5,5 @@ npm/
 deno.lock
 fixtures/
 PLAN.md
+docs/dist/
+docs/content/03-reference/
