@@ -25,9 +25,15 @@ theme:
     - title: GitHub
       url: https://github.com/Pinta365/blizzard_api
   editUrl: "https://github.com/Pinta365/blizzard_api/edit/main/docs/content/"
-  footer: "Not affiliated with Blizzard Entertainment. Built with [tryck](https://github.com/Pinta365/tryck)."
+  footer: "MIT licensed · Not affiliated with Blizzard Entertainment · Built with [tryck](https://github.com/Pinta365/tryck) · [llms.txt](/llms.txt) for AI tools"
 
 plugins:
+  llmsTxt:
+    full: true
+    details: "These docs describe the latest release of `@pinta365/blizzard-api` (JSR) / `@pinta365/blizzard_api` (npm). Create a client with `createClient({ region, clientId, clientSecret })`; every game is a property of it (`client.wow`, `client.wowForever`, ...). The WoW: Forever API is undocumented by Blizzard; the Forever notes describe what has been found by testing."
+  social:
+    image: /img/card.jpg
+    imageAlt: "The text { blizzard_api } with the line TypeScript client for the Blizzard Battle.net APIs, on a dark background."
   syntaxHighlighting:
     theme: "github"
     darkTheme: "github-dark"

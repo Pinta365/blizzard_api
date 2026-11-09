@@ -218,6 +218,7 @@ await Deno.writeTextFile(
     `---
 title: Reference
 weight: 3
+description: "Every endpoint function of blizzard_api, per game: World of Warcraft, Classic, Classic Era, WoW: Forever, Hearthstone, StarCraft II and Diablo III."
 ---
 
 Every endpoint function, per game. Generated from the library's client interfaces, so it always matches the code.

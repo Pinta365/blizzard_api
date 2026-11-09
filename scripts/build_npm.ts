@@ -31,7 +31,7 @@ await build({
         name: "@pinta365/blizzard_api",
         version,
         description:
-            "TS library to interact with the Blizzard Battle.net API. World of Warcraft, World of Warcraft Classic, StarCraft 2, Diablo 3, Hearthstone.",
+            "TS library to interact with the Blizzard Battle.net API. World of Warcraft (Retail, Classic and WoW: Forever), StarCraft 2, Diablo 3, Hearthstone.",
         license: "MIT",
         author: "Pinta <https://github.com/Pinta365>",
         keywords: [
@@ -43,7 +43,11 @@ await build({
             "StarCraft",
             "Diablo",
             "Hearthstone",
+            "WoW Classic",
+            "WoW Forever",
+            "typescript",
         ],
+        homepage: "https://blizzard.pinta.land",
         repository: {
             type: "git",
             url: "git+https://github.com/Pinta365/blizzard_api.git",
