@@ -35,6 +35,129 @@ export interface ItemSubclass extends LinkSelfHref {
     hide_subclass_in_tooltips?: boolean;
 }
 
+/** An item as its tooltip shows it. */
+export interface ItemPreview {
+    item: KeyId;
+    context?: number;
+    bonus_list?: number[];
+    quality: TypeName;
+    name: LocalizedString;
+    media: KeyId;
+    item_class: KeyNameId;
+    item_subclass: KeyNameId;
+    inventory_type: TypeName;
+    /** Absent for items that don't bind, such as recipes. */
+    binding?: TypeName;
+    /** Absent for items that are not unique-equipped. */
+    unique_equipped?: string;
+    /** Absent for non-weapon items. */
+    weapon?: {
+        damage: {
+            min_value: number;
+            max_value: number;
+            display_string: LocalizedString;
+            damage_class: TypeName;
+        };
+        additional_damage?: {
+            min_value: number;
+            max_value: number;
+            display_string: LocalizedString;
+            damage_class: TypeName;
+        }[];
+        attack_speed: {
+            value: number;
+            display_string: LocalizedString;
+        };
+        dps: {
+            value: number;
+            display_string: LocalizedString;
+        };
+    };
+    /** Absent for non-armor items. */
+    armor?: {
+        value: number;
+        display: {
+            display_string: LocalizedString;
+            color: {
+                r: number;
+                g: number;
+                b: number;
+                a: number;
+            };
+        };
+    };
+    /** Absent for items without stats, such as non-equippable items. */
+    stats?: {
+        type: TypeName;
+        value: number;
+        is_negated?: boolean;
+        /** Present on "Equip:" bonus stats, such as spell power. */
+        is_equip_bonus?: boolean;
+        display: {
+            display_string: LocalizedString;
+            color: {
+                r: number;
+                g: number;
+                b: number;
+                a: number;
+            };
+        };
+    }[];
+    /** Absent for items without spells. */
+    spells?: {
+        spell: KeyNameId;
+        description: LocalizedString;
+    }[];
+    /** Absent for items without requirements. */
+    requirements?: {
+        /** Absent for items without a level requirement, such as recipes. */
+        level?: {
+            value: number;
+            display_string: LocalizedString;
+        };
+        /** Present on items that require a profession, such as recipes. */
+        skill?: {
+            profession: KeyNameId;
+            level: number;
+            display_string: LocalizedString;
+        };
+    };
+    level?: {
+        value: number;
+        display_string: LocalizedString;
+    };
+    /** Absent for items without durability, such as non-equippable items. */
+    durability?: {
+        value: number;
+        display_string: LocalizedString;
+    };
+    /** Present on some items, such as recipes ("Teaches you how to make..."). */
+    description?: LocalizedString;
+    /** Present on recipes: the item it makes and its reagents. */
+    recipe?: ItemRecipe;
+    /** Present on some items, such as companion pets. */
+    is_subclass_hidden?: boolean;
+    sell_price?: {
+        value: number;
+        display_strings: {
+            header: LocalizedString;
+            gold: string;
+            silver: string;
+            copper: string;
+        };
+    };
+}
+
+/** What a recipe makes: the crafted item and its reagents. */
+export interface ItemRecipe {
+    item: ItemPreview;
+    reagents: {
+        reagent: KeyNameId;
+        quantity: number;
+    }[];
+    reagents_display_string: LocalizedString;
+}
+
 export interface Item extends LinkSelfHref {
     id: number;
     name: LocalizedString;
@@ -50,105 +173,9 @@ export interface Item extends LinkSelfHref {
     max_count: number;
     is_equippable: boolean;
     is_stackable: boolean;
-    preview_item: {
-        item: KeyId;
-        context?: number;
-        bonus_list?: number[];
-        quality: TypeName;
-        name: LocalizedString;
-        media: KeyId;
-        item_class: KeyNameId;
-        item_subclass: KeyNameId;
-        inventory_type: TypeName;
-        binding: TypeName;
-        /** Absent for items that are not unique-equipped. */
-        unique_equipped?: string;
-        /** Absent for non-weapon items. */
-        weapon?: {
-            damage: {
-                min_value: number;
-                max_value: number;
-                display_string: LocalizedString;
-                damage_class: TypeName;
-            };
-            additional_damage?: {
-                min_value: number;
-                max_value: number;
-                display_string: LocalizedString;
-                damage_class: TypeName;
-            }[];
-            attack_speed: {
-                value: number;
-                display_string: LocalizedString;
-            };
-            dps: {
-                value: number;
-                display_string: LocalizedString;
-            };
-        };
-        /** Absent for non-armor items. */
-        armor?: {
-            value: number;
-            display: {
-                display_string: LocalizedString;
-                color: {
-                    r: number;
-                    g: number;
-                    b: number;
-                    a: number;
-                };
-            };
-        };
-        /** Absent for items without stats, such as non-equippable items. */
-        stats?: {
-            type: TypeName;
-            value: number;
-            is_negated?: boolean;
-            /** Present on "Equip:" bonus stats, such as spell power. */
-            is_equip_bonus?: boolean;
-            display: {
-                display_string: LocalizedString;
-                color: {
-                    r: number;
-                    g: number;
-                    b: number;
-                    a: number;
-                };
-            };
-        }[];
-        /** Absent for items without spells. */
-        spells?: {
-            spell: KeyNameId;
-            description: LocalizedString;
-        }[];
-        /** Absent for items without requirements. */
-        requirements?: {
-            level: {
-                value: number;
-                display_string: LocalizedString;
-            };
-        };
-        level?: {
-            value: number;
-            display_string: LocalizedString;
-        };
-        /** Absent for items without durability, such as non-equippable items. */
-        durability?: {
-            value: number;
-            display_string: LocalizedString;
-        };
-        /** Present on some items, such as companion pets. */
-        is_subclass_hidden?: boolean;
-        sell_price?: {
-            value: number;
-            display_strings: {
-                header: LocalizedString;
-                gold: string;
-                silver: string;
-                copper: string;
-            };
-        };
-    };
+    /** Present on some items, such as recipes ("Teaches you how to make..."). */
+    description?: LocalizedString;
+    preview_item: ItemPreview;
     purchase_quantity: number;
     appearances?: KeyId[];
 }
