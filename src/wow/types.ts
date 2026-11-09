@@ -49,7 +49,17 @@ export type {
 } from "./game_data/guild_crest.ts";
 export type { Heirloom, Heirlooms, Upgrade, UpgradeStats, ValueDisplayString } from "./game_data/heirloom.ts";
 export type { Decor, Decors, Fixture, FixtureHook, FixtureHooks, Fixtures, Room, Rooms } from "./game_data/housing.ts";
-export type { Item, ItemClass, ItemClasses, ItemMedia, ItemSet, ItemSets, ItemSubclass } from "./game_data/item.ts";
+export type {
+    Item,
+    ItemClass,
+    ItemClasses,
+    ItemMedia,
+    ItemPreview,
+    ItemRecipe,
+    ItemSet,
+    ItemSets,
+    ItemSubclass,
+} from "./game_data/item.ts";
 export type {
     AppearanceSlot,
     ItemAppearance,
