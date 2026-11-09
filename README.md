@@ -209,6 +209,7 @@ const sword = await blizzardAPI.wow.item(33791);
 - New `wowForever` client for WoW: Forever (see [WoW: Forever](#wow-forever)).
 - Retail `Item.preview_item.stats`, `requirements` and `durability` are optional: the API omits them for items without
   them, such as companion pets, so you may need to handle `undefined`.
+- 0.8.3: `Item.preview_item.binding` and `requirements.level` are optional, because recipe items have neither.
 
 ### From 0.6 to 0.7
 
