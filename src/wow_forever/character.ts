@@ -31,7 +31,7 @@ import type { CharacterProfessions } from "../wow/profile/character_professions.
 import type { CharacterProfile, CharacterProfileStatus } from "../wow/profile/character_profile.ts";
 import type { CharacterCompletedQuests, CharacterQuests } from "../wow/profile/character_quests.ts";
 import type { CharacterReputations } from "../wow/profile/character_reputations.ts";
-import type { CharacterStatistics } from "../wow/profile/character_statistics.ts";
+import type { CharacterStatistics, StatRating } from "../wow/profile/character_statistics.ts";
 import type { CharacterTitles } from "../wow/profile/character_titles.ts";
 
 /** A reference to a Forever character, as found in the `character` field of the character endpoints. */
@@ -144,7 +144,29 @@ export type ForeverCharacterProfessions = WithForeverCharacter<CharacterProfessi
 export type ForeverCharacterQuests = WithForeverCharacter<CharacterQuests>;
 export type ForeverCharacterCompletedQuests = WithForeverCharacter<CharacterCompletedQuests>;
 export type ForeverCharacterReputations = WithForeverCharacter<CharacterReputations>;
-export type ForeverCharacterStatistics = WithForeverCharacter<CharacterStatistics>;
+/**
+ * Character statistics as returned for Forever: the Retail statistics plus Classic-style hit, expertise and ranged
+ * stats, and `speed` and `avoidance` with a `value`. See https://blizzard.pinta.land/forever/character-statistics/
+ * for what `base` and `effective` mean.
+ */
+export interface ForeverCharacterStatistics
+    extends Omit<WithForeverCharacter<CharacterStatistics>, "speed" | "avoidance"> {
+    speed: StatRating;
+    avoidance: StatRating;
+    melee_hit: StatRating;
+    off_hand_hit: StatRating;
+    ranged_hit: StatRating;
+    spell_hit: StatRating;
+    expertise: number;
+    off_hand_expertise: number;
+    armor_penetration: number;
+    /** Movement speed in percent, e.g. 100. */
+    movement_speed: number;
+    ranged_attack_power: number;
+    ranged_damage_min: number;
+    ranged_damage_max: number;
+    spell_healing: number;
+}
 /** `titles` is absent when the character has no titles. */
 export interface ForeverCharacterTitles extends WithOptional<WithForeverCharacter<CharacterTitles>, "titles"> {}
 
