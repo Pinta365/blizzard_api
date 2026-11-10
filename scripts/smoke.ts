@@ -831,10 +831,25 @@ interface Sc2Ids {
     profileId: number;
 }
 
+/**
+ * The grandmaster leaderboard, which the other StarCraft II profile cases take a player from. Blizzard sometimes
+ * answers it with an empty response (seen in November 2026); that is skipped rather than failed.
+ */
+async function sc2Grandmasters(regionId: number) {
+    try {
+        return await client.sc2.grandmasterLeaderboard(regionId);
+    } catch (error) {
+        if (error instanceof SyntaxError) {
+            throw new SkipError("known Blizzard issue: the StarCraft II grandmaster leaderboard is an empty response");
+        }
+        throw error;
+    }
+}
+
 function getSc2Ids(): Promise<Sc2Ids> {
     return once("sc2.ids", async () => {
         const regionId = 2;
-        const leaderboard = await client.sc2.grandmasterLeaderboard(regionId);
+        const leaderboard = await sc2Grandmasters(regionId);
         const member = leaderboard.ladderTeams[0]?.teamMembers[0];
         if (!member) throw new SkipError("no StarCraft II grandmaster ladder teams for region 2");
         return { regionId, realmId: member.realm, profileId: Number(member.id) };
@@ -1789,7 +1804,7 @@ function buildCases(): Case[] {
             const ids = await getSc2Ids();
             return await client.sc2.ladder(ids.regionId, ids.realmId, ids.profileId, await getSc2LadderId(ids));
         }),
-        c("sc2.grandmasterLeaderboard", () => client.sc2.grandmasterLeaderboard(2)),
+        c("sc2.grandmasterLeaderboard", () => sc2Grandmasters(2)),
         c("sc2.season", () => client.sc2.season(2)),
         { name: "sc2.player", fn: () => Promise.resolve(), skip: "needs a valid StarCraft II account ID" },
         c("sc2.legacyProfile", async () => {
