@@ -353,7 +353,7 @@ function foreverGuildSlug(): Promise<string> {
     return once("wowForever.guildSlug", async () => {
         const { name, surname } = await foreverCharacter();
         const profile = await client.wowForever.characterProfile(name, surname);
-        if (!profile.guild) throw new SkipError(`${name} ${surname} is not in a guild`);
+        if (!profile.guild) throw new SkipError("the Forever test character is not in a guild");
         return profile.guild.slug;
     });
 }
