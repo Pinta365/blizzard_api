@@ -47,12 +47,18 @@ jobs:
 
             - name: Smoke test, type check, field check
               id: checks
+              env:
+                  # A Forever character of level 10 or higher, "Name Surname", for the Forever character and guild
+                  # cases. Optional: without it those cases are skipped.
+                  BLIZZARD_FOREVER_CHARACTER: ${{ secrets.BLIZZARD_FOREVER_CHARACTER }}
               run: |
                   set +e
                   NO_COLOR=1 deno task smoke > smoke.log 2>&1; smoke=$?
                   NO_COLOR=1 deno task check:types > types.log 2>&1; types=$?
                   NO_COLOR=1 deno task check:fields > fields.log 2>&1; fields=$?
                   rm -f .env
+                  # The artifact is public: keep the test character's name, guild and guildmates out of it.
+                  rm -f fixtures/wowForever.character*.json fixtures/wowForever.guild*.json
                   echo "smoke=$smoke" >> "$GITHUB_OUTPUT"
                   echo "types=$types" >> "$GITHUB_OUTPUT"
                   echo "fields=$fields" >> "$GITHUB_OUTPUT"
