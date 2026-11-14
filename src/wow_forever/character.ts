@@ -28,6 +28,7 @@ import type { characterEquipments as CharacterEquipments } from "../wow/profile/
 import type { CharacterMedia } from "../wow/profile/character_media.ts";
 import type { CharacterMythicKeystoneProfile } from "../wow/profile/character_mythic_keystone_profile.ts";
 import type { CharacterProfessions } from "../wow/profile/character_professions.ts";
+import type { CharacterPvpSummary } from "../wow/profile/character_pvp.ts";
 import type { CharacterProfile, CharacterProfileStatus } from "../wow/profile/character_profile.ts";
 import type { CharacterCompletedQuests, CharacterQuests } from "../wow/profile/character_quests.ts";
 import type { CharacterReputations } from "../wow/profile/character_reputations.ts";
@@ -107,6 +108,8 @@ export interface ForeverCharacterPvpSummary {
     character: ForeverCharacterRef;
     honorable_kills: number;
     pvp_rank: number;
+    /** Battlegrounds played, won and lost per map. Absent until the character has played one. */
+    pvp_map_statistics?: CharacterPvpSummary["pvp_map_statistics"];
 }
 
 export type ForeverCharacterProfileStatus = CharacterProfileStatus;
