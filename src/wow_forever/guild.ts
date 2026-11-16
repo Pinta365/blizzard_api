@@ -1,7 +1,7 @@
 /**
  * WoW: Forever guild endpoints. Forever guilds are realmless: a guild is identified by its name slug alone
  * (`/data/wow/guild/{nameSlug}`) and belongs to a ruleset instead of a realm.
- * Verified against the live API (EU) on 2026-11-05.
+ * Verified against the live API (EU, US) on 2026-11-16.
  */
 
 import type { ApiContext, Href, KeyId, KeyNameId, LinkSelfHref, LocalizedString, TypeName } from "../shared/index.ts";
@@ -17,7 +17,7 @@ export interface ForeverGuildRef {
     slug: string;
 }
 
-/** Guild as returned for Forever. */
+/** Guild as returned for Forever. `crest` is absent for many guilds; some have one since mid-November 2026. */
 export interface ForeverGuild extends Omit<Guild, "key" | "realm"> {
     slug: string;
     /** The guild's ruleset (Normal, PvP, Roleplay, Roleplay PvP). */
