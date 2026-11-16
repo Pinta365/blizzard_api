@@ -43,7 +43,7 @@ const roster = await client.wowForever.guildRoster("my-guild");
 
 A guild has a `ruleset` instead of a realm. The roster lists every member, including characters below level 10, with `name`, `surname`, `slug`, `level`, class, race and faction.
 
-`crest` and the achievement totals are absent, and `guildActivity` is empty, so far.
+Some guilds have a `crest` (seen from mid-November); others don't yet. The achievement totals are absent, and `guildActivity` is empty, so far.
 
 ## Collections
 
@@ -51,10 +51,13 @@ The character collection endpoints leave out `mounts`, `pets` and `toys` when th
 
 ## Level 60 characters
 
-Checked on three level 60 characters (EU and US):
+Checked on 13 level 60 characters, on Normal and PvP, in EU and US:
 
 - **Specializations**: two specialization groups (dual specialization), one of them `is_active`, with talent points spread over several trees.
 - **Equipment**: ammunition is equipped in an `AMMO` slot. It has a `weapon` with only `damage` (no `attack_speed` or `dps`) and no `quantity`.
 - **Professions**: a primary profession can have a `specialization`, such as `{ name: "Gnomish Engineer" }`.
 - **PvP summary**: `pvp_map_statistics` lists battlegrounds played, won and lost, once the character has played one. `pvp_rank` is 0.
-- **Encounters**: `characterEncounterRaids` and `characterEncounterDungeons` are empty, even at level 60. Titles are empty too.
+- **Encounters**: `characterEncounterRaids` and `characterEncounterDungeons` are empty, even at level 60.
+- **Titles** appear on some characters (one or two each); most have none yet.
+- **PvP ranks**: some characters have a `pvp_rank` above 0.
+- **Poisons**: a weapon enchantment from a rogue poison has `charges`. Its `display_string` contains raw game text, e.g. `Instant Poison VI (85 |4Charge:Charges;)`.

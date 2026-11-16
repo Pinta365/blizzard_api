@@ -62,6 +62,8 @@ export interface characterEquipments extends LinkSelfHref {
                 description: LocalizedString;
             };
             enchantment_id: number;
+            /** Charges left on a temporary enchantment, such as a rogue poison (WoW: Forever). */
+            charges?: number;
             enchantment_slot: {
                 id: number;
                 type?: string;
