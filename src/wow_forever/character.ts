@@ -1,8 +1,9 @@
 /**
  * WoW: Forever character profile endpoints. Forever is realmless: a character is identified by its two-part name
  * (`name` and `surname`, unique per region), and the URL is `/profile/wow/character/{name}-{surname}`.
- * Characters are only served once they reach level 10; below that the API returns 404.
- * Verified against the live API (EU) on 2026-11-05.
+ * Characters are only served from level 10, after they log out; before that the API returns 404. The responses are
+ * a snapshot of the character's last logout. See https://blizzard.pinta.land/forever/characters-and-guilds/.
+ * Verified against the live API (EU, US) on 2026-11-16, up to level 60.
  */
 
 import type { ApiContext, Href, KeyNameId, LocalizedString, TypeName } from "../shared/index.ts";
@@ -85,7 +86,8 @@ export interface ForeverCharacterTalent {
 
 /**
  * Character specializations as returned for Forever: talent trees with points spent per tree, grouped per talent
- * group (like Classic Era), instead of Retail's loadouts.
+ * group (like Classic Era), instead of Retail's loadouts. A character with dual specialization has two groups, one
+ * of them `is_active`.
  */
 export interface ForeverCharacterSpecializations {
     _links: { self: Href };
@@ -133,9 +135,9 @@ export type ForeverCharacterCollectionHeirlooms = CharacterCollectionHeirlooms;
 export interface ForeverCharacterCollectionTransmogs
     extends WithOptional<CharacterCollectionTransmogs, "appearance_sets"> {}
 export type ForeverCharacterEncounters = WithForeverCharacter<CharacterEncounters>;
-/** `expansions` is absent when the character has completed no dungeons. */
+/** `expansions` is absent when the character has completed no dungeons; so far that is every character, even at 60. */
 export interface ForeverCharacterEncounterDungeons extends WithOptional<CharacterEncounterDungeons, "expansions"> {}
-/** `expansions` is absent when the character has completed no raids. */
+/** `expansions` is absent when the character has completed no raids; so far that is every character, even at 60. */
 export interface ForeverCharacterEncounterRaids
     extends WithOptional<WithForeverCharacter<CharacterEncounterRaids>, "expansions"> {}
 export type ForeverCharacterEquipment = WithForeverCharacter<CharacterEquipments>;

@@ -7,7 +7,8 @@
  * looked up by `name` and `surname`. The realm endpoints are left out (the realm index was taken down at launch);
  * use `rulesets()`. Guilds are looked up by name slug alone. Auctions are listed per auction house (Alliance, Horde,
  * neutral) under a ruleset: `auctionHouses()`, then `auctionHouse()` and `auctionHouseCommodities()`.
- * Verified against the live API (EU) on 2026-11-06.
+ * Blizzard hasn't documented the Forever API; what is known so far is in https://blizzard.pinta.land/forever/.
+ * Verified against the live API (EU, US) on 2026-11-16.
  */
 
 // Game Data APIs
