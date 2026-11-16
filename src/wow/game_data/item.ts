@@ -135,6 +135,11 @@ export interface ItemPreview {
     description?: LocalizedString;
     /** Present on recipes: the item it makes and its reagents. */
     recipe?: ItemRecipe;
+    /** Present on items that start a quest when used ("This Item Begins a Quest"). */
+    item_starts_quest?: {
+        quest: KeyNameId;
+        display_string: LocalizedString;
+    };
     /** Present on some items, such as companion pets. */
     is_subclass_hidden?: boolean;
     sell_price?: {
