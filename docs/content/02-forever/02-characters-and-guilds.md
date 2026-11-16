@@ -3,7 +3,7 @@ title: Characters and guilds
 description: Realmless character names, when characters appear in the API, media, and guilds.
 ---
 
-*Last checked 2026-11-09.*
+*Last checked 2026-11-16.*
 
 ## Names
 
@@ -48,3 +48,13 @@ A guild has a `ruleset` instead of a realm. The roster lists every member, inclu
 ## Collections
 
 The character collection endpoints leave out `mounts`, `pets` and `toys` when the character has none; the types make them optional.
+
+## Level 60 characters
+
+Checked on three level 60 characters (EU and US):
+
+- **Specializations**: two specialization groups (dual specialization), one of them `is_active`, with talent points spread over several trees.
+- **Equipment**: ammunition is equipped in an `AMMO` slot. It has a `weapon` with only `damage` (no `attack_speed` or `dps`) and no `quantity`.
+- **Professions**: a primary profession can have a `specialization`, such as `{ name: "Gnomish Engineer" }`.
+- **PvP summary**: `pvp_map_statistics` lists battlegrounds played, won and lost, once the character has played one. `pvp_rank` is 0.
+- **Encounters**: `characterEncounterRaids` and `characterEncounterDungeons` are empty, even at level 60. Titles are empty too.

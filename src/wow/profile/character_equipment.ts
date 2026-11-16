@@ -15,11 +15,13 @@ export interface EquippedItemWeapon {
         display_string: LocalizedString;
         damage_class: TypeName;
     };
-    attack_speed: {
+    /** Absent for ammunition (arrows and bullets), which only adds damage. */
+    attack_speed?: {
         value: number;
         display_string: LocalizedString;
     };
-    dps: {
+    /** Absent for ammunition (arrows and bullets), which only adds damage. */
+    dps?: {
         value: number;
         display_string: LocalizedString;
     };
@@ -66,7 +68,8 @@ export interface characterEquipments extends LinkSelfHref {
             };
         }[];
         slot: TypeName;
-        quantity: number;
+        /** Absent for the ammunition slot. */
+        quantity?: number;
         context?: number;
         bonus_list?: number[];
         quality: TypeName;

@@ -1,5 +1,5 @@
 import type { ApiContext } from "../../shared/index.ts";
-import type { Character, KeyNameId, LinkSelfHref, NameId } from "../../shared/index.ts";
+import type { Character, KeyNameId, LinkSelfHref, LocalizedString, NameId } from "../../shared/index.ts";
 
 export interface Tier {
     skill_points: number;
@@ -13,6 +13,8 @@ export interface CharacterProfession {
     skill_points?: number;
     max_skill_points?: number;
     tiers?: Tier[];
+    /** The profession's specialization, such as Gnomish Engineer. Present on WoW: Forever once one is chosen. */
+    specialization?: { name: LocalizedString };
 }
 
 export interface CharacterProfessions extends LinkSelfHref {
