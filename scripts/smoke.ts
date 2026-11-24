@@ -361,8 +361,9 @@ function foreverGuildSlug(): Promise<string> {
 function foreverCharacterCase(
     name: string,
     fn: (character: ForeverCharacterName) => Promise<unknown>,
+    allow404?: string,
 ): Case {
-    return c(name, async () => await fn(await foreverCharacter()));
+    return c(name, async () => await fn(await foreverCharacter()), allow404);
 }
 
 function foreverSearchedCreatureId(): Promise<number> {
@@ -1696,6 +1697,11 @@ function buildCases(): Case[] {
         foreverCharacterCase(
             "wowForever.characterEquipments",
             (ch) => client.wowForever.characterEquipments(ch.name, ch.surname),
+        ),
+        foreverCharacterCase(
+            "wowForever.characterHunterPets",
+            (ch) => client.wowForever.characterHunterPets(ch.name, ch.surname),
+            "character-dependent",
         ),
         foreverCharacterCase(
             "wowForever.characterMedia",

@@ -57,6 +57,7 @@ import type {
     ForeverCharacterEncounterRaids,
     ForeverCharacterEncounters,
     ForeverCharacterEquipment,
+    ForeverCharacterHunterPets,
     ForeverCharacterMedia,
     ForeverCharacterMythicKeystoneProfile,
     ForeverCharacterProfessions,
@@ -385,6 +386,16 @@ export interface WowForeverApi {
      * @returns A promise that resolves to an object representing the equipped items.
      */
     characterEquipments(name: string, surname: string): Promise<ForeverCharacterEquipment>;
+
+    /**
+     * If the character is a hunter, returns a summary of the character's hunter pets. Otherwise, returns an HTTP 404 Not
+     * Found error.
+     *
+     * @param name - The character's name (first part). Case-insensitive.
+     * @param surname - The character's surname (second part). Case-insensitive.
+     * @returns A promise that resolves to an object representing the character's hunter pets.
+     */
+    characterHunterPets(name: string, surname: string): Promise<ForeverCharacterHunterPets>;
 
     /**
      * Returns a summary of the media assets available for a character (such as an avatar render).

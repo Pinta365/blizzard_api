@@ -3,7 +3,7 @@
  * (`name` and `surname`, unique per region), and the URL is `/profile/wow/character/{name}-{surname}`.
  * Characters are only served from level 10, after they log out; before that the API returns 404. The responses are
  * a snapshot of the character's last logout. See https://blizzard.pinta.land/forever/characters-and-guilds/.
- * Verified against the live API (EU, US) on 2026-11-16, up to level 60.
+ * Verified against the live API (EU, US) on 2026-11-24, up to level 60.
  */
 
 import type { ApiContext, Href, KeyNameId, LocalizedString, TypeName } from "../shared/index.ts";
@@ -26,6 +26,7 @@ import type {
     CharacterEncounters,
 } from "../wow/profile/character_encounters.ts";
 import type { characterEquipments as CharacterEquipments } from "../wow/profile/character_equipment.ts";
+import type { CharacterHunterPets } from "../wow/profile/character_hunter_pets.ts";
 import type { CharacterMedia } from "../wow/profile/character_media.ts";
 import type { CharacterMythicKeystoneProfile } from "../wow/profile/character_mythic_keystone_profile.ts";
 import type { CharacterProfessions } from "../wow/profile/character_professions.ts";
@@ -53,7 +54,15 @@ export type WithForeverCharacter<T extends { character: unknown }> = Omit<T, "ch
 };
 
 /** Character profile summary as returned for Forever. */
-export interface ForeverCharacterProfile extends Omit<CharacterProfile, "realm" | "guild" | "covenant_progress"> {
+export interface ForeverCharacterProfile extends
+    Omit<
+        CharacterProfile,
+        "realm" | "guild" | "covenant_progress" | "average_item_level" | "equipped_item_level"
+    > {
+    /** Absent on some characters, for an unknown reason (seen on level 60 characters with items equipped). */
+    average_item_level?: number;
+    /** Absent on some characters, for an unknown reason (seen on level 60 characters with items equipped). */
+    equipped_item_level?: number;
     /** The second part of the character's name. */
     surname: string;
     /** The character's ruleset (Normal, PvP, Roleplay, Roleplay PvP). */
@@ -141,6 +150,7 @@ export interface ForeverCharacterEncounterDungeons extends WithOptional<Characte
 export interface ForeverCharacterEncounterRaids
     extends WithOptional<WithForeverCharacter<CharacterEncounterRaids>, "expansions"> {}
 export type ForeverCharacterEquipment = WithForeverCharacter<CharacterEquipments>;
+export type ForeverCharacterHunterPets = WithForeverCharacter<CharacterHunterPets>;
 export type ForeverCharacterMedia = WithForeverCharacter<CharacterMedia>;
 /** `seasons` is absent when the character has no Mythic Keystone seasons. */
 export interface ForeverCharacterMythicKeystoneProfile
@@ -413,6 +423,22 @@ export async function characterEquipments(
     surname: string,
 ): Promise<ForeverCharacterEquipment> {
     return await request(ctx, name, surname, "/equipment");
+}
+
+/**
+ * If the character is a hunter, returns a summary of the character's hunter pets. Otherwise, returns an HTTP 404 Not
+ * Found error.
+ *
+ * @param name - The character's name (first part). Case-insensitive.
+ * @param surname - The character's surname (second part). Case-insensitive.
+ * @returns A promise that resolves to an object representing the character's hunter pets.
+ */
+export async function characterHunterPets(
+    ctx: ApiContext,
+    name: string,
+    surname: string,
+): Promise<ForeverCharacterHunterPets> {
+    return await request(ctx, name, surname, "/hunter-pets");
 }
 
 /**
