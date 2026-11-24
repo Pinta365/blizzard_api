@@ -122,6 +122,7 @@ export {
     characterEncounterRaids,
     characterEncounters,
     characterEquipments,
+    characterHunterPets,
     characterMedia,
     characterMythicKeystoneProfile,
     characterProfessions,
